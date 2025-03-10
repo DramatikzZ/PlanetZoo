@@ -1,5 +1,6 @@
 package fr.isen.vincent.planetzoo
 
+import AnimalsScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,20 +17,33 @@ import fr.isen.vincent.planetzoo.ui.theme.PlanetZooTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavType
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import fr.isen.vincent.planetzoo.components.BottomNavBar
 import fr.isen.vincent.planetzoo.data.BiomeModel
-import fr.isen.vincent.planetzoo.screens.EnclosureListScreen
-import fr.isen.vincent.planetzoo.screens.ZooListScreen
+import fr.isen.vincent.planetzoo.data.NavBarItem
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
-
-
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,62 +58,60 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            PlanetZooTheme {
-                AppNavigation(zooListState.value)
-            }
-        }
-    }
-}
 
-@Composable
-fun AppNavigation(zooList: List<BiomeModel>) {
-    val navController = rememberNavController()
+            val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "biomes") {
-        composable("biomes") {
-            ZooListScreen(zooList, navController)
-        }
+            val context = LocalContext.current
 
-        composable(
-            "enclosures/{biomeId}",
-            arguments = listOf(navArgument("biomeId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val biomeId = backStackEntry.arguments?.getString("biomeId")
-            val selectedBiome = zooList.find { it.id == biomeId }
-            selectedBiome?.let {
-                EnclosureListScreen(it, navController)
-            }
-        }
-    }
-}
-
-
-/*@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PlanetZooTheme {
-        ZooListScreen(
-            listOf(
-                Zoo(id = "1", color = "#70D5C2", name = "La Bergerie des reptiles", enclosures = listOf()),
-                Zoo(id = "2", color = "#A4BDCC", name = "Le Vallon des cascades", enclosures = listOf())
+            val homePage = NavBarItem(
+                title = ContextCompat.getString(context, R.string.homepage),
+                selectedIcon = Icons.Filled.Home,
+                unselectedIcon = Icons.Outlined.Home
             )
-        )
+            val animalsPage = NavBarItem(
+                title = ContextCompat.getString(context, R.string. animalspage),
+                selectedIcon = Icons.Filled.Menu,
+                unselectedIcon = Icons.Outlined.Menu
+            )
+            val servicesPage = NavBarItem(
+                title = ContextCompat.getString(context, R.string.servicespage),
+                selectedIcon = Icons.Filled.Star,
+                unselectedIcon = Icons.Outlined.Star
+            )
+            val securityPage = NavBarItem(
+                title = ContextCompat.getString(context, R.string.securitypage),
+                selectedIcon = Icons.Filled.Lock,
+                unselectedIcon = Icons.Outlined.Lock
+            )
+
+            val navBarItems = listOf(homePage, servicesPage, securityPage,animalsPage)
+
+            PlanetZooTheme {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    bottomBar = { BottomNavBar(navBarItems, navController) },
+                ) { innerPadding ->
+
+                    Box(Modifier.padding(innerPadding)) {
+                        NavHost(navController = navController, startDestination = homePage.title) {
+                            composable(homePage.title) {
+                                Text(homePage.title)
+                            }
+                            composable(servicesPage.title) {
+                                Text(servicesPage.title)
+                            }
+                            composable(securityPage.title) {
+                                Text(securityPage.title)
+                            }
+                            composable(animalsPage.title) {
+                                AnimalsScreen()
+                            }
+                        }
+
+                    }
+
+                }
+            }
+        }
     }
 }
-
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    PlanetZooTheme {
-        Greeting("Android")
-    }
-}*/
