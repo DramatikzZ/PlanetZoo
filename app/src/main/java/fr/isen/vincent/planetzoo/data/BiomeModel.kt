@@ -1,6 +1,6 @@
 package fr.isen.vincent.planetzoo.data
 
-data class ZooModel(
+data class BiomeModel(
     val id: String = "",
     val color: String = "",
     val name: String = "",

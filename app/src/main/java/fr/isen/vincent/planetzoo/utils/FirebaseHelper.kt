@@ -1,19 +1,21 @@
 package fr.isen.vincent.planetzoo.utils
 
 import com.google.firebase.database.*
-import fr.isen.vincent.planetzoo.data.ZooModel
+import fr.isen.vincent.planetzoo.data.BiomeModel
 
 class FirebaseHelper {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    fun fetchZooData(onResult: (List<ZooModel>) -> Unit) {
-        val zooRef = database//.child("zoos") // Adaptez le chemin selon votre base Firebase
+    fun fetchZooData(onResult: (List<BiomeModel>) -> Unit) {
+        val zooRef = database
 
         zooRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val zooList = mutableListOf<ZooModel>()
+                val zooList = mutableListOf<BiomeModel>()
                 snapshot.children.forEach { zooSnapshot ->
-                    val zoo = zooSnapshot.getValue(ZooModel::class.java)
+                    val id = zooSnapshot.key ?: ""
+                    val zoo = zooSnapshot.getValue(BiomeModel::class.java)?.copy(id = id)
+
                     zoo?.let { zooList.add(it) }
                 }
                 onResult(zooList)
@@ -22,16 +24,17 @@ class FirebaseHelper {
             override fun onCancelled(error: DatabaseError) {
                 println("Erreur Firebase: ${error.message}")
             }
-
         })
     }
+
 }
 
 
-fun addZoo(zoo: ZooModel) {
+fun addZoo(zoo: BiomeModel) {
     val database = FirebaseDatabase.getInstance().reference
-    val newZooRef = database//.child("zoos").push()
-    newZooRef.setValue(zoo)
+    val newZooRef = database
+
+    newZooRef.setValue(zoo.copy(id = newZooRef.key ?: ""))
         .addOnSuccessListener {
             println("Données ajoutées avec succès")
         }

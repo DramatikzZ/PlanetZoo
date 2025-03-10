@@ -19,7 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
-import fr.isen.vincent.planetzoo.data.ZooModel
+import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 
 class MainActivity : ComponentActivity() {
@@ -28,9 +28,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val firebaseHelper = FirebaseHelper()
-        val zooListState = mutableStateOf<List<ZooModel>>(emptyList())
+        val zooListState = mutableStateOf<List<BiomeModel>>(emptyList())
 
-        // Lire les données et mettre à jour la liste
         firebaseHelper.fetchZooData { zooList ->
             zooListState.value = zooList
         }
@@ -46,7 +45,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun ZooListScreen(zooList: List<ZooModel>, modifier: Modifier = Modifier) {
+fun ZooListScreen(zooList: List<BiomeModel>, modifier: Modifier = Modifier) {
     LazyColumn(modifier = modifier.padding(16.dp)) {
         items(zooList) { zoo ->
             ZooCard(zoo)
@@ -55,7 +54,7 @@ fun ZooListScreen(zooList: List<ZooModel>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ZooCard(zoo: ZooModel) {
+fun ZooCard(zoo: BiomeModel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
