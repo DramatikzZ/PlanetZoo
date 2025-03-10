@@ -19,8 +19,17 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import fr.isen.vincent.planetzoo.data.BiomeModel
+import fr.isen.vincent.planetzoo.screens.EnclosureListScreen
+import fr.isen.vincent.planetzoo.screens.ZooListScreen
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,38 +45,34 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             PlanetZooTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ZooListScreen(zooListState.value, Modifier.padding(innerPadding))
-                }
+                AppNavigation(zooListState.value)
             }
         }
     }
 }
 
 @Composable
-fun ZooListScreen(zooList: List<BiomeModel>, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier.padding(16.dp)) {
-        items(zooList) { zoo ->
-            ZooCard(zoo)
+fun AppNavigation(zooList: List<BiomeModel>) {
+    val navController = rememberNavController()
+
+    NavHost(navController = navController, startDestination = "biomes") {
+        composable("biomes") {
+            ZooListScreen(zooList, navController)
+        }
+
+        composable(
+            "enclosures/{biomeId}",
+            arguments = listOf(navArgument("biomeId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val biomeId = backStackEntry.arguments?.getString("biomeId")
+            val selectedBiome = zooList.find { it.id == biomeId }
+            selectedBiome?.let {
+                EnclosureListScreen(it, navController)
+            }
         }
     }
 }
 
-@Composable
-fun ZooCard(zoo: BiomeModel) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Zoo: ${zoo.name}", style = MaterialTheme.typography.headlineSmall)
-            Text(text = "Couleur: ${zoo.color}", style = MaterialTheme.typography.bodyMedium)
-            Text(text = "Nombre d'enclos: ${zoo.enclosures.size}", style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
 
 /*@Preview(showBackground = true)
 @Composable
