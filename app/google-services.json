@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "299446859200",
+    "firebase_url": "https://planetzoo-5c332-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "planetzoo-5c332",
+    "storage_bucket": "planetzoo-5c332.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299446859200:android:494de9fb2927473be40425",
+        "android_client_info": {
+          "package_name": "fr.isen.vincent.planetzoo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCp0l2DYinz809UU58e49NBtUALkSnQJdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
