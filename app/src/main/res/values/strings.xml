@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">PlanetZoo</string>
-    <string name="homepage">HomePage</string>
-    <string name="securitypage">SecuityPage</string>
-    <string name="profilepage">ProfilePage</string>
-    <string name="servicespage">ServicesPage</string>
-    <string name="animalspage">AnimalsPage</string>
+    <string name="homepage">Home</string>
+    <string name="securitypage">Security</string>
+    <string name="profilepage">Profile</string>
+    <string name="servicespage">Services</string>
+    <string name="animalspage">Animals</string>
 </resources>
