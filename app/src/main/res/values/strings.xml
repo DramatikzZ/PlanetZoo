@@ -5,4 +5,5 @@
     <string name="profilepage">Profile</string>
     <string name="servicespage">Services</string>
     <string name="animalspage">Animals</string>
+    <string name="logo_zoo">Logo du zoo</string>
 </resources>

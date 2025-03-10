@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import fr.isen.vincent.planetzoo.components.BottomNavBar
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.NavBarItem
+import fr.isen.vincent.planetzoo.screens.HomeScreen
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 
 class MainActivity : ComponentActivity() {
@@ -95,7 +96,7 @@ class MainActivity : ComponentActivity() {
                     Box(Modifier.padding(innerPadding)) {
                         NavHost(navController = navController, startDestination = homePage.title) {
                             composable(homePage.title) {
-                                Text(homePage.title)
+                                HomeScreen()
                             }
                             composable(servicesPage.title) {
                                 Text(servicesPage.title)
