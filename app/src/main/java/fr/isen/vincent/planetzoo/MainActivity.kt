@@ -43,6 +43,7 @@ import androidx.navigation.compose.rememberNavController
 import fr.isen.vincent.planetzoo.components.BottomNavBar
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.NavBarItem
+import fr.isen.vincent.planetzoo.screens.HomeScreen
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 
 class MainActivity : ComponentActivity() {
@@ -65,26 +66,26 @@ class MainActivity : ComponentActivity() {
 
             val homePage = NavBarItem(
                 title = ContextCompat.getString(context, R.string.homepage),
-                selectedIcon = Icons.Filled.Home,
-                unselectedIcon = Icons.Outlined.Home
+                selectedIcon = ImageVector.vectorResource(R.drawable.home_icon_clicked),
+                unselectedIcon = ImageVector.vectorResource(R.drawable.home_icon_unclicked),
             )
             val animalsPage = NavBarItem(
                 title = ContextCompat.getString(context, R.string. animalspage),
-                selectedIcon = Icons.Filled.Menu,
-                unselectedIcon = Icons.Outlined.Menu
+                selectedIcon = ImageVector.vectorResource(R.drawable.animals_icon_clicked),
+                unselectedIcon = ImageVector.vectorResource(R.drawable.animals_icon_unclicked),
             )
             val servicesPage = NavBarItem(
                 title = ContextCompat.getString(context, R.string.servicespage),
-                selectedIcon = Icons.Filled.Star,
-                unselectedIcon = Icons.Outlined.Star
+                selectedIcon = ImageVector.vectorResource(R.drawable.services_icon_clicked),
+                unselectedIcon = ImageVector.vectorResource(R.drawable.services_icon_unclicked),
             )
             val securityPage = NavBarItem(
                 title = ContextCompat.getString(context, R.string.securitypage),
-                selectedIcon = Icons.Filled.Lock,
-                unselectedIcon = Icons.Outlined.Lock
+                selectedIcon = ImageVector.vectorResource(R.drawable.security_icon_clicked),
+                unselectedIcon = ImageVector.vectorResource(R.drawable.security_icon_unclicked),
             )
 
-            val navBarItems = listOf(homePage, servicesPage, securityPage,animalsPage)
+            val navBarItems = listOf(servicesPage, homePage, animalsPage,securityPage)
 
             PlanetZooTheme {
                 /*Scaffold(
@@ -95,7 +96,7 @@ class MainActivity : ComponentActivity() {
                     Box(Modifier.padding(innerPadding)) {
                         NavHost(navController = navController, startDestination = homePage.title) {
                             composable(homePage.title) {
-                                Text(homePage.title)
+                                HomeScreen()
                             }
                             composable(servicesPage.title) {
                                 Text(servicesPage.title)

@@ -1,10 +1,19 @@
 <resources>
     <string name="app_name">PlanetZoo</string>
-    <string name="homepage">HomePage</string>
-    <string name="securitypage">SecuityPage</string>
-    <string name="profilepage">ProfilePage</string>
-    <string name="servicespage">ServicesPage</string>
-    <string name="animalspage">AnimalsPage</string>
+    <string name="homepage">Home</string>
+    <string name="securitypage">Security</string>
+    <string name="profilepage">Profile</string>
+    <string name="servicespage">Services</string>
+    <string name="animalspage">Animals</string>
+    <string name="logo_zoo">Logo du zoo</string>
+    <string name="headline_zoo">BIENVENUE AU PARC ANIMALIER DE LA BARBEN !</string>
+    <string name="corps_zoo">Le parc est ouvert tous les jours, y compris les jours fériés.
+    Au cœur de la Provence et d’un site Natura 2000, le Parc animalier de La Barben est une
+    invitation à l’évasion.9 km de sentiers vous guident à la rencontre de 130 espèces différentes,
+        à l’ombre des chênes.</string>
+    <string name="menu">Menu</string>
+    <string name="close_menu">Ferme le menu</string>
+    <string name="parameters">Paramètres</string>
 
 
     <!-- Image description -->
@@ -43,6 +52,4 @@
 
     <!-- Routes -->
     <string name="users_collection">users</string>
-
-
 </resources>

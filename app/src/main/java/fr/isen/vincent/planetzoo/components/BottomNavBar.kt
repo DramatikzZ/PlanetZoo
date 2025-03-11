@@ -29,7 +29,7 @@ import fr.isen.vincent.planetzoo.data.NavBarItem
 @Composable
 fun BottomNavBar(tabBarItems: List<NavBarItem>, navController: NavController) {
     var selectedTabIndex by rememberSaveable {
-        mutableStateOf(0)
+        mutableStateOf(1)
     }
 
     NavigationBar {
@@ -66,34 +66,4 @@ fun NavBarIconView(
         imageVector = if (isSelected) {selectedIcon} else {unselectedIcon},
         contentDescription = title
     )
-}
-
-@Composable
-fun navBarItem(): List<NavBarItem> {
-
-    val context = LocalContext.current
-
-    val homePage = NavBarItem(
-        title = ContextCompat.getString(context, R.string.homepage),
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home
-    )
-    val animalsPage = NavBarItem(
-        title = ContextCompat.getString(context, R.string. animalspage),
-        selectedIcon = Icons.Filled.Menu,
-        unselectedIcon = Icons.Outlined.Menu
-    )
-    val servicesPage = NavBarItem(
-        title = ContextCompat.getString(context, R.string.servicespage),
-        selectedIcon = Icons.Filled.Star,
-        unselectedIcon = Icons.Outlined.Star
-    )
-    val securityPage = NavBarItem(
-        title = ContextCompat.getString(context, R.string.securitypage),
-        selectedIcon = Icons.Filled.Lock,
-        unselectedIcon = Icons.Outlined.Lock
-    )
-
-    return listOf(homePage, servicesPage, securityPage,animalsPage)
-
 }
