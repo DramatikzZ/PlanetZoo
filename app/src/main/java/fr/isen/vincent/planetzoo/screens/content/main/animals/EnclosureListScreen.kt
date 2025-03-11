@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
@@ -31,24 +32,25 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(biome.enclosures) { enclosure ->
-                EnclosureCard(enclosure, navController)
+                EnclosureCard(enclosure, biome.color, navController)
             }
         }
     }
 }
-        @Composable
-fun EnclosureCard(enclosure: EnclosureModel, navController: NavController) {
+
+@Composable
+fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .clickable { navController.navigate("animals/${enclosure.id}") },
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biomeColor)))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Enclos: ${enclosure.id}", style = MaterialTheme.typography.headlineSmall)
-            Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium)
+            Text(text = "Enclos: ${enclosure.id}", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 }
-
