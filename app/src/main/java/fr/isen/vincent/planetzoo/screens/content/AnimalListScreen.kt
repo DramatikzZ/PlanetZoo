@@ -1,4 +1,4 @@
-package fr.isen.vincent.planetzoo.screens
+package fr.isen.vincent.planetzoo.screens.content
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
