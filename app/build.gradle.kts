@@ -7,12 +7,13 @@ plugins {
 
 android {
     namespace = "fr.isen.vincent.planetzoo"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "fr.isen.vincent.planetzoo"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 25
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -49,23 +50,18 @@ dependencies {
     implementation(libs.google.firebase.firestore)
     implementation(libs.google.firebase.auth)
     implementation(libs.google.firebase.analytics)
-
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
-
     implementation(libs.androidx.core.ktx.v190)
     implementation(libs.androidx.lifecycle.runtime.ktx.v261)
     implementation(libs.androidx.navigation.compose.v260)
-
     implementation(libs.material3)
     implementation(libs.androidx.activity.compose.v161)
     implementation(libs.androidx.appcompat)
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
-
     implementation(libs.kotlinx.coroutines.android.v164)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit.v115)
     androidTestImplementation(libs.androidx.espresso.core.v351)
