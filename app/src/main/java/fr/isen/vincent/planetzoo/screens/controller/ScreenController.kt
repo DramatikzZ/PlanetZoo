@@ -1,4 +1,4 @@
-package fr.isen.vincent.planetzoo.screens
+package fr.isen.vincent.planetzoo.screens.controller
 
 import AnimalsScreen
 import androidx.compose.foundation.layout.padding
@@ -27,9 +27,9 @@ import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.components.DrawerContent
 import fr.isen.vincent.planetzoo.components.TopBar
 import fr.isen.vincent.planetzoo.data.NavBarItem
-import fr.isen.vincent.planetzoo.screens.content.HomeScreen
-import fr.isen.vincent.planetzoo.screens.content.SecurityScreen
-import fr.isen.vincent.planetzoo.screens.content.ServiceScreen
+import fr.isen.vincent.planetzoo.screens.content.main.HomeScreen
+import fr.isen.vincent.planetzoo.screens.content.side.SecurityScreen
+import fr.isen.vincent.planetzoo.screens.content.side.ServiceScreen
 import kotlinx.coroutines.launch
 
 @Composable

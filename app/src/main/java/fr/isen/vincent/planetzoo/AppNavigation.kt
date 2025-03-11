@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
-import fr.isen.vincent.planetzoo.screens.ScreenController
+import fr.isen.vincent.planetzoo.screens.controller.ScreenController
 import fr.isen.vincent.planetzoo.screens.auth.AuthScreen
 import fr.isen.vincent.planetzoo.screens.auth.LoginScreen
 import fr.isen.vincent.planetzoo.screens.auth.SignupScreen
@@ -51,5 +51,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
         composable("profile") { ProfileScreen() }
         composable("parameters") { ParametersScreen() }
+
+
     }
 }

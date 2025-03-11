@@ -1,4 +1,4 @@
-package fr.isen.vincent.planetzoo.screens.content
+package fr.isen.vincent.planetzoo.screens.content.main.animals
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

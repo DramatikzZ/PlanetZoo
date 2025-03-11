@@ -1,4 +1,4 @@
-package fr.isen.vincent.planetzoo.screens.content
+package fr.isen.vincent.planetzoo.screens.content.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
