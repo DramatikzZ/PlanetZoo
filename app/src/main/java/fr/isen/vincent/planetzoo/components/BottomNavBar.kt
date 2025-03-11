@@ -29,7 +29,7 @@ import fr.isen.vincent.planetzoo.data.NavBarItem
 @Composable
 fun BottomNavBar(tabBarItems: List<NavBarItem>, navController: NavController) {
     var selectedTabIndex by rememberSaveable {
-        mutableStateOf(0)
+        mutableStateOf(1)
     }
 
     NavigationBar {

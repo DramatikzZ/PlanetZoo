@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -38,37 +39,51 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import fr.isen.vincent.planetzoo.R
 import kotlinx.coroutines.launch
 
+
 @Composable
 fun HomeScreen() {
+    val navController = rememberNavController()
 
+    NavHost(navController = navController, startDestination = "home") {
+        composable("home") { HomeContent(navController) }
+        composable("profile") { ProfileScreen() }
+        composable("parameters") { ParametersScreen() }
+    }
+}
+
+
+@Composable
+fun HomeContent(navController: NavController) {
     val context = LocalContext.current
-    val drawerState = rememberDrawerState(
-        initialValue = DrawerValue.Closed
-    )
-
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             DrawerContent(
+                onCloseClick = { scope.launch { drawerState.close() } },
                 onProfileClick = {
-                    Toast.makeText(context, "Profil", Toast.LENGTH_SHORT).show()
                     scope.launch { drawerState.close() }
+                    navController.navigate("profile")
                 },
                 onSettingsClick = {
-                    Toast.makeText(context, "Paramètres", Toast.LENGTH_SHORT).show()
                     scope.launch { drawerState.close() }
+                    navController.navigate("parameters")
                 }
             )
         },
         gesturesEnabled = true,
         scrimColor = Color.Black.copy(alpha = 0.3f)
     ) {
-        Scaffold (
+        Scaffold(
             topBar = {
                 TopBar(onOpenDrawer = {
                     scope.launch {
@@ -78,17 +93,14 @@ fun HomeScreen() {
                     }
                 })
             }
-
-        ){innerPadding ->
+        ) { innerPadding ->
             Box(Modifier.padding(innerPadding)) {
                 MiddlePage()
             }
-
         }
     }
-
-
 }
+
 
 @Composable
 fun TopBar(onOpenDrawer: () -> Unit) {
@@ -99,11 +111,7 @@ fun TopBar(onOpenDrawer: () -> Unit) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(id = R.drawable.logo_zoo),
-            contentDescription = "Logo Zoo",
-            modifier = Modifier.size(width = 150.dp, height = 83.dp)
-        )
+
         IconButton(onClick = onOpenDrawer) {
             Icon(
                 Icons.Filled.Menu,
@@ -111,19 +119,40 @@ fun TopBar(onOpenDrawer: () -> Unit) {
                 modifier = Modifier.size(40.dp)
             )
         }
+        Image(
+            painter = painterResource(id = R.drawable.logo_zoo),
+            contentDescription = "Logo Zoo",
+            modifier = Modifier.size(width = 160.dp, height = 55.dp)
+        )
     }
 }
 
 @Composable
-fun DrawerContent(onProfileClick: () -> Unit, onSettingsClick: () -> Unit) {
+fun DrawerContent(onCloseClick: () -> Unit, onProfileClick: () -> Unit, onSettingsClick: () -> Unit) {
     ModalDrawerSheet {
-        Text("Menu", modifier = Modifier.padding(16.dp), fontWeight = FontWeight.Bold)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Menu", fontWeight = FontWeight.Bold)
+            IconButton(onClick = onCloseClick) {
+                Icon(
+                    imageVector = Icons.Default.ArrowForward,
+                    contentDescription = "Fermer le menu"
+                )
+            }
+        }
+
         NavigationDrawerItem(
             icon = { Icon(Icons.Filled.Person, contentDescription = "Profil") },
             label = { Text("Profil") },
             selected = false,
             onClick = onProfileClick
         )
+
         NavigationDrawerItem(
             icon = { Icon(Icons.Filled.Settings, contentDescription = "Paramètres") },
             label = { Text("Paramètres") },
@@ -132,6 +161,7 @@ fun DrawerContent(onProfileClick: () -> Unit, onSettingsClick: () -> Unit) {
         )
     }
 }
+
 
 @Composable
 fun MiddlePage() {
