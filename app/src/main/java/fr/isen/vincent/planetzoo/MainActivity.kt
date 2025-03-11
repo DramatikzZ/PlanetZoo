@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity() {
             val navBarItems = listOf(servicesPage, homePage, animalsPage,securityPage)
 
             PlanetZooTheme {
-                Scaffold(
+                /*Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     bottomBar = { BottomNavBar(navBarItems, navController) },
                 ) { innerPadding ->
@@ -110,7 +110,9 @@ class MainActivity : ComponentActivity() {
                         }
 
                     }
-
+                }*/
+                Scaffold (modifier = Modifier.fillMaxSize()){ innerPadding ->
+                    AppNavigation(Modifier.padding(innerPadding))
                 }
             }
         }
