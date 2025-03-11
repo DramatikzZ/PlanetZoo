@@ -1,5 +1,6 @@
 package fr.isen.vincent.planetzoo.screens
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -43,7 +44,8 @@ fun AnimalListScreen(enclosure: EnclosureModel, navController: NavController) {
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(enclosure.animals) { animal ->
-                AnimalCard(animal, animalInfos[animal.id] ?: "Chargement des infos...")
+                val info = animalInfos[animal.id] ?: "Chargement des infos..."
+                AnimalCard(animal, info)
             }
         }
     }
@@ -52,31 +54,24 @@ fun AnimalListScreen(enclosure: EnclosureModel, navController: NavController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimalCard(animal: AnimalModel, info: String) {
-    var showDialog by remember { mutableStateOf(false) }
+    var isExpanded by remember { mutableStateOf(false) }
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(8.dp)
+            .animateContentSize(),
         elevation = CardDefaults.cardElevation(4.dp),
-        onClick = { showDialog = true }
+        onClick = { isExpanded = !isExpanded }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = "Nom: ${animal.name}", style = MaterialTheme.typography.headlineSmall)
             Text(text = "ID: ${animal.id}", style = MaterialTheme.typography.bodyMedium)
-        }
-    }
 
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Informations sur ${animal.name}") },
-            text = { Text(info) },
-            confirmButton = {
-                Button(onClick = { showDialog = false }) {
-                    Text("Fermer")
-                }
+            if (isExpanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = info, style = MaterialTheme.typography.bodyMedium)
             }
-        )
+        }
     }
 }
