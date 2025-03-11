@@ -9,10 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import fr.isen.vincent.planetzoo.screens.ScreenController
 import fr.isen.vincent.planetzoo.screens.auth.AuthScreen
 import fr.isen.vincent.planetzoo.screens.auth.LoginScreen
 import fr.isen.vincent.planetzoo.screens.auth.SignupScreen
 import fr.isen.vincent.planetzoo.screens.auth.TestScreen
+import fr.isen.vincent.planetzoo.screens.ParametersScreen
+import fr.isen.vincent.planetzoo.screens.ProfileScreen
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
@@ -22,7 +25,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
     val isLoggedIn = Firebase.auth.currentUser!=null
-    val firstPage = if(isLoggedIn) ContextCompat.getString(context, R.string.test_route) else  ContextCompat.getString(context, R.string.auth_route)
+    val firstPage = if(isLoggedIn) "home" else  ContextCompat.getString(context, R.string.auth_route)
 
     NavHost(navController = navController, startDestination = firstPage) {
 
@@ -42,5 +45,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             TestScreen(modifier, navController)
         }
 
+        composable( "home") {
+            ScreenController(modifier, navController)
+        }
+
+        composable("profile") { ProfileScreen() }
+        composable("parameters") { ParametersScreen() }
     }
 }

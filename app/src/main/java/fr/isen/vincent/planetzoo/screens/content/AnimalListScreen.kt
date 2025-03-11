@@ -1,4 +1,4 @@
-package fr.isen.vincent.planetzoo.screens
+package fr.isen.vincent.planetzoo.screens.content
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*

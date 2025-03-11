@@ -1,20 +1,19 @@
 import androidx.compose.runtime.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import fr.isen.vincent.planetzoo.data.BiomeModel
-import fr.isen.vincent.planetzoo.screens.AnimalListScreen
-import fr.isen.vincent.planetzoo.screens.EnclosureListScreen
-import fr.isen.vincent.planetzoo.screens.ZooListScreen
+import fr.isen.vincent.planetzoo.screens.content.AnimalListScreen
+import fr.isen.vincent.planetzoo.screens.content.EnclosureListScreen
+import fr.isen.vincent.planetzoo.screens.content.ZooListScreen
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 import fr.isen.vincent.planetzoo.ui.theme.PlanetZooTheme
 
 @Composable
-fun AnimalsScreen() {
+fun AnimalsScreen(modifier: Modifier) {
     val navController = rememberNavController()
     val firebaseHelper = FirebaseHelper()
     val zooListState = remember { mutableStateOf<List<BiomeModel>>(emptyList()) }
