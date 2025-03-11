@@ -3,12 +3,14 @@ package fr.isen.vincent.planetzoo.screens.auth
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -142,6 +144,25 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
                 text = if(isLoading) ContextCompat.getString(context, R.string.logging_text) else ContextCompat.getString(context, R.string.login_text),
                 fontSize = 22.sp
             )
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Row (
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            Text(text = "Créer un compte")
+
+            OutlinedButton (
+                onClick = {
+                    navController.navigate("signup")
+                }
+            ) {
+                Text(
+                    text = "Cliquez ici"
+                )
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ class AuthViewModel : ViewModel() {
                 if(it.isSuccessful) {
                     var userId = it.result?.user?.uid
 
-                    val userModel = UserModel(name, email, userId!!)
+                    val userModel = UserModel(name, email, userId!!, false)
                     firestore
                         .collection(ContextCompat.getString(context, R.string.users_collection))
                         .document(userId)

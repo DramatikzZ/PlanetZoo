@@ -28,8 +28,8 @@ import fr.isen.vincent.planetzoo.components.DrawerContent
 import fr.isen.vincent.planetzoo.components.TopBar
 import fr.isen.vincent.planetzoo.data.NavBarItem
 import fr.isen.vincent.planetzoo.screens.content.main.HomeScreen
-import fr.isen.vincent.planetzoo.screens.content.side.SecurityScreen
-import fr.isen.vincent.planetzoo.screens.content.side.ServiceScreen
+import fr.isen.vincent.planetzoo.screens.content.main.SecurityScreen
+import fr.isen.vincent.planetzoo.screens.content.main.ServiceScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -79,7 +79,8 @@ fun ScreenController(modifier : Modifier = Modifier, navController: NavControlle
                 onSettingsClick = {
                     scope.launch { drawerState.close() }
                     navController.navigate("parameters")
-                }
+                },
+                navController
             )
         },
         gesturesEnabled = true,

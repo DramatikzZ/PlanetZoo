@@ -14,8 +14,8 @@ import fr.isen.vincent.planetzoo.screens.auth.AuthScreen
 import fr.isen.vincent.planetzoo.screens.auth.LoginScreen
 import fr.isen.vincent.planetzoo.screens.auth.SignupScreen
 import fr.isen.vincent.planetzoo.screens.auth.TestScreen
-import fr.isen.vincent.planetzoo.screens.ParametersScreen
-import fr.isen.vincent.planetzoo.screens.ProfileScreen
+import fr.isen.vincent.planetzoo.screens.content.side.ParametersScreen
+import fr.isen.vincent.planetzoo.screens.content.side.ProfileScreen
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
