@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
+fun EnclosureListScreen(biome: BiomeModel, navController: NavController, modifier: Modifier) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -29,7 +29,7 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+        LazyColumn(modifier = modifier.padding(innerPadding)) {
             items(biome.enclosures) { enclosure ->
                 EnclosureCard(enclosure, navController)
             }

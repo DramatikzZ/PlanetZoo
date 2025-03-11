@@ -25,7 +25,7 @@ fun AnimalsScreen(modifier: Modifier) {
     PlanetZooTheme {
         NavHost(navController = navController, startDestination = "biomes") {
             composable("biomes") {
-                ZooListScreen(zooListState.value, navController)
+                ZooListScreen(zooListState.value, navController,modifier)
             }
             composable(
                 "enclosures/{biomeId}",
@@ -34,7 +34,7 @@ fun AnimalsScreen(modifier: Modifier) {
                 val biomeId = backStackEntry.arguments?.getString("biomeId")
                 val selectedBiome = zooListState.value.find { it.id == biomeId }
                 selectedBiome?.let {
-                    EnclosureListScreen(it, navController)
+                    EnclosureListScreen(it, navController,modifier)
                 }
             }
             composable(
@@ -46,7 +46,7 @@ fun AnimalsScreen(modifier: Modifier) {
                     .flatMap { it.enclosures }
                     .find { it.id == enclosureId }
                 selectedEnclosure?.let {
-                    AnimalListScreen(it, navController)
+                    AnimalListScreen(it, navController,modifier)
                 }
             }
         }
