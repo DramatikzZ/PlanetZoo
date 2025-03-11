@@ -1,4 +1,5 @@
 <resources>
+    <!-- Page description -->
     <string name="app_name">PlanetZoo</string>
     <string name="homepage">Home</string>
     <string name="securitypage">Security</string>
@@ -6,24 +7,30 @@
     <string name="servicespage">Services</string>
     <string name="animalspage">Animals</string>
     <string name="logo_zoo">Logo du zoo</string>
-    <string name="headline_zoo">BIENVENUE AU PARC ANIMALIER DE LA BARBEN !</string>
-    <string name="corps_zoo">Le parc est ouvert tous les jours, y compris les jours fériés.
-    Au cœur de la Provence et d’un site Natura 2000, le Parc animalier de La Barben est une
-    invitation à l’évasion.9 km de sentiers vous guident à la rencontre de 130 espèces différentes,
-        à l’ombre des chênes.</string>
     <string name="menu">Menu</string>
-    <string name="close_menu">Ferme le menu</string>
     <string name="parameters">Paramètres</string>
 
+    <!-- Icon description -->
+    <string name="close_menu">Ferme le menu</string>
+    <string name="warning">Alerte</string>
+    <string name="first_aid_station">Poste de secours</string>
+    <string name="emergency_exit">Sortie de secours</string>
+    <string name="assembly_point">Point de rassemblement</string>
 
     <!-- Image description -->
     <string name="auth_image">Authentification Image</string>
+
+    <!-- Button description -->
+    <string name="appeler">Appeler</string>
 
 
     <!-- Title -->
     <string name="auth_title">Authentifiez-vous</string>
     <string name="login_title">Login</string>
     <string name="signup_title">Sign up</string>
+    <string name="headline_zoo">BIENVENUE AU PARC ANIMALIER DE LA BARBEN !</string>
+    <string name="need_help">Besoin d\'aide ?</string>
+
 
 
     <!-- Text-->
@@ -37,7 +44,13 @@
     <string name="name_text">"Name"</string>
     <string name="hello_text">"Hello there !"</string>
     <string name="create_account_text">"Create an account !"</string>
-
+    <string name="corps_zoo">Le parc est ouvert tous les jours, y compris les jours fériés.
+    Au cœur de la Provence et d’un site Natura 2000, le Parc animalier de La Barben est une
+    invitation à l’évasion.9 km de sentiers vous guident à la rencontre de 130 espèces différentes,
+        à l’ombre des chênes.</string>
+    <string name="merci">Merci de bien vouloir appeler ce numéro, nous nous chargerons de joindre les pompiers.</string>
+    <string name="cas_urgence">En cas d\'urgence au parc :</string>
+    <string name="phone_number">06 31 29 35 98</string>
 
     <!-- Routes -->
     <string name="login_route">login</string>
