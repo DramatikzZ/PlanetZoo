@@ -2,6 +2,7 @@ package fr.isen.vincent.planetzoo.screens.controller
 
 import AnimalsScreen
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalNavigationDrawer
@@ -28,8 +29,8 @@ import fr.isen.vincent.planetzoo.components.DrawerContent
 import fr.isen.vincent.planetzoo.components.TopBar
 import fr.isen.vincent.planetzoo.data.NavBarItem
 import fr.isen.vincent.planetzoo.screens.content.main.HomeScreen
-import fr.isen.vincent.planetzoo.screens.content.side.SecurityScreen
-import fr.isen.vincent.planetzoo.screens.content.side.ServiceScreen
+import fr.isen.vincent.planetzoo.screens.content.main.SecurityScreen
+import fr.isen.vincent.planetzoo.screens.content.main.ServiceScreen
 import kotlinx.coroutines.launch
 
 @Composable
@@ -86,6 +87,7 @@ fun ScreenController(modifier : Modifier = Modifier, navController: NavControlle
         scrimColor = Color.Black.copy(alpha = 0.3f)
     ) {
         Scaffold (
+            modifier = Modifier.statusBarsPadding(),
             topBar = {
                 TopBar(onOpenDrawer = {
                     scope.launch {
@@ -93,7 +95,7 @@ fun ScreenController(modifier : Modifier = Modifier, navController: NavControlle
                             if (isClosed) open() else close()
                         }
                     }
-                })
+                },)
             },
             bottomBar = {
                 NavigationBar {

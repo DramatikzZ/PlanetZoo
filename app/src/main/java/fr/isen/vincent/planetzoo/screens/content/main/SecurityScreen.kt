@@ -1,10 +1,10 @@
-package fr.isen.vincent.planetzoo.screens.content.side
+package fr.isen.vincent.planetzoo.screens.content.main
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ServiceScreen(modifier: Modifier) {
-    Text("Service")
+fun SecurityScreen(modifier: Modifier) {
+    Text("Profile")
 }

@@ -13,8 +13,8 @@ import fr.isen.vincent.planetzoo.data.BiomeModel
 import androidx.navigation.NavController
 
 @Composable
-fun ZooListScreen(zooList: List<BiomeModel>, navController: NavController) {
-    LazyColumn(modifier = Modifier.padding(16.dp)) {
+fun ZooListScreen(zooList: List<BiomeModel>, navController: NavController, modifier: Modifier) {
+    LazyColumn(modifier = modifier.padding(16.dp)) {
         items(zooList) { biome ->
             BiomeCard(biome, navController)
         }
