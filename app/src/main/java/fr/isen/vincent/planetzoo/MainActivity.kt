@@ -15,7 +15,6 @@ import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -27,9 +26,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-
             PlanetZooTheme {
-
                 Scaffold (modifier = Modifier.fillMaxSize()){ innerPadding ->
                     AppNavigation(Modifier.padding(innerPadding))
                 }

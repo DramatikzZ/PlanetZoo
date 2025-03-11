@@ -6,9 +6,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import fr.isen.vincent.planetzoo.data.BiomeModel
-import fr.isen.vincent.planetzoo.screens.content.AnimalListScreen
-import fr.isen.vincent.planetzoo.screens.content.EnclosureListScreen
-import fr.isen.vincent.planetzoo.screens.content.ZooListScreen
+import fr.isen.vincent.planetzoo.screens.content.main.animals.AnimalListScreen
+import fr.isen.vincent.planetzoo.screens.content.main.animals.EnclosureListScreen
+import fr.isen.vincent.planetzoo.screens.content.main.animals.ZooListScreen
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 import fr.isen.vincent.planetzoo.ui.theme.PlanetZooTheme
 
