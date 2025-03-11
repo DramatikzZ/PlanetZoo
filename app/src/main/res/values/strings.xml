@@ -5,4 +5,44 @@
     <string name="profilepage">ProfilePage</string>
     <string name="servicespage">ServicesPage</string>
     <string name="animalspage">AnimalsPage</string>
+
+
+    <!-- Image description -->
+    <string name="auth_image">Authentification Image</string>
+
+
+    <!-- Title -->
+    <string name="auth_title">Authentifiez-vous</string>
+    <string name="login_title">Login</string>
+    <string name="signup_title">Sign up</string>
+
+
+    <!-- Text-->
+    <string name="welcome_text">Welcome back !</string>
+    <string name="signup_text">"Sign in to your account"</string>
+    <string name="email_text">"Email address"</string>
+    <string name="password_text">"Password"</string>
+    <string name="logging_text">"Logging in"</string>
+    <string name="login_text">"Login"</string>
+    <string name="creating_account_text">"Creating account"</string>
+    <string name="name_text">"Name"</string>
+    <string name="hello_text">"Hello there !"</string>
+    <string name="create_account_text">"Create an account !"</string>
+
+
+    <!-- Routes -->
+    <string name="login_route">login</string>
+    <string name="auth_route">auth</string>
+    <string name="signup_route">signup</string>
+    <string name="test_route">test</string>
+
+
+    <!-- Messages -->
+    <string name="error_message">"Something went wrong</string>
+
+
+    <!-- Routes -->
+    <string name="users_collection">users</string>
+
+
 </resources>
