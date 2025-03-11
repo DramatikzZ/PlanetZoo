@@ -45,6 +45,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.isen.vincent.planetzoo.R
 import kotlinx.coroutines.launch
+import fr.isen.vincent.planetzoo.components.*
 
 
 @Composable
@@ -61,7 +62,7 @@ fun HomeScreen() {
 
 @Composable
 fun HomeContent(navController: NavController) {
-    val context = LocalContext.current
+
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -103,68 +104,9 @@ fun HomeContent(navController: NavController) {
 
 
 @Composable
-fun TopBar(onOpenDrawer: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        IconButton(onClick = onOpenDrawer) {
-            Icon(
-                Icons.Filled.Menu,
-                contentDescription = "Menu",
-                modifier = Modifier.size(40.dp)
-            )
-        }
-        Image(
-            painter = painterResource(id = R.drawable.logo_zoo),
-            contentDescription = "Logo Zoo",
-            modifier = Modifier.size(width = 160.dp, height = 55.dp)
-        )
-    }
-}
-
-@Composable
-fun DrawerContent(onCloseClick: () -> Unit, onProfileClick: () -> Unit, onSettingsClick: () -> Unit) {
-    ModalDrawerSheet {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Menu", fontWeight = FontWeight.Bold)
-            IconButton(onClick = onCloseClick) {
-                Icon(
-                    imageVector = Icons.Default.ArrowForward,
-                    contentDescription = "Fermer le menu"
-                )
-            }
-        }
-
-        NavigationDrawerItem(
-            icon = { Icon(Icons.Filled.Person, contentDescription = "Profil") },
-            label = { Text("Profil") },
-            selected = false,
-            onClick = onProfileClick
-        )
-
-        NavigationDrawerItem(
-            icon = { Icon(Icons.Filled.Settings, contentDescription = "Paramètres") },
-            label = { Text("Paramètres") },
-            selected = false,
-            onClick = onSettingsClick
-        )
-    }
-}
-
-
-@Composable
 fun MiddlePage() {
+
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -178,16 +120,14 @@ fun MiddlePage() {
             modifier = Modifier.fillMaxWidth().padding(20.dp)
         ){
             Text(
-                text = "BIENVENUE AU PARC ANIMALIER DE LA BARBEN !",
+                text = ContextCompat.getString(context, R.string.headline_zoo),
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Le parc est ouvert tous les jours, y compris les jours fériés.\n\n" +
-                        "Au cœur de la Provence et d’un site Natura 2000, le Parc animalier de La Barben est une invitation à l’évasion.\n\n" +
-                        "9 km de sentiers vous guident à la rencontre de 130 espèces différentes, à l’ombre des chênes.",
+                text = ContextCompat.getString(context, R.string.corps_zoo),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center
             )
