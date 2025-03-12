@@ -33,7 +33,7 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = modifier.padding(innerPadding)) {
+        LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(biome.enclosures) { enclosure ->
                 EnclosureCard(enclosure, biome.color, navController)
             }
