@@ -2,8 +2,26 @@ package fr.isen.vincent.planetzoo.screens.controller
 
 import AnimalsScreen
 import androidx.compose.foundation.layout.padding
+<<<<<<< HEAD
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+=======
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+>>>>>>> ad204599b15f5d47dc25969278a842235bb7c301
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -70,7 +88,12 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
         gesturesEnabled = true,
         scrimColor = Color.Black.copy(alpha = 0.3f)
     ) {
+<<<<<<< HEAD
         Scaffold(
+=======
+        Scaffold (
+            modifier = Modifier.statusBarsPadding(),
+>>>>>>> ad204599b15f5d47dc25969278a842235bb7c301
             topBar = {
                 TopBar(onOpenDrawer = {
                     scope.launch {
@@ -78,7 +101,7 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
                             if (isClosed) open() else close()
                         }
                     }
-                })
+                },)
             },
             bottomBar = {
                 NavigationBar {

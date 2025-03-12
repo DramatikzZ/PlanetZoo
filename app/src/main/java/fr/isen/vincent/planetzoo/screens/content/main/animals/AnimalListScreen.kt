@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnimalListScreen(enclosure: EnclosureModel, navController: NavController) {
+fun AnimalListScreen(enclosure: EnclosureModel, navController: NavController, modifier: Modifier) {
     val coroutineScope = rememberCoroutineScope()
     val animalInfos = remember { mutableStateMapOf<String, String>() }
     val animalImages = remember { mutableStateMapOf<String, String>() }
@@ -63,7 +63,7 @@ fun AnimalListScreen(enclosure: EnclosureModel, navController: NavController) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+        LazyColumn(modifier = modifier.padding(innerPadding)) {
             items(enclosure.animals) { animal ->
                 val info = animalInfos[animal.id] ?: "Chargement des infos..."
                 val imageUrl = animalImages[animal.id]

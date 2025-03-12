@@ -10,11 +10,20 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.screens.controller.ScreenController
+<<<<<<< HEAD
 import fr.isen.vincent.planetzoo.screens.auth.*
 import fr.isen.vincent.planetzoo.screens.content.main.animals.*
 import fr.isen.vincent.planetzoo.screens.content.side.*
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 import androidx.navigation.navArgument
+=======
+import fr.isen.vincent.planetzoo.screens.auth.AuthScreen
+import fr.isen.vincent.planetzoo.screens.auth.LoginScreen
+import fr.isen.vincent.planetzoo.screens.auth.SignupScreen
+import fr.isen.vincent.planetzoo.screens.auth.TestScreen
+import fr.isen.vincent.planetzoo.screens.content.side.ParametersScreen
+import fr.isen.vincent.planetzoo.screens.content.side.ProfileScreen
+>>>>>>> ad204599b15f5d47dc25969278a842235bb7c301
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
