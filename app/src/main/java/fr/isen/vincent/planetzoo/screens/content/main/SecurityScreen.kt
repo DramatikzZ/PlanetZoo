@@ -55,13 +55,14 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
             color = Color.Black,
         )
         Spacer(modifier = Modifier.size(15.dp))
-        Row (
+        Column (
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.SpaceEvenly
         ){
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ){
                 Button(
                     onClick = { /* TODO */ },
@@ -85,8 +86,9 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
             }
             Spacer(modifier = Modifier.size(5.dp))
 
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ){
                 Button(
                     onClick = { /* TODO */ },
@@ -109,8 +111,9 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
                 )
             }
             Spacer(modifier = Modifier.size(5.dp))
-            Column (
-                horizontalAlignment = Alignment.CenterHorizontally
+            Row (
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
             ){
                 Button(
                     onClick = { /* TODO */ },
