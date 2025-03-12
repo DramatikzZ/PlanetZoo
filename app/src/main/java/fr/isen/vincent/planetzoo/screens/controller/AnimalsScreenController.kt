@@ -34,7 +34,7 @@ fun AnimalsScreen(modifier: Modifier) {
                 val biomeId = backStackEntry.arguments?.getString("biomeId")
                 val selectedBiome = zooListState.value.find { it.id == biomeId }
                 selectedBiome?.let {
-                    EnclosureListScreen(it, navController,modifier)
+                    EnclosureListScreen(it, navController)
                 }
             }
             composable(
