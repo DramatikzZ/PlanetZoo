@@ -21,7 +21,6 @@ import androidx.navigation.NavController
 @Composable
 fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
     println("✅ DEBUG: Chargement de l'écran des enclos pour le biome ${biome.id}")
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -34,7 +33,7 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding)) {
+        LazyColumn(modifier = modifier.padding(innerPadding)) {
             items(biome.enclosures) { enclosure ->
                 EnclosureCard(enclosure, biome.color, navController)
             }

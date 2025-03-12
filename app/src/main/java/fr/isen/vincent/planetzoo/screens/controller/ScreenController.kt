@@ -4,6 +4,7 @@ import AnimalsScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -78,7 +79,7 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
                             if (isClosed) open() else close()
                         }
                     }
-                })
+                },)
             },
             bottomBar = {
                 NavigationBar {
