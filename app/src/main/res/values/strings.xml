@@ -29,7 +29,8 @@
     <string name="login_title">Login</string>
     <string name="signup_title">Sign up</string>
     <string name="headline_zoo">BIENVENUE AU PARC ANIMALIER DE LA BARBEN !</string>
-    <string name="need_help">Besoin d\'aide ?</string>
+    <string name="need_help">Besoin d\'aide ?</string>*
+    <string name="can_be_find">Vous retrouverez dans le parc :</string>
 
 
 
