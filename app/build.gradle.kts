@@ -69,5 +69,7 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
     implementation(libs.generativeai)
+    implementation(libs.coil.compose)
+
 
 }
