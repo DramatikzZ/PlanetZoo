@@ -54,16 +54,14 @@ fun ServiceItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
+            .clip(if (expanded) RoundedCornerShape(20.dp) else RoundedCornerShape(0.dp))
             .background(if (expanded) colorResource(R.color.ecru) else Color.Transparent)
             .animateContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         Surface(
-            shape = if (expanded) MaterialTheme.shapes.medium else CircleShape,
             color = Color.Transparent,
-
         ) {
             Button(
                 onClick = { onExpand(service.name) },
@@ -83,7 +81,8 @@ fun ServiceItem(
             text = service.name,
             textAlign = TextAlign.Center,
             fontSize = 14.sp,
-            color = Color.Black
+            color = Color.Black,
+            modifier = Modifier.padding(10.dp)
         )
 
         if (expanded) {

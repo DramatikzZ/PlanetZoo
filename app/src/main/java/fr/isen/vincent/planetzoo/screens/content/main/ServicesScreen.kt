@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.components.ServiceItem
 import fr.isen.vincent.planetzoo.utils.AppUtil
 
@@ -36,6 +38,7 @@ fun ServiceScreen(modifier: Modifier = Modifier) {
     val serviceListState = remember { mutableStateOf<Map<String, Pair<ServiceModel, Map<String, Int>>>>(emptyMap()) }
 
     val expandedServiceName = remember { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
 
     firebaseHelper.fetchZooData { zooList ->
         val serviceMap = mutableMapOf<String, Pair<ServiceModel, MutableMap<String, Int>>>()
@@ -63,9 +66,11 @@ fun ServiceScreen(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top,
     ) {
-        Row {
+        Row (
+            modifier = Modifier.padding(horizontal = 20.dp)
+        ){
             Text(
-                text = "Vous retrouverez dans le parc :",
+                text = ContextCompat.getString(context, R.string.can_be_find),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp,
