@@ -1,9 +1,13 @@
 package fr.isen.vincent.planetzoo.viewmodel
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import fr.isen.vincent.planetzoo.R
@@ -16,7 +20,7 @@ class AuthViewModel : ViewModel() {
 
     private val firestore = Firebase.firestore
 
-    fun login(context : Context, email: String, password: String, onResult: (Boolean, String?)-> Unit ) {
+    fun login(context: Context, email: String, password: String, onResult: (Boolean, String?)-> Unit ) {
 
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
             AppUtil.showToast(context, ContextCompat.getString(context, R.string.error_message), )
@@ -26,7 +30,20 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener{
             if(it.isSuccessful) {
-                onResult(true, null)
+
+                Firebase.firestore.collection("users")
+                    .document(FirebaseAuth.getInstance().currentUser?.uid!!)
+                    .get().addOnCompleteListener() { task ->
+                        if (task.isSuccessful) {
+                            val result = task.result
+                            if (result != null && result.exists()) {
+                                UserModel.isAdmin = result.getBoolean("admin") ?: false
+                                UserModel.name =  result.getString("name") ?: "Nom inconnu"
+
+                                onResult(true, null)
+                            }
+                        }
+                    }
             } else {
                 onResult(false, it.exception?.localizedMessage)
             }
@@ -52,6 +69,8 @@ class AuthViewModel : ViewModel() {
                         .set(userModel)
                         .addOnCompleteListener {
                             dbTask-> if(dbTask.isSuccessful) {
+                                UserModel.name = name
+                                UserModel.isAdmin = false
                                 onResult(true, null)
                             } else {
                                 onResult(false, ContextCompat.getString(context, R.string.auth_image))

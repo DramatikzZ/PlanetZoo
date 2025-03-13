@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -30,6 +29,7 @@ import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import fr.isen.vincent.planetzoo.R
+import fr.isen.vincent.planetzoo.data.UserModel
 
 
 @Composable
@@ -78,7 +78,7 @@ fun DrawerContent(
             Text(ContextCompat.getString(context, R.string.menu), fontWeight = FontWeight.Bold)
             IconButton(onClick = onCloseClick) {
                 Icon(
-                    imageVector = Icons.Default.ArrowForward,
+                    imageVector = Icons.Default.ArrowBack,
                     contentDescription = ContextCompat.getString(context, R.string.close_menu)
                 )
             }
@@ -97,6 +97,15 @@ fun DrawerContent(
             selected = false,
             onClick = onSettingsClick
         )
+
+        if(UserModel.isAdmin) {
+            NavigationDrawerItem(
+                icon = { Icon(Icons.Filled.Settings, contentDescription = "Admin only") },
+                label = { Text("Admin only") },
+                selected = false,
+                onClick = onSettingsClick
+            )
+        }
 
         NavigationDrawerItem(
             icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "Logout") },

@@ -5,4 +5,9 @@ data class UserModel(
     val email : String,
     val uid : String,
     val admin : Boolean
-)
+) {
+    companion object {
+        var isAdmin: Boolean = false
+        var name: String = ""
+    }
+}
