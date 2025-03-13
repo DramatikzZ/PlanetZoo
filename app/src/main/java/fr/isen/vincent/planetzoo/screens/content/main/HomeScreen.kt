@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.components.BiomeCarousel
 import fr.isen.vincent.planetzoo.components.SearchBar
+import fr.isen.vincent.planetzoo.components.SearchResultsList
 import fr.isen.vincent.planetzoo.data.AnimalModel
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
@@ -72,28 +73,12 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
         }
 
         if (searchResults.value.isNotEmpty()) {
-            LazyColumn(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-                items(searchResults.value) { (animal, enclosure) ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(12.dp)
-                            .clickable { navController.navigate("enclosures/${enclosure.id}") },
-                        elevation = CardDefaults.cardElevation(8.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = animal.name, fontWeight = FontWeight.Bold)
-                            Text(text = "Enclos: ${enclosure.id}")
-                        }
-                    }
-                }
-            }
-        }
-        else if (biomes.value.isNotEmpty()) {
+            SearchResultsList(searchResults = searchResults.value, navController = navController)
+        } else if (biomes.value.isNotEmpty()) {
             BiomeCarousel(biomes = biomes.value, navController = navController)
         } else {
             Text("Chargement des biomes...", modifier = Modifier.padding(16.dp))
         }
+
     }
 }

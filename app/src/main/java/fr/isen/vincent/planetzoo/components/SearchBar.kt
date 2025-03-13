@@ -1,11 +1,15 @@
 package fr.isen.vincent.planetzoo.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -41,6 +45,30 @@ fun searchAnimals(query: String, biomes: List<BiomeModel>): List<Pair<AnimalMode
         biome.enclosures.flatMap { enclosure ->
             enclosure.animals.filter { it.name.contains(query, ignoreCase = true) }
                 .map { it to enclosure }
+        }
+    }
+}
+
+@Composable
+fun SearchResultsList(
+    searchResults: List<Pair<AnimalModel, EnclosureModel>>,
+    navController: NavController
+) {
+    LazyColumn(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+        items(searchResults) { (animal, enclosure) ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+                    .clickable { navController.navigate("animals/${enclosure.id}") },
+                elevation = CardDefaults.cardElevation(8.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(text = animal.name, fontWeight = FontWeight.Bold)
+                    Text(text = "Enclos: ${enclosure.id}")
+                }
+            }
         }
     }
 }

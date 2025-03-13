@@ -26,7 +26,7 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
             TopAppBar(
                 title = { Text(text = biome.name) },
                 navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStack()}) {
                         Icon(Icons.Default.Clear, contentDescription = "Retour")
                     }
                 }
