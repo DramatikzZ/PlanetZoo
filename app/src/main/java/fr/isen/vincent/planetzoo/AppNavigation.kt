@@ -88,10 +88,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
 
             composable( "home") {
-                ScreenController(modifier, navController)
+                ScreenController(modifier, navController, zooListState)
             }
 
-            composable(
+            /*composable(
                 "enclosures/{biomeId}",
                 arguments = listOf(navArgument("biomeId") { type = NavType.StringType })
             ) { backStackEntry ->
@@ -106,7 +106,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 } else {
                     println("❌ ERREUR: Aucun biome trouvé pour ID = $biomeId")
                 }
-            }
+            }*/
 
             composable("comments") {
                 println("✅ DEBUG: Navigation vers la page unique des commentaires")
@@ -119,6 +119,32 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
             composable("parameters") {
                 ParametersScreen()
+            }
+
+            composable("biomes") {
+                ZooListScreen(zooListState.value, navController,modifier)
+            }
+            composable(
+                "enclosures/{biomeId}",
+                arguments = listOf(navArgument("biomeId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val biomeId = backStackEntry.arguments?.getString("biomeId")
+                val selectedBiome = zooListState.value.find { it.id == biomeId }
+                selectedBiome?.let {
+                    EnclosureListScreen(it, navController)
+                }
+            }
+            composable(
+                "animals/{enclosureId}",
+                arguments = listOf(navArgument("enclosureId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val enclosureId = backStackEntry.arguments?.getString("enclosureId")
+                val selectedEnclosure = zooListState.value
+                    .flatMap { it.enclosures }
+                    .find { it.id == enclosureId }
+                selectedEnclosure?.let {
+                    AnimalListScreen(it, navController,modifier)
+                }
             }
 
         }

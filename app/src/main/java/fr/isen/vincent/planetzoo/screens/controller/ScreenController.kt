@@ -1,6 +1,5 @@
 package fr.isen.vincent.planetzoo.screens.controller
 
-import AnimalsScreen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
@@ -15,16 +14,23 @@ import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.components.DrawerContent
 import fr.isen.vincent.planetzoo.components.TopBar
+import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.NavBarItem
 import fr.isen.vincent.planetzoo.screens.content.main.HomeScreen
 import fr.isen.vincent.planetzoo.screens.content.main.SecurityScreen
 import fr.isen.vincent.planetzoo.screens.content.main.ServiceScreen
+import fr.isen.vincent.planetzoo.screens.content.main.animals.ZooListScreen
 import kotlinx.coroutines.launch
 
 @Composable
-fun ScreenController(modifier: Modifier = Modifier, navController: NavController) {
+fun ScreenController(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    zooListState: MutableState<List<BiomeModel>>
+) {
 
     val context = LocalContext.current
+
 
     val homePage = NavBarItem(
         title = ContextCompat.getString(context, R.string.homepage),
@@ -103,18 +109,24 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
             ContentScreen(
                 modifier = Modifier.padding(innerPadding).fillMaxSize(),
                 selectedIndex = selectedIndex,
-                navController = navController
+                navController = navController,
+                zooListState = zooListState,
             )
         }
     }
 }
 
 @Composable
-fun ContentScreen(modifier: Modifier = Modifier, selectedIndex: Int, navController: NavController) {
+fun ContentScreen(
+    modifier: Modifier = Modifier,
+    selectedIndex: Int,
+    navController: NavController,
+    zooListState: MutableState<List<BiomeModel>>
+) {
     when (selectedIndex) {
         0 -> ServiceScreen(modifier)
         1 -> HomeScreen(modifier, navController)
-        2 -> AnimalsScreen(modifier)
+        2 -> ZooListScreen(zooListState.value, navController,modifier)
         3 -> SecurityScreen(modifier)
     }
 }

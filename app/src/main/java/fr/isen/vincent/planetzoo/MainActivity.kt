@@ -22,7 +22,6 @@ class MainActivity : ComponentActivity() {
         firebaseHelper.fetchZooData { zooList ->
             zooListState.value = zooList
         }
-
         setContent {
             PlanetZooTheme {
                 Scaffold (modifier = Modifier.fillMaxSize()){ innerPadding ->
