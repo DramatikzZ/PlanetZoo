@@ -33,10 +33,10 @@ import fr.isen.vincent.planetzoo.data.UserModel
 
 
 @Composable
-fun TopBar(onOpenDrawer: () -> Unit) {
+fun TopBar(onOpenDrawer: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
