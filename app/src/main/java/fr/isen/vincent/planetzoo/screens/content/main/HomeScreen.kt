@@ -18,7 +18,7 @@ import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 
 @Composable
-fun HomeScreen(modifier: Modifier, navController: NavController) {
+fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
     val context = LocalContext.current
 
     val firebaseHelper = remember { FirebaseHelper() }
