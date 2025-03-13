@@ -2,6 +2,7 @@ package fr.isen.vincent.planetzoo
 
 import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,9 +32,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val navController = rememberNavController()
     val zooListState = remember { mutableStateOf<List<BiomeModel>>(emptyList()) }
-
-    val isLoggedIn = Firebase.auth.currentUser != null
-    val firstPage = if (isLoggedIn) "home" else ContextCompat.getString(context, R.string.auth_route)
 
     val isLoggedIn = Firebase.auth.currentUser!=null
     var isLoading by remember {
