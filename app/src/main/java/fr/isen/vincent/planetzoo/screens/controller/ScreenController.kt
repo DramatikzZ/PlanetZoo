@@ -65,7 +65,8 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
                 onSettingsClick = {
                     scope.launch { drawerState.close() }
                     navController.navigate("parameters")
-                }
+                },
+                navController
             )
         },
         gesturesEnabled = true,

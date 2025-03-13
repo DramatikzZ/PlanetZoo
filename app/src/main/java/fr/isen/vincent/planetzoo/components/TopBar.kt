@@ -7,7 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
@@ -24,7 +25,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import fr.isen.vincent.planetzoo.R
+import fr.isen.vincent.planetzoo.data.UserModel
 
 
 @Composable
@@ -54,7 +59,12 @@ fun TopBar(onOpenDrawer: () -> Unit) {
 }
 
 @Composable
-fun DrawerContent(onCloseClick: () -> Unit, onProfileClick: () -> Unit, onSettingsClick: () -> Unit) {
+fun DrawerContent(
+    onCloseClick: () -> Unit,
+    onProfileClick: () -> Unit,
+    onSettingsClick: () -> Unit,
+    navController: NavController
+) {
 
     val context = LocalContext.current
     ModalDrawerSheet {
@@ -68,7 +78,7 @@ fun DrawerContent(onCloseClick: () -> Unit, onProfileClick: () -> Unit, onSettin
             Text(ContextCompat.getString(context, R.string.menu), fontWeight = FontWeight.Bold)
             IconButton(onClick = onCloseClick) {
                 Icon(
-                    imageVector = Icons.Default.ArrowForward,
+                    imageVector = Icons.Default.ArrowBack,
                     contentDescription = ContextCompat.getString(context, R.string.close_menu)
                 )
             }
@@ -86,6 +96,27 @@ fun DrawerContent(onCloseClick: () -> Unit, onProfileClick: () -> Unit, onSettin
             label = { Text(ContextCompat.getString(context, R.string.parameters)) },
             selected = false,
             onClick = onSettingsClick
+        )
+
+        if(UserModel.isAdmin) {
+            NavigationDrawerItem(
+                icon = { Icon(Icons.Filled.Settings, contentDescription = "Admin only") },
+                label = { Text("Admin only") },
+                selected = false,
+                onClick = onSettingsClick
+            )
+        }
+
+        NavigationDrawerItem(
+            icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "Logout") },
+            label = { Text("Logout") },
+            selected = false,
+            onClick = {
+                Firebase.auth.signOut()
+                navController.navigate("auth") {
+                    popUpTo("home") {inclusive = true}
+                }
+            }
         )
     }
 }
