@@ -9,35 +9,44 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import fr.isen.vincent.planetzoo.data.UserModel
 import fr.isen.vincent.planetzoo.screens.LoadingScreen
+import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.screens.controller.ScreenController
-import fr.isen.vincent.planetzoo.screens.auth.AuthScreen
-import fr.isen.vincent.planetzoo.screens.auth.LoginScreen
-import fr.isen.vincent.planetzoo.screens.auth.SignupScreen
-import fr.isen.vincent.planetzoo.screens.auth.TestScreen
-import fr.isen.vincent.planetzoo.screens.content.side.ParametersScreen
-import fr.isen.vincent.planetzoo.screens.content.side.ProfileScreen
+import fr.isen.vincent.planetzoo.screens.auth.*
+import fr.isen.vincent.planetzoo.screens.content.main.animals.*
+import fr.isen.vincent.planetzoo.screens.content.side.*
+import fr.isen.vincent.planetzoo.utils.FirebaseHelper
+import androidx.navigation.navArgument
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
 
     val context = LocalContext.current
-
     val navController = rememberNavController()
+    val zooListState = remember { mutableStateOf<List<BiomeModel>>(emptyList()) }
+
+    val isLoggedIn = Firebase.auth.currentUser != null
+    val firstPage = if (isLoggedIn) "home" else ContextCompat.getString(context, R.string.auth_route)
 
     val isLoggedIn = Firebase.auth.currentUser!=null
     var isLoading by remember {
         mutableStateOf(true)
     }
     val firstPage = if(isLoggedIn) "home" else  ContextCompat.getString(context, R.string.auth_route)
+
+    LaunchedEffect(Unit) {
+        FirebaseHelper().fetchZooData { biomes ->
+            zooListState.value = biomes
+            println("✅ DEBUG: Biomes chargés depuis Firebase, nombre de biomes: ${biomes.size}")
+        }
+    }
 
     if(isLoggedIn) {
         Firebase.firestore.collection("users")
@@ -82,6 +91,28 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
             composable( "home") {
                 ScreenController(modifier, navController)
+            }
+
+            composable(
+                "enclosures/{biomeId}",
+                arguments = listOf(navArgument("biomeId") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val biomeId = backStackEntry.arguments?.getString("biomeId")
+                println("✅ DEBUG: Navigation vers enclosures/$biomeId")
+
+                val selectedBiome = zooListState.value.find { it.id == biomeId }
+
+                if (selectedBiome != null) {
+                    println("✅ DEBUG: Biome trouvé : ${selectedBiome.name}")
+                    EnclosureListScreen(selectedBiome, navController)
+                } else {
+                    println("❌ ERREUR: Aucun biome trouvé pour ID = $biomeId")
+                }
+            }
+
+            composable("comments") {
+                println("✅ DEBUG: Navigation vers la page unique des commentaires")
+                CommentsScreen(navController)
             }
 
             composable("profile") {
