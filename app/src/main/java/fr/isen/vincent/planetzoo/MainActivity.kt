@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import fr.isen.vincent.planetzoo.ui.theme.PlanetZooTheme
-
-
 import androidx.compose.runtime.*
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper

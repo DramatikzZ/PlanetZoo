@@ -1,10 +1,10 @@
 package fr.isen.vincent.planetzoo.screens.controller
 
 import AnimalsScreen
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -65,7 +65,8 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
                 onSettingsClick = {
                     scope.launch { drawerState.close() }
                     navController.navigate("parameters")
-                }
+                },
+                navController
             )
         },
         gesturesEnabled = true,
@@ -79,7 +80,7 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
                             if (isClosed) open() else close()
                         }
                     }
-                },)
+                }, modifier)
             },
             bottomBar = {
                 NavigationBar {
@@ -100,7 +101,7 @@ fun ScreenController(modifier: Modifier = Modifier, navController: NavController
             }
         ) { innerPadding ->
             ContentScreen(
-                modifier = modifier.padding(innerPadding),
+                modifier = Modifier.padding(innerPadding).fillMaxSize(),
                 selectedIndex = selectedIndex,
                 navController = navController
             )

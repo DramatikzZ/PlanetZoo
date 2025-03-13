@@ -17,10 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import coil.ImageLoader
 import coil.compose.AsyncImage
@@ -73,7 +69,6 @@ fun AnimalListScreen(enclosure: EnclosureModel, navController: NavController, mo
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnimalCard(animal: AnimalModel, info: String, imageUrl: String?) {
     var isExpanded by remember { mutableStateOf(false) }
