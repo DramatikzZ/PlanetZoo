@@ -1,9 +1,6 @@
 package fr.isen.vincent.planetzoo.viewmodel
 
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
@@ -23,7 +20,7 @@ class AuthViewModel : ViewModel() {
     fun login(context: Context, email: String, password: String, onResult: (Boolean, String?)-> Unit ) {
 
         if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            AppUtil.showToast(context, ContextCompat.getString(context, R.string.error_message), )
+            AppUtil.showToast(context, ContextCompat.getString(context, R.string.error_message))
             return
         }
 
@@ -62,7 +59,7 @@ class AuthViewModel : ViewModel() {
                 if(it.isSuccessful) {
                     var userId = it.result?.user?.uid
 
-                    val userModel = UserModel(name, email, userId!!, false)
+                    val userModel = UserModel(name, email, userId!!, false, "Black")
                     firestore
                         .collection(ContextCompat.getString(context, R.string.users_collection))
                         .document(userId)
@@ -78,6 +75,23 @@ class AuthViewModel : ViewModel() {
                         }
                 }else {
                     onResult(false, it.exception?.localizedMessage)
+                }
+            }
+    }
+
+    fun changePassword(context: Context, email: String, onResult: (Boolean, String?)-> Unit) {
+        if (email.isEmpty()) {
+            onResult(false, "Veuillez entrer une adresse e-mail")
+            return
+        }
+
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    onResult(true, "Email de réinitialisation envoyé")
+                    AppUtil.showToast(context, "tout est bien qui marche bien")
+                } else {
+                    onResult(false, task.exception?.localizedMessage ?: "Une erreur est survenue")
                 }
             }
     }

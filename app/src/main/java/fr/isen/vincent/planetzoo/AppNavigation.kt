@@ -82,6 +82,10 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 SignupScreen(modifier, navController)
             }
 
+            composable("forgot_password") {
+                ForgotPasswordScreen(modifier, navController)
+            }
+
             composable( ContextCompat.getString(context, R.string.test_route)) {
                 TestScreen(modifier, navController)
             }
@@ -96,7 +100,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
 
             composable("profile") {
-                ProfileScreen()
+                ProfileScreen(modifier, navController)
             }
 
             composable("parameters") {
