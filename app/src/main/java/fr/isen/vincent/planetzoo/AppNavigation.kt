@@ -114,7 +114,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
 
             composable("profile") {
-                ProfileScreen()
+                ProfileScreen(modifier, navController)
             }
 
             composable("parameters") {
