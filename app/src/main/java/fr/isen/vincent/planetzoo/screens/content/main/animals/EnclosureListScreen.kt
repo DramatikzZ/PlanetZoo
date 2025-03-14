@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import fr.isen.vincent.planetzoo.data.UserModel
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
@@ -112,6 +113,91 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
 
     CommentList(commentsList)
 }
+
+
+@Composable
+fun EnclosureAdminCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
+    var isClosed by remember { mutableStateOf(false) }
+    val fakeComments = listOf("Super enclos, les animaux ont l'air heureux!", "Très bien entretenu, j'adore!", "Belle diversité d'animaux, top!")
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { navController.navigate("animals/${enclosure.id}") },
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biomeColor)))
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "Enclos: ${enclosure.id}",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            Text(
+                text = "Animaux: ${enclosure.animals.joinToString { it.name }}",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // bouton qui gere letat de lenclo a relier au back ensuite
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = if (isClosed) "Enclos fermé (maintenance)" else "Enclos ouvert",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+                Switch(
+                    checked = isClosed,
+                    onCheckedChange = { isClosed = it },
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = Color.White,
+                        checkedTrackColor = Color(0xFFD73E30),
+                        uncheckedThumbColor = Color.White,
+                        uncheckedTrackColor = Color(0xFF72DA76)
+
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Affichage des commentaires a mettre avec firebase apres plus tard
+            Text(
+                text = "Commentaires:",
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onPrimary
+            )
+            if (fakeComments.isNotEmpty()) {
+                fakeComments.forEach { comment ->
+                    Text(
+                        text = comment,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
+                if (fakeComments.size > 1) {
+                    Text(
+                        text = "Voir plus...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Blue,
+                        modifier = Modifier.clickable {
+                            navController.navigate("comments")
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+
 
 @Composable
 fun RatingAndCommentSection(
