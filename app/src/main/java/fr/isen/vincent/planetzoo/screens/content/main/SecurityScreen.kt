@@ -1,15 +1,5 @@
 package fr.isen.vincent.planetzoo.screens.content.main
 
-<<<<<<< HEAD
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-
-@Composable
-fun SecurityScreen(modifier: Modifier) {
-    Text("Profile")
-}
-=======
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -224,4 +214,3 @@ fun EmergencyAlertSection(phoneNumber: String) {
 fun PreviewSecurityScreen() {
     SecurityScreen(modifier = Modifier)
 }
->>>>>>> ad204599b15f5d47dc25969278a842235bb7c301
