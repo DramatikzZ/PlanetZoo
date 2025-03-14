@@ -50,6 +50,8 @@ dependencies {
     implementation(libs.google.firebase.firestore)
     implementation(libs.google.firebase.auth)
     implementation(libs.google.firebase.analytics)
+    implementation(libs.firebase.auth.v2101)
+
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.core.ktx.v190)

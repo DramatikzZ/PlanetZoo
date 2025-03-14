@@ -17,16 +17,16 @@ import fr.isen.vincent.planetzoo.data.CommentModel
 @Composable
 fun CommentsScreen(navController: NavController) {
     val fakeComments = listOf(
-        CommentModel(1, "Super enclos, mais les animaux ont pas l'air heureux !"),
-        CommentModel(2, "Pas ouf !"),
-        CommentModel(3, "Super !"),
-        CommentModel(4, "Nul !")
+        CommentModel("1", "Super enclos, mais les animaux ont pas l'air heureux !"),
+        CommentModel("2", "Pas ouf !"),
+        CommentModel("3", "Super !"),
+        CommentModel("4", "Nul !")
     )
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Commentaires") }, // Plus de référence à enclosureId
+                title = { Text(text = "Commentaires") },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.Clear, contentDescription = "Retour")
