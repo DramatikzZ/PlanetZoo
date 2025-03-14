@@ -33,7 +33,7 @@ class FirebaseHelper {
 /*
 fun addZoo(zoo: BiomeModel) {
     val database = FirebaseDatabase.getInstance().reference
-    val newZooRef = database
+    val newZooRef = database.child("biomes")
 
     newZooRef.setValue(zoo.copy(id = newZooRef.key ?: ""))
         .addOnSuccessListener {
