@@ -209,6 +209,77 @@ fun CommentList(commentsList: List<CommentModel>) {
 fun AdminContent(enclosure: EnclosureModel) {
     val database = FirebaseDatabase.getInstance().reference
     var isClosed by remember { mutableStateOf(enclosure.is_open.not()) }
+    var mealTime by remember { mutableStateOf(enclosure.meal) }
+
+    LaunchedEffect(enclosure.id) {
+        val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
+            .child("enclosures").child(enclosure.id)
+
+        enclosureRef.child("is_open").get().addOnSuccessListener { snapshot ->
+            snapshot.getValue(Boolean::class.java)?.let { isClosed = !it }
+        }
+
+        enclosureRef.child("meal").get().addOnSuccessListener { snapshot ->
+            snapshot.getValue(String::class.java)?.let { mealTime = it }
+        }
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = if (isClosed) "Enclos fermé (maintenance)" else "Enclos ouvert",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
+        Switch(
+            checked = isClosed,
+            onCheckedChange = {
+                isClosed = it
+                database.child("biomes").child(enclosure.id_biomes)
+                    .child("enclosures").child(enclosure.id)
+                    .child("is_open").setValue(!it)
+            },
+            colors = SwitchDefaults.colors(
+                checkedThumbColor = Color.White,
+                checkedTrackColor = Color(0xFFD73E30),
+                uncheckedThumbColor = Color.White,
+                uncheckedTrackColor = Color(0xFF72DA76)
+            )
+        )
+    }
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Text(text = "Repas à :", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
+    OutlinedTextField(
+        value = mealTime,
+        onValueChange = { mealTime = it },
+        label = { Text("Modifier l'heure du repas") },
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    Button(
+        onClick = {
+            database.child("biomes").child(enclosure.id_biomes)
+                .child("enclosures").child(enclosure.id)
+                .child("meal").setValue(mealTime)
+        }
+    ) {
+        Text("Mettre à jour l'heure du repas")
+    }
+}
+
+/*
+@Composable
+fun AdminContent(enclosure: EnclosureModel) {
+    val database = FirebaseDatabase.getInstance().reference
+    var isClosed by remember { mutableStateOf(enclosure.is_open.not()) }
 
     LaunchedEffect(enclosure.id) {
         val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
@@ -246,8 +317,13 @@ fun AdminContent(enclosure: EnclosureModel) {
             )
         )
     }
+    Text(
+        text = "Repas à : " + enclosure.meal,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onPrimary
+    )
 }
-
+*/
 @Composable
 fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
     Card(
