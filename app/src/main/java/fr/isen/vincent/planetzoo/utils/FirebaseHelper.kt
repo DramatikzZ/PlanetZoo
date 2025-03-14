@@ -6,8 +6,9 @@ import fr.isen.vincent.planetzoo.data.BiomeModel
 class FirebaseHelper {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
+
     fun fetchZooData(onResult: (List<BiomeModel>) -> Unit) {
-        val zooRef = database
+        val zooRef = database.child("biomes")
 
         zooRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -29,7 +30,7 @@ class FirebaseHelper {
 
 }
 
-
+/*
 fun addZoo(zoo: BiomeModel) {
     val database = FirebaseDatabase.getInstance().reference
     val newZooRef = database
@@ -41,4 +42,4 @@ fun addZoo(zoo: BiomeModel) {
         .addOnFailureListener { e ->
             println("Erreur lors de l'ajout: ${e.message}")
         }
-}
+}*/

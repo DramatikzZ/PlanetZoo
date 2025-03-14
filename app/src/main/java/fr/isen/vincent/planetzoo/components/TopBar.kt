@@ -86,7 +86,11 @@ fun DrawerContent(
 
         NavigationDrawerItem(
             icon = { Icon(Icons.Filled.Person, contentDescription = ContextCompat.getString(context, R.string.profilepage)) },
-            label = { Text(ContextCompat.getString(context, R.string.profilepage)) },
+            label = { if (UserModel.isAdmin) {
+                Text(text = "Admin Profile")
+            } else {
+                Text(ContextCompat.getString(context, R.string.profilepage))
+            } },
             selected = false,
             onClick = onProfileClick
         )
@@ -97,15 +101,6 @@ fun DrawerContent(
             selected = false,
             onClick = onSettingsClick
         )
-
-        if(UserModel.isAdmin) {
-            NavigationDrawerItem(
-                icon = { Icon(Icons.Filled.Settings, contentDescription = "Admin only") },
-                label = { Text("Admin only") },
-                selected = false,
-                onClick = onSettingsClick
-            )
-        }
 
         NavigationDrawerItem(
             icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "Logout") },
