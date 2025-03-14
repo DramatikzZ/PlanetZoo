@@ -1,5 +1,6 @@
 package fr.isen.vincent.planetzoo.screens.content.main.animals
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,11 +17,17 @@ import androidx.compose.ui.unit.dp
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
 import androidx.navigation.NavController
+import fr.isen.vincent.planetzoo.data.CommentModel
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import fr.isen.vincent.planetzoo.data.UserModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
-    println("✅ DEBUG: Chargement de l'écran des enclos pour le biome ${biome.id}")
     Scaffold(
         topBar = {
             TopAppBar(
@@ -46,7 +53,29 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
 fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
     var rating by remember { mutableStateOf(0) }
     var comment by remember { mutableStateOf("") }
-    val fakeComments = listOf("Super enclos, les animaux ont l'air heureux!", "Très bien entretenu, j'adore!", "Belle diversité d'animaux, top!")
+    val database = FirebaseDatabase.getInstance().reference
+    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous"
+
+    val commentsList = remember { mutableStateListOf<CommentModel>() }
+
+    LaunchedEffect(enclosure.id) {
+        val commentRef = database.child("biomes").child(enclosure.id_biomes)
+            .child("enclosures").child(enclosure.id).child("comments")
+
+        commentRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                commentsList.clear()
+                for (commentSnapshot in snapshot.children) {
+                    val comment = commentSnapshot.getValue(CommentModel::class.java)
+                    comment?.let { commentsList.add(it) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseDebug", "❌ Erreur lors du chargement des commentaires: ${error.message}")
+            }
+        })
+    }
 
     Card(
         modifier = Modifier
@@ -83,26 +112,44 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
             )
 
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = { /* Simuler l'envoi du commentaire */ }) {
+            Button(onClick = {
+                val commentRef = database.child("biomes").child(enclosure.id_biomes)
+                    .child("enclosures").child(enclosure.id).child("comments")
+
+                commentRef.get().addOnSuccessListener { snapshot ->
+                    val existingComments = snapshot.children.mapNotNull { it.getValue(CommentModel::class.java) }.toMutableList()
+
+                    val newComment = CommentModel(
+                        id = existingComments.size.toString(),
+                        comment = comment,
+                        uid = userId
+                    )
+
+                    existingComments.add(newComment)
+
+                    commentRef.setValue(existingComments)
+                    comment = ""
+                }
+            }) {
                 Text("Soumettre")
             }
-
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = "Commentaires:", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
-            if (fakeComments.isNotEmpty()) {
-                Text(text = fakeComments.last(), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
-                if (fakeComments.size > 1) {
+
+            if (commentsList.isNotEmpty()) {
+                commentsList.forEach { commentItem ->
                     Text(
-                        text = "Voir plus...",
+                        text = commentItem.comment,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Blue,
-                        modifier = Modifier.clickable {
-                            navController.navigate("comments")
-
-
-                }
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
+            } else {
+                Text(
+                    text = "Aucun commentaire",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
         }
     }
