@@ -7,7 +7,7 @@ class FirebaseHelper {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     fun fetchZooData(onResult: (List<BiomeModel>) -> Unit) {
-        val zooRef = database
+        val zooRef = database.child("biomes")
 
         zooRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
