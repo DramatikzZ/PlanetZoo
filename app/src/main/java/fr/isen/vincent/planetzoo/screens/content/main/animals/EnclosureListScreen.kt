@@ -26,9 +26,15 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import fr.isen.vincent.planetzoo.data.UserModel
 
+import android.app.TimePickerDialog
+import android.content.Context
+import androidx.compose.ui.platform.LocalContext
+import java.util.Calendar
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
+    val context = LocalContext.current
     Scaffold(
         topBar = {
             TopAppBar(
@@ -43,7 +49,7 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
             items(biome.enclosures) { enclosure ->
-                EnclosureCard(enclosure, biome.color, navController)
+                EnclosureCard(enclosure, biome.color, navController, context)
             }
         }
     }
@@ -205,8 +211,9 @@ fun CommentList(commentsList: List<CommentModel>) {
     }
 }
 
+
 @Composable
-fun AdminContent(enclosure: EnclosureModel) {
+fun AdminContent(enclosure: EnclosureModel, context: Context) {
     val database = FirebaseDatabase.getInstance().reference
     var isClosed by remember { mutableStateOf(enclosure.is_open.not()) }
     var mealTime by remember { mutableStateOf(enclosure.meal) }
@@ -254,78 +261,29 @@ fun AdminContent(enclosure: EnclosureModel) {
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Text(text = "Repas à :", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
-    OutlinedTextField(
-        value = mealTime,
-        onValueChange = { mealTime = it },
-        label = { Text("Modifier l'heure du repas") },
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    Spacer(modifier = Modifier.height(8.dp))
+    Text(text = "Repas à : $mealTime", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
 
     Button(
         onClick = {
-            database.child("biomes").child(enclosure.id_biomes)
-                .child("enclosures").child(enclosure.id)
-                .child("meal").setValue(mealTime)
-        }
-    ) {
-        Text("Mettre à jour l'heure du repas")
-    }
-}
+            val calendar = Calendar.getInstance()
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
 
-/*
-@Composable
-fun AdminContent(enclosure: EnclosureModel) {
-    val database = FirebaseDatabase.getInstance().reference
-    var isClosed by remember { mutableStateOf(enclosure.is_open.not()) }
-
-    LaunchedEffect(enclosure.id) {
-        val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id).child("is_open")
-
-        enclosureRef.get().addOnSuccessListener { snapshot ->
-            snapshot.getValue(Boolean::class.java)?.let { isClosed = !it }
-        }
-    }
-
-    Spacer(modifier = Modifier.height(8.dp))
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = if (isClosed) "Enclos fermé (maintenance)" else "Enclos ouvert",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-        Switch(
-            checked = isClosed,
-            onCheckedChange = {
-                isClosed = it
+            TimePickerDialog(context, { _, selectedHour, selectedMinute ->
+                val newMealTime = "%02d:%02d".format(selectedHour, selectedMinute)
+                mealTime = newMealTime
                 database.child("biomes").child(enclosure.id_biomes)
                     .child("enclosures").child(enclosure.id)
-                    .child("is_open").setValue(!it)
-            },
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
-                checkedTrackColor = Color(0xFFD73E30),
-                uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = Color(0xFF72DA76)
-            )
-        )
+                    .child("meal").setValue(newMealTime)
+            }, hour, minute, true).show()
+        }
+    ) {
+        Text("Modifier l'heure du repas")
     }
-    Text(
-        text = "Repas à : " + enclosure.meal,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onPrimary
-    )
 }
-*/
+
 @Composable
-fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
+fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController, context: Context) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -339,7 +297,7 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
             Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
 
             if (UserModel.isAdmin) {
-                AdminContent(enclosure)
+                AdminContent(enclosure, context)
             } else {
                 VisitorContent(enclosure, biomeColor, navController)
             }
