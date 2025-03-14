@@ -19,8 +19,8 @@ class AuthViewModel : ViewModel() {
 
     fun login(context: Context, email: String, password: String, onResult: (Boolean, String?)-> Unit ) {
 
-        if (email.isNullOrEmpty() || password.isNullOrEmpty()) {
-            AppUtil.showToast(context, ContextCompat.getString(context, R.string.error_message))
+        if (email.isEmpty() || password.isEmpty()) {
+            onResult(false, "Veuillez entrer un email et un mot de passe.")
             return
         }
 
@@ -30,7 +30,7 @@ class AuthViewModel : ViewModel() {
 
                 Firebase.firestore.collection("users")
                     .document(FirebaseAuth.getInstance().currentUser?.uid!!)
-                    .get().addOnCompleteListener() { task ->
+                    .get().addOnCompleteListener { task ->
                         if (task.isSuccessful) {
                             val result = task.result
                             if (result != null && result.exists()) {
@@ -38,11 +38,13 @@ class AuthViewModel : ViewModel() {
                                 UserModel.name =  result.getString("name") ?: "Nom inconnu"
 
                                 onResult(true, null)
+                            } else {
+                                onResult(false, "Les données utilisateur sont manquantes.")
                             }
                         }
                     }
             } else {
-                onResult(false, it.exception?.localizedMessage)
+                onResult(false, it.exception?.localizedMessage ?: "Erreur Firestore")
             }
         }
     }
@@ -50,14 +52,14 @@ class AuthViewModel : ViewModel() {
     fun signup(context : Context, email : String, name : String, password : String, onResult: (Boolean, String?)-> Unit ) {
 
         if (email.isEmpty() || password.isEmpty() || name.isEmpty()) {
-            AppUtil.showToast(context, ContextCompat.getString(context, R.string.error_message), )
+            AppUtil.showToast(context, ContextCompat.getString(context, R.string.error_message))
             return
         }
 
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener {
                 if(it.isSuccessful) {
-                    var userId = it.result?.user?.uid
+                    val userId = it.result?.user?.uid
 
                     val userModel = UserModel(name, email, userId!!, false, "Black")
                     firestore
