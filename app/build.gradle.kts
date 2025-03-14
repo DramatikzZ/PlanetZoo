@@ -70,6 +70,7 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
     implementation(libs.generativeai)
     implementation(libs.coil.compose)
+    implementation (libs.photoview) //photoview pour la map la
 
 
 }

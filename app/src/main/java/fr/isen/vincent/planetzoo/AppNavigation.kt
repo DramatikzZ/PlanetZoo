@@ -25,6 +25,7 @@ import fr.isen.vincent.planetzoo.screens.content.main.animals.*
 import fr.isen.vincent.planetzoo.screens.content.side.*
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 import androidx.navigation.navArgument
+import fr.isen.vincent.planetzoo.screens.ZooMapScreen
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
@@ -134,6 +135,14 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     EnclosureListScreen(it, navController)
                 }
             }
+
+
+            composable("zooMap") {
+                ZooMapScreen()
+            }
+
+
+
             composable(
                 "animals/{enclosureId}",
                 arguments = listOf(navArgument("enclosureId") { type = NavType.StringType })

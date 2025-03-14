@@ -7,7 +7,7 @@ class FirebaseHelper {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     fun fetchZooData(onResult: (List<BiomeModel>) -> Unit) {
-        val zooRef = database
+        val zooRef = database.child("biomes")
 
         zooRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -32,7 +32,7 @@ class FirebaseHelper {
 
 fun addZoo(zoo: BiomeModel) {
     val database = FirebaseDatabase.getInstance().reference
-    val newZooRef = database
+    val newZooRef = database.child("biomes")
 
     newZooRef.setValue(zoo.copy(id = newZooRef.key ?: ""))
         .addOnSuccessListener {
