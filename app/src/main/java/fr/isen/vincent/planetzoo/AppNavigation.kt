@@ -65,7 +65,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         isLoading = false
     }
 
-
     if (isLoading) {
         LoadingScreen()
     } else {
@@ -94,23 +93,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             composable( "home") {
                 ScreenController(modifier, navController, zooListState)
             }
-
-            /*composable(
-                "enclosures/{biomeId}",
-                arguments = listOf(navArgument("biomeId") { type = NavType.StringType })
-            ) { backStackEntry ->
-                val biomeId = backStackEntry.arguments?.getString("biomeId")
-                println("✅ DEBUG: Navigation vers enclosures/$biomeId")
-
-                val selectedBiome = zooListState.value.find { it.id == biomeId }
-
-                if (selectedBiome != null) {
-                    println("✅ DEBUG: Biome trouvé : ${selectedBiome.name}")
-                    EnclosureListScreen(selectedBiome, navController)
-                } else {
-                    println("❌ ERREUR: Aucun biome trouvé pour ID = $biomeId")
-                }
-            }*/
 
             composable("comments") {
                 println("✅ DEBUG: Navigation vers la page unique des commentaires")
