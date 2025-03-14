@@ -90,6 +90,127 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
             Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
 
             Spacer(modifier = Modifier.height(8.dp))
+
+            // Système de notation avec étoiles
+            Row {
+                (1..5).forEach { index ->
+                    Icon(
+                        imageVector = if (index <= rating) Icons.Filled.Star else Icons.Outlined.Star,
+                        contentDescription = "Star $index",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { rating = index },
+                        tint = if (index <= rating) Color.Yellow else Color.Gray
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedTextField(
+                value = comment,
+                onValueChange = { comment = it },
+                label = { Text("Laisser un commentaire") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Button(
+                onClick = {
+                    val commentRef = database.child("biomes").child(enclosure.id_biomes)
+                        .child("enclosures").child(enclosure.id).child("comments")
+
+                    commentRef.get().addOnSuccessListener { snapshot ->
+                        val existingComments = snapshot.children.mapNotNull { it.getValue(CommentModel::class.java) }.toMutableList()
+
+                        val newComment = CommentModel(
+                            id = existingComments.size.toString(),
+                            comment = comment,
+                            uid = userId,
+                            rating = rating // Ajout de la note au commentaire
+                        )
+
+                        existingComments.add(newComment)
+
+                        commentRef.setValue(existingComments)
+                        comment = ""
+                        rating = 0 // Réinitialisation de la note après l'envoi
+                    }
+                },
+                enabled = rating > 0 // Bouton désactivé tant que la note n'est pas sélectionnée
+            ) {
+                Text("Soumettre")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(text = "Commentaires:", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
+
+            if (commentsList.isNotEmpty()) {
+                commentsList.forEach { commentItem ->
+                    Text(
+                        text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            } else {
+                Text(
+                    text = "Aucun commentaire",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }
+    }
+}
+
+
+
+/*
+
+@Composable
+fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
+    var rating by remember { mutableStateOf(0) }
+    var comment by remember { mutableStateOf("") }
+    val database = FirebaseDatabase.getInstance().reference
+    val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous"
+
+    val commentsList = remember { mutableStateListOf<CommentModel>() }
+
+    LaunchedEffect(enclosure.id) {
+        val commentRef = database.child("biomes").child(enclosure.id_biomes)
+            .child("enclosures").child(enclosure.id).child("comments")
+
+        commentRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                commentsList.clear()
+                for (commentSnapshot in snapshot.children) {
+                    val comment = commentSnapshot.getValue(CommentModel::class.java)
+                    comment?.let { commentsList.add(it) }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e("FirebaseDebug", "❌ Erreur lors du chargement des commentaires: ${error.message}")
+            }
+        })
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { navController.navigate("animals/${enclosure.id}") },
+        elevation = CardDefaults.cardElevation(6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biomeColor)))
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = "Enclos: ${enclosure.id}", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
+
+            Spacer(modifier = Modifier.height(8.dp))
             Row {
                 (1..5).forEach { index ->
                     Icon(
@@ -154,3 +275,6 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
         }
     }
 }
+
+
+*/
