@@ -48,11 +48,13 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
     }
 }
 
-
 @Composable
 fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
     var rating by remember { mutableStateOf(0) }
     var comment by remember { mutableStateOf("") }
+    var hasCommented by remember { mutableStateOf(false) }
+    var averageRating by remember { mutableStateOf(0.0) } // Stocke la moyenne des notes
+
     val database = FirebaseDatabase.getInstance().reference
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous"
 
@@ -65,10 +67,24 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
         commentRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 commentsList.clear()
+                var totalRating = 0
+                var count = 0
+                hasCommented = false
+
                 for (commentSnapshot in snapshot.children) {
                     val comment = commentSnapshot.getValue(CommentModel::class.java)
-                    comment?.let { commentsList.add(it) }
+                    comment?.let {
+                        commentsList.add(it)
+                        totalRating += it.rating
+                        count++
+
+                        if (it.uid == userId) {
+                            hasCommented = true
+                        }
+                    }
                 }
+
+                averageRating = if (count > 0) totalRating.toDouble() / count else 0.0
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -90,56 +106,74 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
             Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
 
             Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                (1..5).forEach { index ->
-                    Icon(
-                        imageVector = if (index <= rating) Icons.Filled.Star else Icons.Outlined.Star,
-                        contentDescription = "Star $index",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .clickable { rating = index },
-                        tint = if (index <= rating) Color.Yellow else Color.Gray
-                    )
+
+            if (hasCommented) {
+                Text(
+                    text = "⭐ Note moyenne : ${"%.1f".format(averageRating)}/5",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            } else {
+                Row {
+                    (1..5).forEach { index ->
+                        Icon(
+                            imageVector = if (index <= rating) Icons.Filled.Star else Icons.Outlined.Star,
+                            contentDescription = "Star $index",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .clickable { rating = index },
+                            tint = if (index <= rating) Color.Yellow else Color.Gray
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedTextField(
+                    value = comment,
+                    onValueChange = { comment = it },
+                    label = { Text("Laisser un commentaire") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = {
+                        val commentRef = database.child("biomes").child(enclosure.id_biomes)
+                            .child("enclosures").child(enclosure.id).child("comments")
+
+                        commentRef.get().addOnSuccessListener { snapshot ->
+                            val existingComments = snapshot.children.mapNotNull { it.getValue(CommentModel::class.java) }.toMutableList()
+
+                            val newComment = CommentModel(
+                                id = existingComments.size.toString(),
+                                comment = comment,
+                                uid = userId,
+                                rating = rating
+                            )
+
+                            existingComments.add(newComment)
+
+                            commentRef.setValue(existingComments)
+                            comment = ""
+                            rating = 0
+                        }
+                    },
+                    enabled = rating > 0
+                ) {
+                    Text("Soumettre")
                 }
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
-            OutlinedTextField(
-                value = comment,
-                onValueChange = { comment = it },
-                label = { Text("Laisser un commentaire") },
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = {
-                val commentRef = database.child("biomes").child(enclosure.id_biomes)
-                    .child("enclosures").child(enclosure.id).child("comments")
-
-                commentRef.get().addOnSuccessListener { snapshot ->
-                    val existingComments = snapshot.children.mapNotNull { it.getValue(CommentModel::class.java) }.toMutableList()
-
-                    val newComment = CommentModel(
-                        id = existingComments.size.toString(),
-                        comment = comment,
-                        uid = userId
-                    )
-
-                    existingComments.add(newComment)
-
-                    commentRef.setValue(existingComments)
-                    comment = ""
-                }
-            }) {
-                Text("Soumettre")
-            }
             Spacer(modifier = Modifier.height(16.dp))
+
             Text(text = "Commentaires:", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
 
             if (commentsList.isNotEmpty()) {
                 commentsList.forEach { commentItem ->
                     Text(
-                        text = commentItem.comment,
+                        text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onPrimary
                     )
