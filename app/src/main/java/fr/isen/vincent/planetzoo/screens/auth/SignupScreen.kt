@@ -144,7 +144,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
                     success, errorMessage ->
                     if(success) {
                         isLoading = false
-                        navController.navigate("home") {
+                        navController.navigate("login") {
                             popUpTo( ContextCompat.getString(context, R.string.auth_route)) {inclusive = true}
                         }
                     } else {
