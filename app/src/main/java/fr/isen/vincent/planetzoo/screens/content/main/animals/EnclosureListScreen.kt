@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import fr.isen.vincent.planetzoo.data.UserModel
 
@@ -48,23 +49,23 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
     }
 }
 
-
 @Composable
-fun VisitorContent(
-    enclosure: EnclosureModel,
-    biomeColor: String,
-    navController: NavController
-) {
-    var rating by remember { mutableStateOf(0) }
-    var comment by remember { mutableStateOf("") }
-    var hasCommented by remember { mutableStateOf(false) }
-    var averageRating by remember { mutableStateOf(0.0) }
-
+fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
     val database = FirebaseDatabase.getInstance().reference
     val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous"
     val commentsList = remember { mutableStateListOf<CommentModel>() }
+    var averageRating by remember { mutableStateOf(0.0) }
+    var hasCommented by remember { mutableStateOf(false) }
+    var isOpen by remember { mutableStateOf(enclosure.is_open) }
 
     LaunchedEffect(enclosure.id) {
+        val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
+            .child("enclosures").child(enclosure.id).child("is_open")
+
+        enclosureRef.get().addOnSuccessListener { snapshot ->
+            snapshot.getValue(Boolean::class.java)?.let { isOpen = it }
+        }
+
         val commentRef = database.child("biomes").child(enclosure.id_biomes)
             .child("enclosures").child(enclosure.id).child("comments")
 
@@ -99,6 +100,27 @@ fun VisitorContent(
 
     Spacer(modifier = Modifier.height(8.dp))
 
+    if (!isOpen) {
+        Text(
+            text = "⚠ Enclos en maintenance",
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.error
+        )
+    } else {
+        RatingAndCommentSection(hasCommented, averageRating, database, enclosure, userId)
+    }
+
+    CommentList(commentsList)
+}
+
+@Composable
+fun RatingAndCommentSection(
+    hasCommented: Boolean,
+    averageRating: Double,
+    database: DatabaseReference,
+    enclosure: EnclosureModel,
+    userId: String
+) {
     if (hasCommented) {
         Text(
             text = "⭐ Note moyenne : ${"%.1f".format(averageRating)}/5",
@@ -106,6 +128,9 @@ fun VisitorContent(
             color = MaterialTheme.colorScheme.onPrimary
         )
     } else {
+        var rating by remember { mutableStateOf(0) }
+        var comment by remember { mutableStateOf("") }
+
         Row {
             (1..5).forEach { index ->
                 Icon(
@@ -148,8 +173,6 @@ fun VisitorContent(
                     existingComments.add(newComment)
 
                     commentRef.setValue(existingComments)
-                    comment = ""
-                    rating = 0
                 }
             },
             enabled = rating > 0
@@ -157,7 +180,10 @@ fun VisitorContent(
             Text("Soumettre")
         }
     }
+}
 
+@Composable
+fun CommentList(commentsList: List<CommentModel>) {
     Spacer(modifier = Modifier.height(16.dp))
 
     Text(text = "Commentaires:", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
