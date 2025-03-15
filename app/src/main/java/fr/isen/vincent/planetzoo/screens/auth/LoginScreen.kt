@@ -131,21 +131,22 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
         Button(
             onClick = {
                 isLoading = true
-                authViewModel.checkEmailVerification { verified, message ->
-                    if (verified) {
-                        authViewModel.login(context, email, password) { success, errorMessage ->
-                            isLoading = false
-                            if (success) {
+                authViewModel.login(context, email, password) { success, errorMessage ->
+                    if(success) {
+                        authViewModel.checkEmailVerification { verified, message ->
+                            if(verified) {
+                                isLoading = false
                                 navController.navigate("home") {
                                     popUpTo(ContextCompat.getString(context, R.string.auth_route)) { inclusive = true }
                                 }
                             } else {
-                                AppUtil.showToast(context, errorMessage ?: ContextCompat.getString(context, R.string.error_message))
+                                isLoading = false
+                                AppUtil.showToast(context, message ?: "Veuillez vérifier votre adresse mail")
                             }
                         }
                     } else {
                         isLoading = false
-                        AppUtil.showToast(context, "Veuillez vérifier votre adresse mail")
+                        AppUtil.showToast(context, errorMessage ?: "Mot de passe ou adresse mail incorrects")
                     }
                 }
             },
