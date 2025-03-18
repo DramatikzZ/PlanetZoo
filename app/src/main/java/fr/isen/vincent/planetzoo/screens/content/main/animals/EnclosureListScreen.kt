@@ -1,12 +1,12 @@
 package fr.isen.vincent.planetzoo.screens.content.main.animals
 
-import android.app.TimePickerDialog
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -35,7 +35,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import fr.isen.vincent.planetzoo.data.UserModel
-import java.util.Calendar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,8 +53,8 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
         }
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(biome.enclosures) { enclosure ->
-                EnclosureCard(enclosure, biome.color, navController)
+            itemsIndexed(biome.enclosures) { index, enclosure ->
+                EnclosureCard(enclosure.copy(firebaseId = index.toString()), biome.color, navController)
             }
         }
     }
@@ -70,16 +69,16 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
     var hasCommented by remember { mutableStateOf(false) }
     var isOpen by remember { mutableStateOf(enclosure.is_open) }
 
-    LaunchedEffect(enclosure.id) {
+    LaunchedEffect(enclosure.firebaseId) {
         val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id).child("is_open")
+            .child("enclosures").child(enclosure.firebaseId).child("is_open")
 
         enclosureRef.get().addOnSuccessListener { snapshot ->
             snapshot.getValue(Boolean::class.java)?.let { isOpen = it }
         }
 
         val commentRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id).child("comments")
+            .child("enclosures").child(enclosure.firebaseId).child("comments")
 
         commentRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -170,7 +169,7 @@ fun RatingAndCommentSection(
         Button(
             onClick = {
                 val commentRef = database.child("biomes").child(enclosure.id_biomes)
-                    .child("enclosures").child(enclosure.id).child("comments")
+                    .child("enclosures").child(enclosure.firebaseId).child("comments")
 
                 commentRef.get().addOnSuccessListener { snapshot ->
                     val existingComments = snapshot.children.mapNotNull { it.getValue(CommentModel::class.java) }.toMutableList()
@@ -263,9 +262,9 @@ fun CommentDialog(
         val database = FirebaseDatabase.getInstance().reference
         val commentsList = remember { mutableStateListOf<CommentModel>() }
 
-        LaunchedEffect(enclosure.id) {
+        LaunchedEffect(enclosure.firebaseId) {
             val commentRef = database.child("biomes").child(enclosure.id_biomes)
-                .child("enclosures").child(enclosure.id).child("comments")
+                .child("enclosures").child(enclosure.firebaseId).child("comments")
 
             commentRef.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -321,9 +320,9 @@ fun AdminContent(enclosure: EnclosureModel) {
     var mealTime by remember { mutableStateOf(enclosure.meal) }
     val context = LocalContext.current
 
-    LaunchedEffect(enclosure.id) {
+    LaunchedEffect(enclosure.firebaseId) {
         val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id)
+            .child("enclosures").child(enclosure.firebaseId)
 
         enclosureRef.child("is_open").get().addOnSuccessListener { snapshot ->
             snapshot.getValue(Boolean::class.java)?.let { isClosed = !it }
@@ -350,7 +349,7 @@ fun AdminContent(enclosure: EnclosureModel) {
             onCheckedChange = {
                 isClosed = it
                 database.child("biomes").child(enclosure.id_biomes)
-                    .child("enclosures").child(enclosure.id)
+                    .child("enclosures").child(enclosure.firebaseId)
                     .child("is_open").setValue(!it)
             },
             colors = SwitchDefaults.colors(
@@ -385,13 +384,16 @@ fun AdminContent(enclosure: EnclosureModel) {
                 }
             },
             text = {
-                TimePickerField(mealTime) { selectedTime ->
+                TimePickerField(mealTime, enclosure.firebaseId) { selectedTime ->
                     mealTime = selectedTime
                     database.child("biomes").child(enclosure.id_biomes)
-                        .child("enclosures").child(enclosure.id)
-                        .child("meal").setValue(mealTime)
+                        .child("enclosures").child(enclosure.firebaseId)
+                        .child("meal")
+                        .setValue(mealTime)
                     showTimePicker = false
                 }
+
+
             }
         )
     }
@@ -407,11 +409,11 @@ fun AdminContent(enclosure: EnclosureModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimePickerField(initialTime: String, onTimeSelected: (String) -> Unit) {
+fun TimePickerField(initialTime: String, enclosureId: String, onTimeSelected: (String) -> Unit) {
     val timeParts = initialTime.split(":").map { it.toIntOrNull() ?: 0 }
     val initialHour = timeParts.getOrElse(0) { 0 }
     val initialMinute = timeParts.getOrElse(1) { 0 }
-    val state = rememberTimePickerState(initialHour,initialMinute, is24Hour = true)
+    val state = rememberTimePickerState(initialHour, initialMinute, is24Hour = true)
 
     Column(modifier = Modifier.padding(16.dp)) {
         TimePicker(
@@ -424,6 +426,9 @@ fun TimePickerField(initialTime: String, onTimeSelected: (String) -> Unit) {
                 val selectedHour = state.hour
                 val selectedMinute = state.minute
                 val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+
+                Log.d("Debug", "Modification mealTime pour l’enclos ID: $enclosureId") // Ajout du log
+
                 onTimeSelected(formattedTime)
             }
         ) {
@@ -433,9 +438,12 @@ fun TimePickerField(initialTime: String, onTimeSelected: (String) -> Unit) {
 }
 
 
-
 @Composable
-fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
+fun EnclosureCard(
+    enclosure: EnclosureModel,
+    biomeColor: String,
+    navController: NavController
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -445,7 +453,7 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
         colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biomeColor)))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Enclos: ${enclosure.id}", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = "Enclos: ${enclosure.firebaseId}", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
             Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
 
             if (UserModel.isAdmin) {
@@ -461,9 +469,9 @@ fun deleteComment(database: DatabaseReference, enclosure: EnclosureModel, commen
     val commentRef = database.child("biomes")
         .child(enclosure.id_biomes)
         .child("enclosures")
-        .child(enclosure.id)
+        .child(enclosure.firebaseId)
         .child("comments")
-        .child(commentId) // ❗ Supprime uniquement ce commentaire
+        .child(commentId)
 
     commentRef.removeValue().addOnSuccessListener {
         Log.d("FirebaseDebug", "✅ Commentaire supprimé : $commentId")
