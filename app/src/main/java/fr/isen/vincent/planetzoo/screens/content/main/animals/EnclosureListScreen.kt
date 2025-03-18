@@ -1,19 +1,29 @@
 package fr.isen.vincent.planetzoo.screens.content.main.animals
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
 import androidx.navigation.NavController
@@ -43,8 +53,8 @@ fun EnclosureListScreen(biome: BiomeModel, navController: NavController) {
         }
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding)) {
-            items(biome.enclosures) { enclosure ->
-                EnclosureCard(enclosure, biome.color, navController)
+            itemsIndexed(biome.enclosures) { index, enclosure ->
+                EnclosureCard(enclosure.copy(firebaseId = index.toString()), biome.color, navController)
             }
         }
     }
@@ -59,16 +69,16 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
     var hasCommented by remember { mutableStateOf(false) }
     var isOpen by remember { mutableStateOf(enclosure.is_open) }
 
-    LaunchedEffect(enclosure.id) {
+    LaunchedEffect(enclosure.firebaseId) {
         val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id).child("is_open")
+            .child("enclosures").child(enclosure.firebaseId).child("is_open")
 
         enclosureRef.get().addOnSuccessListener { snapshot ->
             snapshot.getValue(Boolean::class.java)?.let { isOpen = it }
         }
 
         val commentRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id).child("comments")
+            .child("enclosures").child(enclosure.firebaseId).child("comments")
 
         commentRef.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -111,93 +121,8 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
         RatingAndCommentSection(hasCommented, averageRating, database, enclosure, userId)
     }
 
-    CommentList(commentsList)
+    CommentList(commentsList,Color.White,enclosure)
 }
-
-
-@Composable
-fun EnclosureAdminCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
-    var isClosed by remember { mutableStateOf(false) }
-    val fakeComments = listOf("Super enclos, les animaux ont l'air heureux!", "Très bien entretenu, j'adore!", "Belle diversité d'animaux, top!")
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { navController.navigate("animals/${enclosure.id}") },
-        elevation = CardDefaults.cardElevation(6.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biomeColor)))
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Enclos: ${enclosure.id}",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            Text(
-                text = "Animaux: ${enclosure.animals.joinToString { it.name }}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            // bouton qui gere letat de lenclo a relier au back ensuite
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = if (isClosed) "Enclos fermé (maintenance)" else "Enclos ouvert",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimary
-                )
-                Switch(
-                    checked = isClosed,
-                    onCheckedChange = { isClosed = it },
-                    colors = SwitchDefaults.colors(
-                        checkedThumbColor = Color.White,
-                        checkedTrackColor = Color(0xFFD73E30),
-                        uncheckedThumbColor = Color.White,
-                        uncheckedTrackColor = Color(0xFF72DA76)
-
-                    )
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Affichage des commentaires a mettre avec firebase apres plus tard
-            Text(
-                text = "Commentaires:",
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-            if (fakeComments.isNotEmpty()) {
-                fakeComments.forEach { comment ->
-                    Text(
-                        text = comment,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                }
-                if (fakeComments.size > 1) {
-                    Text(
-                        text = "Voir plus...",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.Blue,
-                        modifier = Modifier.clickable {
-                            navController.navigate("comments")
-                        }
-                    )
-                }
-            }
-        }
-    }
-}
-
-
 
 @Composable
 fun RatingAndCommentSection(
@@ -244,7 +169,7 @@ fun RatingAndCommentSection(
         Button(
             onClick = {
                 val commentRef = database.child("biomes").child(enclosure.id_biomes)
-                    .child("enclosures").child(enclosure.id).child("comments")
+                    .child("enclosures").child(enclosure.firebaseId).child("comments")
 
                 commentRef.get().addOnSuccessListener { snapshot ->
                     val existingComments = snapshot.children.mapNotNull { it.getValue(CommentModel::class.java) }.toMutableList()
@@ -268,38 +193,136 @@ fun RatingAndCommentSection(
     }
 }
 
+
 @Composable
-fun CommentList(commentsList: List<CommentModel>) {
+fun CommentList(commentsList: List<CommentModel>, textColor: Color, enclosure: EnclosureModel) {
+    val database = FirebaseDatabase.getInstance().reference
+
     Spacer(modifier = Modifier.height(16.dp))
 
-    Text(text = "Commentaires:", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
+    Text(
+        text = "Commentaires :",
+        style = MaterialTheme.typography.headlineSmall,
+        color = textColor
+    )
 
-    if (commentsList.isNotEmpty()) {
-        commentsList.forEach { commentItem ->
-            Text(
-                text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
-            )
-        }
-    } else {
+    if (commentsList.isEmpty()) {
         Text(
             text = "Aucun commentaire",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = textColor
         )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 400.dp) // Ajout d'une hauteur maximale
+        ) {
+            items(commentsList) { commentItem ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = textColor,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    if (UserModel.isAdmin) {
+                        IconButton(onClick = {
+                            commentItem.id?.let { commentId ->
+                                deleteComment(database, enclosure, commentId)
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Supprimer",
+                                tint = Color.Red
+                            )
+                        }
+                    }
+                }
+                Divider(color = Color.Gray, thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
+            }
+        }
     }
 }
 
+@Composable
+fun CommentDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    enclosure: EnclosureModel
+) {
+    if (showDialog) {
+        val database = FirebaseDatabase.getInstance().reference
+        val commentsList = remember { mutableStateListOf<CommentModel>() }
+
+        LaunchedEffect(enclosure.firebaseId) {
+            val commentRef = database.child("biomes").child(enclosure.id_biomes)
+                .child("enclosures").child(enclosure.firebaseId).child("comments")
+
+            commentRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    commentsList.clear()
+                    for (commentSnapshot in snapshot.children) {
+                        val comment = commentSnapshot.getValue(CommentModel::class.java)
+                        comment?.let { commentsList.add(it) }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("FirebaseDebug", "❌ Erreur lors du chargement des commentaires: ${error.message}")
+                }
+            })
+        }
+
+        Dialog(onDismissRequest = onDismiss) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.7f)
+                    .background(Color.White, shape = RoundedCornerShape(16.dp))
+                    .padding(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()) // Ajout du scroll
+                ) {
+                    Text(
+                        text = "Commentaires",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    CommentList(commentsList, Color.Black, enclosure)
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Button(onClick = onDismiss, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                        Text("Fermer")
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminContent(enclosure: EnclosureModel) {
     val database = FirebaseDatabase.getInstance().reference
     var isClosed by remember { mutableStateOf(enclosure.is_open.not()) }
     var mealTime by remember { mutableStateOf(enclosure.meal) }
+    val context = LocalContext.current
 
-    LaunchedEffect(enclosure.id) {
+    LaunchedEffect(enclosure.firebaseId) {
         val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id)
+            .child("enclosures").child(enclosure.firebaseId)
 
         enclosureRef.child("is_open").get().addOnSuccessListener { snapshot ->
             snapshot.getValue(Boolean::class.java)?.let { isClosed = !it }
@@ -326,7 +349,7 @@ fun AdminContent(enclosure: EnclosureModel) {
             onCheckedChange = {
                 isClosed = it
                 database.child("biomes").child(enclosure.id_biomes)
-                    .child("enclosures").child(enclosure.id)
+                    .child("enclosures").child(enclosure.firebaseId)
                     .child("is_open").setValue(!it)
             },
             colors = SwitchDefaults.colors(
@@ -340,78 +363,87 @@ fun AdminContent(enclosure: EnclosureModel) {
 
     Spacer(modifier = Modifier.height(8.dp))
 
-    Text(text = "Repas à :", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
-    OutlinedTextField(
-        value = mealTime,
-        onValueChange = { mealTime = it },
-        label = { Text("Modifier l'heure du repas") },
-        modifier = Modifier.fillMaxWidth()
-    )
+    Text(text = "Repas à : $mealTime", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
+    var showTimePicker by remember { mutableStateOf(false) }
+    var showModComm by remember { mutableStateOf(false) }
 
-    Spacer(modifier = Modifier.height(8.dp))
-
-    Button(
-        onClick = {
-            database.child("biomes").child(enclosure.id_biomes)
-                .child("enclosures").child(enclosure.id)
-                .child("meal").setValue(mealTime)
-        }
-    ) {
-        Text("Mettre à jour l'heure du repas")
-    }
-}
-
-/*
-@Composable
-fun AdminContent(enclosure: EnclosureModel) {
-    val database = FirebaseDatabase.getInstance().reference
-    var isClosed by remember { mutableStateOf(enclosure.is_open.not()) }
-
-    LaunchedEffect(enclosure.id) {
-        val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
-            .child("enclosures").child(enclosure.id).child("is_open")
-
-        enclosureRef.get().addOnSuccessListener { snapshot ->
-            snapshot.getValue(Boolean::class.java)?.let { isClosed = !it }
-        }
+    Button(onClick = { showTimePicker = true }) {
+        Text("Modifier l'heure du repas")
     }
 
-    Spacer(modifier = Modifier.height(8.dp))
+    Button(onClick = { showModComm = true }) {
+        Text("Modérer les commentaires")
+    }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = if (isClosed) "Enclos fermé (maintenance)" else "Enclos ouvert",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimary
-        )
-        Switch(
-            checked = isClosed,
-            onCheckedChange = {
-                isClosed = it
-                database.child("biomes").child(enclosure.id_biomes)
-                    .child("enclosures").child(enclosure.id)
-                    .child("is_open").setValue(!it)
+    if (showTimePicker) {
+        AlertDialog(
+            onDismissRequest = { showTimePicker = false },
+            confirmButton = {
+                Button(onClick = { showTimePicker = false }) {
+                    Text("Annuler")
+                }
             },
-            colors = SwitchDefaults.colors(
-                checkedThumbColor = Color.White,
-                checkedTrackColor = Color(0xFFD73E30),
-                uncheckedThumbColor = Color.White,
-                uncheckedTrackColor = Color(0xFF72DA76)
-            )
+            text = {
+                TimePickerField(mealTime, enclosure.firebaseId) { selectedTime ->
+                    mealTime = selectedTime
+                    database.child("biomes").child(enclosure.id_biomes)
+                        .child("enclosures").child(enclosure.firebaseId)
+                        .child("meal")
+                        .setValue(mealTime)
+                    showTimePicker = false
+                }
+
+
+            }
         )
     }
-    Text(
-        text = "Repas à : " + enclosure.meal,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onPrimary
+
+
+    CommentDialog(
+        showDialog = showModComm,
+        onDismiss = { showModComm = false },
+        enclosure = enclosure
     )
+
 }
-*/
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: NavController) {
+fun TimePickerField(initialTime: String, enclosureId: String, onTimeSelected: (String) -> Unit) {
+    val timeParts = initialTime.split(":").map { it.toIntOrNull() ?: 0 }
+    val initialHour = timeParts.getOrElse(0) { 0 }
+    val initialMinute = timeParts.getOrElse(1) { 0 }
+    val state = rememberTimePickerState(initialHour, initialMinute, is24Hour = true)
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        TimePicker(
+            state = state,
+            layoutType = TimePickerLayoutType.Vertical
+        )
+
+        Button(
+            onClick = {
+                val selectedHour = state.hour
+                val selectedMinute = state.minute
+                val formattedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
+
+                Log.d("Debug", "Modification mealTime pour l’enclos ID: $enclosureId") // Ajout du log
+
+                onTimeSelected(formattedTime)
+            }
+        ) {
+            Text("Confirmer l'heure")
+        }
+    }
+}
+
+
+@Composable
+fun EnclosureCard(
+    enclosure: EnclosureModel,
+    biomeColor: String,
+    navController: NavController
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -421,7 +453,7 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
         colors = CardDefaults.cardColors(containerColor = Color(android.graphics.Color.parseColor(biomeColor)))
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = "Enclos: ${enclosure.id}", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
+            Text(text = "Enclos: ${enclosure.firebaseId}", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
             Text(text = "Animaux: ${enclosure.animals.joinToString { it.name }}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
 
             if (UserModel.isAdmin) {
@@ -430,5 +462,20 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
                 VisitorContent(enclosure, biomeColor, navController)
             }
         }
+    }
+}
+
+fun deleteComment(database: DatabaseReference, enclosure: EnclosureModel, commentId: String) {
+    val commentRef = database.child("biomes")
+        .child(enclosure.id_biomes)
+        .child("enclosures")
+        .child(enclosure.firebaseId)
+        .child("comments")
+        .child(commentId)
+
+    commentRef.removeValue().addOnSuccessListener {
+        Log.d("FirebaseDebug", "✅ Commentaire supprimé : $commentId")
+    }.addOnFailureListener { error ->
+        Log.e("FirebaseDebug", "❌ Erreur lors de la suppression : ${error.message}")
     }
 }
