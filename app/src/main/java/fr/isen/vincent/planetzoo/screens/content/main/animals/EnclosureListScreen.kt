@@ -7,7 +7,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Star
@@ -120,7 +122,7 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
         RatingAndCommentSection(hasCommented, averageRating, database, enclosure, userId)
     }
 
-    CommentList(commentsList,Color.White)
+    CommentList(commentsList,Color.White,enclosure)
 }
 
 @Composable
@@ -192,26 +194,62 @@ fun RatingAndCommentSection(
     }
 }
 
+
 @Composable
-fun CommentList(commentsList: List<CommentModel>, textColor: Color) {
+fun CommentList(commentsList: List<CommentModel>, textColor: Color, enclosure: EnclosureModel) {
+    val database = FirebaseDatabase.getInstance().reference
+
     Spacer(modifier = Modifier.height(16.dp))
 
-    Text(text = "Commentaires:", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
+    Text(
+        text = "Commentaires :",
+        style = MaterialTheme.typography.headlineSmall,
+        color = textColor
+    )
 
-    if (commentsList.isNotEmpty()) {
-        commentsList.forEach { commentItem ->
-            Text(
-                text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
-                style = MaterialTheme.typography.bodyMedium,
-                color = textColor
-            )
-        }
-    } else {
+    if (commentsList.isEmpty()) {
         Text(
             text = "Aucun commentaire",
             style = MaterialTheme.typography.bodyMedium,
             color = textColor
         )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 400.dp) // Ajout d'une hauteur maximale
+        ) {
+            items(commentsList) { commentItem ->
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = textColor,
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    if (UserModel.isAdmin) {
+                        IconButton(onClick = {
+                            commentItem.id?.let { commentId ->
+                                deleteComment(database, enclosure, commentId)
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Filled.Clear,
+                                contentDescription = "Supprimer",
+                                tint = Color.Red
+                            )
+                        }
+                    }
+                }
+                Divider(color = Color.Gray, thickness = 1.dp, modifier = Modifier.padding(vertical = 4.dp))
+            }
+        }
     }
 }
 
@@ -248,16 +286,20 @@ fun CommentDialog(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .fillMaxHeight(0.7f)
                     .background(Color.White, shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.verticalScroll(rememberScrollState()) // Ajout du scroll
+                ) {
                     Text(
                         text = "Commentaires",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold
                     )
-                    CommentList(commentsList, Color.Black)
+
+                    CommentList(commentsList, Color.Black, enclosure)
 
                     Spacer(modifier = Modifier.height(20.dp))
 
@@ -269,7 +311,6 @@ fun CommentDialog(
         }
     }
 }
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -413,5 +454,20 @@ fun EnclosureCard(enclosure: EnclosureModel, biomeColor: String, navController: 
                 VisitorContent(enclosure, biomeColor, navController)
             }
         }
+    }
+}
+
+fun deleteComment(database: DatabaseReference, enclosure: EnclosureModel, commentId: String) {
+    val commentRef = database.child("biomes")
+        .child(enclosure.id_biomes)
+        .child("enclosures")
+        .child(enclosure.id)
+        .child("comments")
+        .child(commentId) // ❗ Supprime uniquement ce commentaire
+
+    commentRef.removeValue().addOnSuccessListener {
+        Log.d("FirebaseDebug", "✅ Commentaire supprimé : $commentId")
+    }.addOnFailureListener { error ->
+        Log.e("FirebaseDebug", "❌ Erreur lors de la suppression : ${error.message}")
     }
 }
