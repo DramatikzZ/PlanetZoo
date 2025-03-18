@@ -2,20 +2,26 @@ package fr.isen.vincent.planetzoo.screens.content.main.animals
 
 import android.app.TimePickerDialog
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
 import androidx.navigation.NavController
@@ -114,7 +120,7 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
         RatingAndCommentSection(hasCommented, averageRating, database, enclosure, userId)
     }
 
-    CommentList(commentsList)
+    CommentList(commentsList,Color.White)
 }
 
 @Composable
@@ -187,7 +193,7 @@ fun RatingAndCommentSection(
 }
 
 @Composable
-fun CommentList(commentsList: List<CommentModel>) {
+fun CommentList(commentsList: List<CommentModel>, textColor: Color) {
     Spacer(modifier = Modifier.height(16.dp))
 
     Text(text = "Commentaires:", style = MaterialTheme.typography.headlineSmall, color = MaterialTheme.colorScheme.onPrimary)
@@ -197,20 +203,76 @@ fun CommentList(commentsList: List<CommentModel>) {
             Text(
                 text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onPrimary
+                color = textColor
             )
         }
     } else {
         Text(
             text = "Aucun commentaire",
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = textColor
         )
+    }
+}
+
+@Composable
+fun CommentDialog(
+    showDialog: Boolean,
+    onDismiss: () -> Unit,
+    enclosure: EnclosureModel
+) {
+    if (showDialog) {
+        val database = FirebaseDatabase.getInstance().reference
+        val commentsList = remember { mutableStateListOf<CommentModel>() }
+
+        LaunchedEffect(enclosure.id) {
+            val commentRef = database.child("biomes").child(enclosure.id_biomes)
+                .child("enclosures").child(enclosure.id).child("comments")
+
+            commentRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    commentsList.clear()
+                    for (commentSnapshot in snapshot.children) {
+                        val comment = commentSnapshot.getValue(CommentModel::class.java)
+                        comment?.let { commentsList.add(it) }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("FirebaseDebug", "❌ Erreur lors du chargement des commentaires: ${error.message}")
+                }
+            })
+        }
+
+        Dialog(onDismissRequest = onDismiss) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, shape = RoundedCornerShape(16.dp))
+                    .padding(16.dp)
+            ) {
+                Column {
+                    Text(
+                        text = "Commentaires",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    CommentList(commentsList, Color.Black)
+
+                    Spacer(modifier = Modifier.height(20.dp))
+
+                    Button(onClick = onDismiss, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                        Text("Fermer")
+                    }
+                }
+            }
+        }
     }
 }
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AdminContent(enclosure: EnclosureModel) {
     val database = FirebaseDatabase.getInstance().reference
@@ -263,9 +325,14 @@ fun AdminContent(enclosure: EnclosureModel) {
 
     Text(text = "Repas à : $mealTime", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimary)
     var showTimePicker by remember { mutableStateOf(false) }
+    var showModComm by remember { mutableStateOf(false) }
 
     Button(onClick = { showTimePicker = true }) {
         Text("Modifier l'heure du repas")
+    }
+
+    Button(onClick = { showModComm = true }) {
+        Text("Modérer les commentaires")
     }
 
     if (showTimePicker) {
@@ -287,6 +354,14 @@ fun AdminContent(enclosure: EnclosureModel) {
             }
         )
     }
+
+
+    CommentDialog(
+        showDialog = showModComm,
+        onDismiss = { showModComm = false },
+        enclosure = enclosure
+    )
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
