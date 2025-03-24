@@ -1,6 +1,8 @@
 package fr.isen.vincent.planetzoo.screens.auth
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,11 +11,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -39,12 +43,13 @@ fun AuthScreen(modifier: Modifier = Modifier, navController: NavHostController) 
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+
         Image(
             painter = painterResource(id = R.drawable.banner_auth),
             contentDescription = ContextCompat.getString(context, R.string.auth_image),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(300.dp)
+                .height(400.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -67,13 +72,18 @@ fun AuthScreen(modifier: Modifier = Modifier, navController: NavHostController) 
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
-            ) {
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFD7725D),
+                contentColor = Color.White
+            )
+        ) {
             Text(
                 text = ContextCompat.getString(context, R.string.login_title),
                 fontSize = 22.sp
             )
         }
+
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -83,7 +93,12 @@ fun AuthScreen(modifier: Modifier = Modifier, navController: NavHostController) 
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(60.dp),
+            colors = ButtonDefaults.outlinedButtonColors(
+                containerColor = Color.Transparent,
+                contentColor =  Color(0xFFD7725D)
+            ),
+            border = BorderStroke(1.dp, Color(0xFFD7725D))
         ) {
             Text(
                 text = ContextCompat.getString(context, R.string.signup_title),

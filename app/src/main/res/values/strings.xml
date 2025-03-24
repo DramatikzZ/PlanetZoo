@@ -26,8 +26,8 @@
 
     <!-- Title -->
     <string name="auth_title">Authentifiez-vous</string>
-    <string name="login_title">Login</string>
-    <string name="signup_title">Sign up</string>
+    <string name="login_title">Se connecter</string>
+    <string name="signup_title">S\'inscrire</string>
     <string name="headline_zoo">BIENVENUE AU PARC ANIMALIER DE LA BARBEN !</string>
     <string name="need_help">Besoin d\'aide ?</string>*
     <string name="can_be_find">Vous retrouverez dans le parc :</string>
@@ -35,16 +35,18 @@
 
 
     <!-- Text-->
-    <string name="welcome_text">Welcome back !</string>
-    <string name="signup_text">"Sign in to your account"</string>
-    <string name="email_text">"Email address"</string>
-    <string name="password_text">"Password"</string>
-    <string name="logging_text">"Logging in"</string>
-    <string name="login_text">"Login"</string>
+    <string name="welcome_text">Bon retour !</string>
+    <string name="forgot_text">Vous avez oublié votre mot de passe ?</string>
+    <string name="soucis_text">Aucun soucis !</string>
+    <string name="signup_text">Connectez vous</string>
+    <string name="email_text">"exemple@gmail.com"</string>
+    <string name="password_text">"Mot de passe"</string>
+    <string name="logging_text">"Connexion..."</string>
+    <string name="login_text">"Se connecter"</string>
     <string name="creating_account_text">"Creating account"</string>
     <string name="name_text">"Name"</string>
-    <string name="hello_text">"Hello there !"</string>
-    <string name="create_account_text">"Create an account !"</string>
+    <string name="hello_text">"Bienvenue !"</string>
+    <string name="create_account_text">"Créez votre compte"</string>
     <string name="corps_zoo">Le parc est ouvert tous les jours, y compris les jours fériés.
     Au cœur de la Provence et d’un site Natura 2000, le Parc animalier de La Barben est une
     invitation à l’évasion.9 km de sentiers vous guident à la rencontre de 130 espèces différentes,
