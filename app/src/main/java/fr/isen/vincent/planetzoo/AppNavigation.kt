@@ -96,7 +96,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
 
             composable("comments") {
-                println("✅ DEBUG: Navigation vers la page unique des commentaires")
                 CommentsScreen(navController)
             }
 
@@ -122,12 +121,9 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 }
             }
 
-
             composable("zooMap") {
                 ZooMapScreen()
             }
-
-
 
             composable(
                 "animals/{enclosureId}",
@@ -141,7 +137,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                     AnimalListScreen(it, navController,modifier)
                 }
             }
-
         }
     }
 }
