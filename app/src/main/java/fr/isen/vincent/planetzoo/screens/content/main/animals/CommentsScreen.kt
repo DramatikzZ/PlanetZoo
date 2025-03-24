@@ -50,7 +50,7 @@ fun CommentsScreen(navController: NavController) {
                         elevation = CardDefaults.cardElevation(6.dp)
                     ) {
                         Text(
-                            text = comment.comment,
+                            text = comment.comment.toString(),
                             style = MaterialTheme.typography.bodyMedium,
                             modifier = Modifier.padding(16.dp)
                         )

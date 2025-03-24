@@ -353,12 +353,11 @@ fun ZooMapScreen() {
     }
 }
 
-// ✅ Fonction de distance entre 2 points
 fun distance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
     return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 }
 
-// ✅ Algorithme de Dijkstra
+
 fun dijkstra(
     voisins: Map<Int, List<Int>>,
     points: List<PointInteret>,
