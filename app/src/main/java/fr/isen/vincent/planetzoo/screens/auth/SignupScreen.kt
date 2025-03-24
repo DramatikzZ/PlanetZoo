@@ -1,6 +1,7 @@
 package fr.isen.vincent.planetzoo.screens.auth
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,9 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -81,7 +87,8 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
             style = TextStyle(
                 fontSize = 22.sp,
                 fontFamily = FontFamily.Monospace,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFF796D47)
             )
         )
 
@@ -92,7 +99,7 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
             contentDescription = ContextCompat.getString(context, R.string.auth_image),
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(300.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -105,7 +112,15 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
             label = {
                 Text(text = ContextCompat.getString(context, R.string.email_text))
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(25.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFFD6725D),
+                unfocusedLabelColor = Color(0xFF796D47),
+                focusedLabelColor = Color(0xFFD6725D),
+                unfocusedBorderColor =  Color(0xFF796D47),
+
+                )
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -118,7 +133,15 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
             label = {
                 Text(text = ContextCompat.getString(context, R.string.name_text))
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(25.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFFD6725D),
+                unfocusedLabelColor = Color(0xFF796D47),
+                focusedLabelColor = Color(0xFFD6725D),
+                unfocusedBorderColor =  Color(0xFF796D47),
+
+                )
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -132,7 +155,15 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
                 Text(text = ContextCompat.getString(context, R.string.password_text))
             },
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation()
+            shape = RoundedCornerShape(25.dp),
+            visualTransformation = PasswordVisualTransformation(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFFD6725D),
+                unfocusedLabelColor = Color(0xFF796D47),
+                focusedLabelColor = Color(0xFFD6725D),
+                unfocusedBorderColor =  Color(0xFF796D47),
+
+                )
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -156,7 +187,11 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
             enabled = !isLoading,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp)
+                .height(60.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFD7725D),
+                contentColor = Color.White
+            )
         ) {
             Text(
                 text = if(isLoading)  ContextCompat.getString(context, R.string.creating_account_text) else  ContextCompat.getString(context, R.string.signup_title),
@@ -170,17 +205,16 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ){
-            Text(text = "Vous avez déjà un compte ?")
-
-            OutlinedButton (
-                onClick = {
+            Text(text = "Vous avez déjà un compte ?",
+                color = Color(0xFF796D47))
+            Spacer(modifier = Modifier.size(10.dp))
+            Text(
+                text = "Cliquez ici",
+                modifier = Modifier.clickable {
                     navController.navigate("login")
-                }
-            ) {
-                Text(
-                    text = "Cliquez ici"
-                )
-            }
+                },
+                color = Color(0xFFD7725D)
+            )
         }
     }
 }
