@@ -20,161 +20,210 @@ import androidx.compose.ui.unit.dp
 import fr.isen.vincent.planetzoo.R
 import kotlin.math.sqrt
 
-data class PointInteret(val name: String, val x: Float, val y: Float)
 
-    val pointsZoo = listOf(
-        PointInteret("Entrée du parc", 103.86534f, 529.28906f),
-PointInteret("Toilettes 1", 81.06788f, 573.972f),
-PointInteret("Café Nomade", 116.534256f, 577.92316f),
-PointInteret("Accueil Billetterie", 128.34538f, 509.9401f),
-PointInteret("Boutique", 104.72314f, 493.26367f),
-PointInteret("Poste de Secours", 119.89944f, 475.94858f),
-PointInteret("Restaurant du Parc Bergerie", 199.31113f, 511.27673f),
-PointInteret("Parking Handicapé 1", 152.85841f, 439.28384f),
-PointInteret("Parking Handicapé 2", 242.36566f, 550.61395f),
-PointInteret("Gare des Cascades", 216.20302f, 464.61786f),
-PointInteret("Enclos Perroquets/Ara", 190.00739f, 441.25912f),
-PointInteret("Grand Hocco", 212.80484f, 430.6263f),
-PointInteret("Panthère", 249.9868f, 441.25912f),
-PointInteret("Panda Roux", 415.50757f, 560.6081f),
-PointInteret("Lémurien", 457.73727f, 567.29034f),
-PointInteret("Chèvre Naine", 429.85907f, 591.9271f),
-PointInteret("Enclos Tortue", 491.52106f, 583.9661f),
-PointInteret("Enclos Mouflon", 530.3856f, 571.2995f),
-PointInteret("Binturong", 538.83154f, 527.9525f),
-PointInteret("Loutre", 575.9805f, 535.2741f),
-PointInteret("Point Pique-Nique 1", 521.93964f, 631.26434f),
-PointInteret("Point Pique-Nique 2", 558.23083f, 613.30994f),
-PointInteret("Point Pique-Nique 3", 600.4606f, 597.9701f),
-PointInteret("Point d’Eau 1", 528.67f, 605.291f),
-PointInteret("Café Nomade 2", 485.61548f, 603.9544f),
-PointInteret("Cerf", 659.5822f, 591.9271f),
-PointInteret("Macaque Crabier", 649.4536f, 565.9538f),
-PointInteret("Vautour", 738.1361f, 569.2656f),
-PointInteret("Antilope / Nilgaut / Daim", 829.3589f, 543.93164f),
-PointInteret("Loup d’Europe", 902.83203f, 549.27734f),
-PointInteret("Dromadaire", 902.83203f, 485.30338f),
-PointInteret("Âne de Provence", 914.6432f, 467.29037f),
-PointInteret("Bison", 875.8116f, 451.31186f),
-PointInteret("Sortie de Secours 1", 956.0481f, 485.30338f),
-PointInteret("Futur Plaine Africaine", 800.62286f, 423.3047f),
-PointInteret("Mouton Noir / Yack", 755.02795f, 431.26495f),
-PointInteret("Âne de Somalie / Watusi", 689.143f, 455.26303f),
-PointInteret("Cigogne / Marabout", 599.6358f, 443.93228f),
-PointInteret("Point de Vue 1", 650.31146f, 397.27344f),
-PointInteret("Loup à Crinière", 570.07495f, 495.29752f),
-PointInteret("Girafe", 512.6359f, 500.64325f),
-PointInteret("Éléphant", 456.0547f, 500.64325f),
-PointInteret("Varan de Komodo", 414.64975f, 501.97983f),
-PointInteret("Hyène", 505.0478f, 473.2754f),
-PointInteret("Tente Pédagogique", 528.67f, 460.60873f),
-PointInteret("Zèbre", 551.5005f, 443.29297f),
-PointInteret("Hippopotame", 551.5005f, 411.2767f),
-PointInteret("Lion", 515.1763f, 395.93686f),
-PointInteret("Pique-Nique 1", 472.9466f, 443.93228f),
-PointInteret("Pique-Nique 2", 377.5008f, 475.94858f),
-PointInteret("Lodge", 369.91263f, 459.9694f),
-PointInteret("Gare du Plateau", 426.4939f, 453.2871f),
-PointInteret("Ouistiti", 348.79776f, 487.97592f),
-PointInteret("Crocodile Nain", 478.85214f, 360.60873f),
-PointInteret("Casoar", 464.50064f, 384.60678f),
-PointInteret("Tapir", 423.9535f, 410.63803f),
-PointInteret("Samiri", 380.04117f, 419.2956f),
-PointInteret("Suricate", 321.77734f, 421.9681f),
-PointInteret("Fennec", 330.2233f, 407.96484f),
-PointInteret("Gnou / Oryx / Rhinocéros", 337.81143f, 370.60287f),
-PointInteret("Autruche / Gazelle", 385.12195f, 357.93622f),
-PointInteret("Guépard", 443.38577f, 348.6393f),
-PointInteret("Point de Vue 2", 461.10245f, 315.9837f),
-PointInteret("Point de Vue 3", 284.5954f, 438.64453f),
-PointInteret("Point de Vue 4", 231.37933f, 399.30728f),
-PointInteret("Tigre", 747.4398f, 539.92255f),
-PointInteret("Chien des Buissons", 720.3864f, 515.9251f),
-PointInteret("Serval", 667.2033f, 531.9622f),
-PointInteret("Lynx", 637.6425f, 529.28906f),
-PointInteret("Ibis et Tortue", 625.7984f, 493.26367f),
-PointInteret("Pécari", 687.46045f, 497.2728f),
-PointInteret("Flamant Rose / Nandou / Tamanoir", 725.46716f, 464.61786f),
-PointInteret("Émeu / Wallaby", 785.4466f, 471.3001f),
-PointInteret("Porc-Épic", 808.2441f, 451.95053f)
+const val IMAGE_WIDTH_ORIG = 1800f
+const val IMAGE_HEIGHT_ORIG = 850f
+
+data class PointInteret(val id: Int, val name: String, val x: Float, val y: Float)
+
+val pointsZoo = listOf(
+    PointInteret(1, "01 - Café Nomade", 211.10895f, 676.3764f),
+    PointInteret(2, "02 - Toilettes 1", 147.50395f, 662.51376f),
+    PointInteret(3, "03 - Entrée Bergerie", 180.93735f, 560.58267f),
+    PointInteret(4, "04 - Accueil / Boutique", 239.64966f, 515.73297f),
+    PointInteret(5, "05 - Poste de Sécurité", 219.26344f, 435.819f),
+    PointInteret(6, "06 - Entrée du Parc", 372.5678f, 447.2353f),
+    PointInteret(7, "07 - Gare des Cascades", 405.18576f, 402.3856f),
+    PointInteret(8, "08 - Ara / Perroquet", 349.73524f, 354.27414f),
+    PointInteret(9, "09 - Grand Hocco", 393.76947f, 317.57895f),
+    PointInteret(10, "10 - Panthère", 458.18994f, 345.3042f),
+    PointInteret(11, "11 - Point de Vue 1", 527.50305f, 346.11963f),
+    PointInteret(12, "12 - Suricate", 593.55444f, 306.16266f),
+    PointInteret(13, "13 - Rhinocéros / Onyx / Gnou", 576.43f, 234.40317f),
+    PointInteret(14, "14 - Point de Vue 2", 432.09558f, 250.71214f),
+    PointInteret(15, "15 - Fennec", 609.8634f, 271.9138f),
+    PointInteret(16, "16 - Samiri", 698.7473f, 283.33008f),
+    PointInteret(17, "17 - Tapir", 780.2922f, 266.20566f),
+    PointInteret(18, "18 - Casoar", 854.49805f, 214.01695f),
+    PointInteret(19, "19 - Crocodile Nain", 900.16315f, 155.30463f),
+    PointInteret(20, "20 - Guépard", 820.2492f, 116.97854f),
+    PointInteret(21, "21 - Autruche / Gazelle", 737.88885f, 147.15015f),
+    PointInteret(22, "22 -  À compléter", 856.1289f, 55.819885f),
+    PointInteret(23, "23 -  À compléter", 947.45917f, 235.21861f),
+    PointInteret(24, "24 - À compléter", 1019.2187f, 275.1756f),
+    PointInteret(25, "25 - À compléter", 1020.84955f, 350.1969f),
+    PointInteret(26, "26 - XX - À compléter", 988.2316f, 394.23112f),
+    PointInteret(27, "27 - XX - À compléter", 947.45917f, 417.0637f),
+    PointInteret(28, "28 - XX - À compléter", 1053.4675f, 470.8833f),
+    PointInteret(29, "29 - XX - À compléter", 918.91846f, 492.085f),
+    PointInteret(30, "30 - XX - À compléter", 837.3736f, 535.3038f),
+    PointInteret(31, "31 - XX - À compléter", 848.7899f, 488.82318f),
+    PointInteret(32, "32 - XX - À compléter", 774.58405f, 487.1923f),
+    PointInteret(33, "33 - XX - À compléter", 699.56274f, 506.76306f),
+    PointInteret(34, "34 - XX - À compléter", 693.0392f, 468.437f),
+    PointInteret(35, "35 - XX - À compléter", 674.2838f, 460.28247f),
+    PointInteret(36, "36 - XX - À compléter", 656.344f, 439.0808f),
+    PointInteret(37, "37 - XX - À compléter", 638.4041f, 419.51004f),
+    PointInteret(38, "38 - XX - À compléter", 702.0091f, 425.21817f),
+    PointInteret(39, "39 - XX - À compléter", 595.1853f, 402.3856f),
+    PointInteret(40, "40 - XX - À compléter", 599.2626f, 368.9522f),
+    PointInteret(41, "41 - XX - À compléter", 679.992f, 386.07663f),
+    PointInteret(42, "42 - XX - À compléter", 718.31805f, 343.6733f),
+    PointInteret(43, "43 - XX - À compléter", 789.26215f, 377.92215f),
+    PointInteret(44, "44 - XX - À compléter", 874.0688f, 373.02945f),
+    PointInteret(45, "45 - XX - À compléter", 879.7769f, 315.94803f),
+    PointInteret(46, "46 - XX - À compléter", 856.1289f, 598.0933f),
+    PointInteret(47, "47 - XX - À compléter", 764.79865f, 574.4453f),
+    PointInteret(48, "48 - XX - À compléter", 769.69135f, 629.0804f),
+    PointInteret(49, "49 - XX - À compléter", 836.55817f, 646.2048f),
+    PointInteret(50, "50 - XX - À compléter", 802.3093f, 713.887f),
+    PointInteret(51, "51 - XX - À compléter", 908.3176f, 681.26904f),
+    PointInteret(52, "52 - XX - À compléter", 898.5323f, 742.42773f),
+    PointInteret(53, "53 - XX - À compléter", 990.678f, 670.6682f),
+    PointInteret(54, "54 - XX - À compléter", 974.369f, 739.9814f),
+    PointInteret(55, "55 - XX - À compléter", 969.4763f, 804.40186f),
+    PointInteret(56, "56 - XX - À compléter", 1043.6821f, 764.4449f),
+    PointInteret(57, "57 - XX - À compléter", 1113.8108f, 726.9342f),
+    PointInteret(58, "58 - XX - À compléter", 1037.974f, 569.5526f),
+    PointInteret(59, "59 - XX - À compléter", 1177.4158f, 629.0804f),
+    PointInteret(60, "60 - XX - À compléter", 1267.9305f, 712.2561f),
+    PointInteret(61, "61 - XX - À compléter", 1384.5397f, 657.62103f),
+    PointInteret(62, "62 - XX - À compléter", 1563.123f, 548.35095f),
+    PointInteret(63, "63 - XX - À compléter", 1705.8265f, 586.67706f),
+    PointInteret(64, "64 - XX - À compléter", 1688.7021f, 421.9564f),
+    PointInteret(65, "65 - XX - À compléter", 1695.2257f, 334.70337f),
+    PointInteret(66, "66 - XX - À compléter", 1586.771f, 445.6044f),
+    PointInteret(67, "67 - XX - À compléter", 1530.505f, 368.13675f),
+    PointInteret(68, "68 - XX - À compléter", 1517.4579f, 301.26996f),
+    PointInteret(69, "69 - XX - À compléter", 1373.9388f, 334.70337f),
+    PointInteret(70, "70 - XX - À compléter", 1213.2955f, 386.07663f),
+    PointInteret(71, "71 - XX - À compléter", 1119.5189f, 362.42862f),
+    PointInteret(72, "72 - XX - À compléter", 1220.6345f, 251.52759f),
+    PointInteret(73, "73 - XX - À compléter", 1182.3085f, 476.59146f),
+    PointInteret(74, "74 - XX - À compléter", 1268.746f, 465.17517f),
+    PointInteret(75, "75 - XX - À compléter", 1364.969f, 442.3426f),
+    PointInteret(76, "76 - XX - À compléter", 1161.9222f, 516.54846f),
+    PointInteret(77, "77 - XX - À compléter", 1169.2612f, 554.8745f),
+    PointInteret(78, "78 - XX - À compléter", 1242.6516f, 564.6599f),
+    PointInteret(79, "79 - XX - À compléter", 1277.7159f, 536.1192f),
+    PointInteret(80, "80 - XX - À compléter", 1357.6299f, 528.78015f),
+    PointInteret(81, "81 - XX - À compléter", 1376.3853f, 576.0762f),
+    PointInteret(82, "82 - XX - À compléter", 1427.7585f, 612.7714f),
+    PointInteret(83, "83 - XX - À compléter", 373.38327f, 523.88745f),
+    PointInteret(84, "84 - XX - À compléter", 276.34485f, 334.70337f),
+    PointInteret(85, "85 - XX - À compléter", 459.00537f, 620.9259f),
+    PointInteret(86, "86 - XX - À compléter", 273.8985f, 594.01605f),
+    PointInteret(87, "87 - XX - À compléter", 336.68805f, 408.9092f),
+    PointInteret(88, "88 - XX - À compléter", 887.116f, 812.55634f),
+    PointInteret(89, "89 - XX - À compléter", 561.7519f, 763.6294f),
+    PointInteret(90, "90 - XX - À compléter", 1787.3715f, 457.02066f),
+    PointInteret(91, "91 - XX - À compléter", 1813.4658f, 293.9309f),
+    PointInteret(92, "92 - XX - À compléter", 1546.814f, 409.72464f),
+    PointInteret(93, "93 - XX - À compléter", 836.55817f, 365.69043f),
+    PointInteret(94, "94 - Enclos Émeu / Nandou / Flamant Rose", 1455.4838f, 419.51004f),
+    PointInteret(95, "95 - Point d’Eau / Aire de Pique-Nique", 1430.4597f, 480.50967f)
 )
-
-
-
-
-
 
 
 
 val voisinsZoo = mapOf(
-    "Café Nomade" to listOf("Toilettes 1"),
-    "Restaurant du Parc Bergerie" to listOf("Boutique"),
-    "Boutique" to listOf("Poste de Secours"),
-    "Poste de Secours" to listOf("Entrée du parc"),
-    "Entrée du parc" to listOf("Gare des Cascades"),
-    "Gare des Cascades" to listOf("Enclos Perroquets/Ara", "Grand Hocco", "Panthère"),
-    "Point de Vue 1" to listOf("Suricate"),
-
-    "Point de Vue 2" to listOf("Gnou / Oryx / Rhinocéros"),
-    "Suricate" to listOf("Gnou / Oryx / Rhinocéros", "Fennec", "Point Pique-Nique 1"),
-    "Fennec" to listOf("Gnou / Oryx / Rhinocéros", "Samiri"),
-    "Samiri" to listOf("Tapir"),
-    "Gnou / Oryx / Rhinocéros" to listOf("Autruche / Gazelle"),
-    "Autruche / Gazelle" to listOf("Guépard"),
-    "Tapir" to listOf("Casoar"),
-    "Casoar" to listOf("Crocodile Nain", "Lion"),
-    "Guépard" to listOf("Crocodile Nain", "Point de Vue 3"),
-    "Lion" to listOf("Hippopotame"),
-    "Hippopotame" to listOf("Zèbre", "Point de Vue 4"),
-    "Zèbre" to listOf("Tente Pédagogique"),
-    "Tente Pédagogique" to listOf("Hyène"),
-    "Hyène" to listOf("Loup à Crinière", "Girafe"),
-    "Loup à Crinière" to listOf("Girafe"),
-    "Girafe" to listOf("Éléphant", "Grives / Cercopithèque"),
-    "Éléphant" to listOf("Varan de Komodo"),
-    "Varan de Komodo" to listOf("Paillote 1"),
-    "Paillote 1" to listOf("Gibbon"),
-    "Gibbon" to listOf("Ouistiti"),
-    "Ouistiti" to listOf("Capucin"),
-    "Capucin" to listOf("Tamarin"),
-    "Tamarin" to listOf("Toilettes 2"),
-
-    "Toilettes 1" to listOf("Point d’Eau 2", "Lodge"),
-    "Lodge" to listOf("Point Pique-Nique 2"),
-    "Gare du Plateau" to listOf("Éléphant", "Varan de Komodo", "Point Pique-Nique 3"),
-    "Point de Vue 4" to listOf("Marabout"),
-    "Marabout" to listOf("Cigogne"),
-    "Cigogne" to listOf("Âne de Somalie / Watusi"),
-    "Âne de Somalie / Watusi" to listOf("Mouton Noir / Yack"),
-    "Mouton Noir / Yack" to listOf("Futur Plaine Africaine"),
-    "Futur Plaine Africaine" to listOf("Porc-Épic"),
-    "Porc-Épic" to listOf("Émeu / Wallaby"),
-    "Émeu / Wallaby" to listOf("Flamant Rose / Nandou / Tamanoir"),
-    "Flamant Rose / Nandou / Tamanoir" to listOf("Pécari"),
-    "Pécari" to listOf("Ibis et Tortue"),
-    "Ibis et Tortue" to listOf("Point d’Eau 3"),
-    "Point d’Eau 3" to listOf("Lynx"),
-    "Lynx" to listOf("Serval"),
-    "Serval" to listOf("Toilettes 3"),
-    "Toilettes 3" to listOf("Chien des Buissons", "Pécari"),
-    "Chien des Buissons" to listOf("Flamant Rose / Nandou / Tamanoir", "Tigre"),
-    "Tigre" to listOf("Point d’Eau 4"),
-    "Point d’Eau 4" to listOf("Vautour"),
-    "Vautour" to listOf("Macaque Crabier"),
-    "Macaque Crabier" to listOf("Cerf"),
-    "Vautour" to listOf("Antilope / Nilgaut / Daim"),
-    "Antilope / Nilgaut / Daim" to listOf("Loup d’Europe"),
-    "Antilope / Nilgaut / Daim" to listOf("Dromadaire / Âne de Provence"),
-    "Dromadaire / Âne de Provence" to listOf("Sortie de Secours 1"),
-    "Bison" to listOf("Sortie de Secours 1")
+    1 to listOf(2, 86, 3, 85, 89, 83),
+    2 to listOf(1, 3),
+    3 to listOf(2, 86, 4),
+    4 to listOf(3, 5),
+    5 to listOf(4, 87, 6),
+    6 to listOf(5, 87, 7),
+    7 to listOf(6, 8, 9, 10, 50, 48, 11),
+    8 to listOf(84, 9, 87, 7),
+    9 to listOf(8, 7, 10),
+    10 to listOf(9, 7, 11),
+    11 to listOf(10, 12, 40),
+    12 to listOf(11, 13, 15, 14),
+    13 to listOf(14, 15, 12),
+    14 to listOf(13, 12),
+    15 to listOf(13, 16, 12, 42),
+    16 to listOf(17, 15, 42),
+    17 to listOf(16, 18, 45),
+    18 to listOf(19, 20, 23, 45),
+    19 to listOf(18, 20),
+    20 to listOf(22, 19, 21),
+    21 to listOf(20, 13),
+    22 to listOf(20),
+    23 to listOf(18, 45, 24),
+    24 to listOf(23, 72, 25),
+    25 to listOf(71, 26),
+    26 to listOf(27, 28),
+    27 to listOf(26, 29, 43),
+    28 to listOf(29, 73, 76),
+    29 to listOf(58, 30, 31, 27, 43, 32),
+    30 to listOf(46, 47, 33, 29, 58, 32),
+    31 to listOf(32, 29, 38, 43),
+    32 to listOf(33, 34, 43),
+    33 to listOf(47, 32, 35, 43),
+    34 to listOf(35, 33),
+    35 to listOf(34, 36),
+    36 to listOf(38, 35, 37),
+    37 to listOf(38, 36),
+    38 to listOf(39, 37, 41),
+    39 to listOf(38, 11, 40, 41),
+    40 to listOf(11, 39, 41),
+    41 to listOf(40, 12, 11, 40, 42, 37),
+    42 to listOf(16, 41, 43, 45),
+    43 to listOf(93, 44, 38, 32, 31, 29, 27, 33, 34),
+    44 to listOf(45, 93, 27),
+    45 to listOf(17, 18, 23, 93, 44),
+    46 to listOf(30),
+    47 to listOf(33, 46),
+    48 to listOf(6, 7, 49),
+    49 to listOf(48, 50, 51),
+    50 to listOf(7, 6, 48, 49),
+    51 to listOf(49, 52, 53),
+    52 to listOf(54, 50, 88, 51),
+    53 to listOf(51, 54, 58, 59),
+    54 to listOf(52, 51, 56, 53),
+    55 to listOf(52, 54, 56),
+    56 to listOf(54, 55, 57),
+    57 to listOf(60, 56, 56),
+    58 to listOf(29, 30, 53),
+    59 to listOf(53, 57, 60, 61),
+    60 to listOf(59, 61, 57),
+    61 to listOf(82, 60, 59, 82),
+    62 to listOf(81, 82, 66),
+    63 to listOf(61, 62, 66),
+    64 to listOf(66, 92, 90, 65),
+    65 to listOf(64, 66, 92, 91),
+    66 to listOf(62, 64, 65, 92),
+    67 to listOf(68, 94, 92, 65),
+    68 to listOf(69, 67),
+    69 to listOf(68, 70, 75, 94),
+    70 to listOf(69, 28),
+    71 to listOf(25, 72, 24),
+    72 to listOf(71, 24, 25),
+    73 to listOf(28, 76, 74, 79),
+    74 to listOf(79, 73, 80),
+    75 to listOf(69, 70, 94),
+    76 to listOf(73, 28, 79),
+    77 to listOf(78, 96),
+    78 to listOf(77, 96, 79, 82),
+    79 to listOf(80, 74, 76, 73),
+    80 to listOf(79, 74, 95),
+    81 to listOf(78, 61, 82),
+    82 to listOf(62, 61, 81, 78),
+    83 to listOf(1, 86, 85, 6),
+    84 to listOf(87),
+    85 to listOf(83, 86, 89, 1),
+    86 to listOf(1, 3, 89, 83, 4, 85),
+    87 to listOf(8, 7, 6),
+    88 to listOf(55, 55),
+    89 to listOf(85, 88),
+    90 to listOf(64, 66),
+    91 to listOf(67, 92),
+    92 to listOf(67, 91, 65),
+    93 to listOf(44, 45, 43),
+    94 to listOf(75, 67, 69, 95),
+    95 to listOf(75, 80, 94),
+    96 to listOf(77, 78, 59)
 )
-
-
-
-
-
-
-
 
 
 
@@ -189,20 +238,23 @@ fun ZooMapScreen() {
 
     LaunchedEffect(selectedStart, selectedEnd) {
         if (selectedStart != null && selectedEnd != null) {
-            shortestPath = dijkstra(voisinsZoo, pointsZoo, selectedStart!!, selectedEnd!!)
+            shortestPath = dijkstra(voisinsZoo, pointsZoo, selectedStart!!.id, selectedEnd!!.id)
         }
     }
 
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
         Text("Clique sur un point pour voir son nom et tracer un chemin")
 
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(IMAGE_WIDTH_ORIG / IMAGE_HEIGHT_ORIG)
+        ) {
             Image(
-                painter = painterResource(id = R.drawable.mapzoo),
+                painter = painterResource(id = R.drawable.mapzoo2),
                 contentDescription = "Carte du zoo",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp)
+                    .fillMaxSize()
                     .onGloballyPositioned { layoutCoordinates ->
                         imageWidth = layoutCoordinates.size.width
                         imageHeight = layoutCoordinates.size.height
@@ -213,14 +265,13 @@ fun ZooMapScreen() {
                 if (shortestPath.isNotEmpty()) {
                     for (i in 0 until shortestPath.size - 1) {
                         val start = Offset(
-                            x = (shortestPath[i].x / 1000) * imageWidth,
-                            y = (shortestPath[i].y / 1000) * imageHeight
+                            x = (shortestPath[i].x / IMAGE_WIDTH_ORIG) * imageWidth,
+                            y = (shortestPath[i].y / IMAGE_HEIGHT_ORIG) * imageHeight
                         )
                         val end = Offset(
-                            x = (shortestPath[i + 1].x / 1000) * imageWidth,
-                            y = (shortestPath[i + 1].y / 1000) * imageHeight
+                            x = (shortestPath[i + 1].x / IMAGE_WIDTH_ORIG) * imageWidth,
+                            y = (shortestPath[i + 1].y / IMAGE_HEIGHT_ORIG) * imageHeight
                         )
-
                         drawLine(
                             color = Color.Blue,
                             start = start,
@@ -239,20 +290,19 @@ fun ZooMapScreen() {
                         },
                         radius = 10f,
                         center = Offset(
-                            x = (point.x / 1000) * imageWidth,
-                            y = (point.y / 1000) * imageHeight
+                            x = (point.x / IMAGE_WIDTH_ORIG) * imageWidth,
+                            y = (point.y / IMAGE_HEIGHT_ORIG) * imageHeight
                         )
                     )
                 }
             }
 
-
             Box(modifier = Modifier
                 .fillMaxSize()
                 .pointerInput(Unit) {
                     detectTapGestures { tapOffset ->
-                        val clickedX = (tapOffset.x / imageWidth) * 1000
-                        val clickedY = (tapOffset.y / imageHeight) * 1000
+                        val clickedX = (tapOffset.x / imageWidth) * IMAGE_WIDTH_ORIG
+                        val clickedY = (tapOffset.y / imageHeight) * IMAGE_HEIGHT_ORIG
 
                         val nearestPoint = pointsZoo.minByOrNull { point ->
                             distance(point.x, point.y, clickedX, clickedY)
@@ -261,77 +311,95 @@ fun ZooMapScreen() {
                         nearestPoint?.let {
                             if (selectedStart == null) {
                                 selectedStart = it
-                                Toast.makeText(context, "Départ sélectionné: ${it.name}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Départ : ${it.name}", Toast.LENGTH_SHORT).show()
                             } else if (selectedEnd == null) {
                                 selectedEnd = it
-                                Toast.makeText(context, "Arrivée sélectionnée: ${it.name}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Arrivée : ${it.name}", Toast.LENGTH_SHORT).show()
                             } else {
-
                                 selectedStart = it
                                 selectedEnd = null
                                 shortestPath = emptyList()
-                                Toast.makeText(context, "Nouveau départ sélectionné: ${it.name}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Nouveau départ : ${it.name}", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
                 }
             )
         }
+
+        if (shortestPath.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("🧭 Itinéraire :", color = Color.Black)
+
+            var totalDistance = 0f
+            for (i in 0 until shortestPath.size - 1) {
+                val a = shortestPath[i]
+                val b = shortestPath[i + 1]
+                totalDistance += distance(a.x, a.y, b.x, b.y)
+                Text("➡️ ${i + 1}. De « ${a.name} » à « ${b.name} »")
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            val distanceMeters = totalDistance
+            val walkingSpeed = 1.33f // m/s (4.8 km/h)
+            val estimatedTimeSeconds = distanceMeters / walkingSpeed
+            val minutes = (estimatedTimeSeconds / 60).toInt()
+            val seconds = (estimatedTimeSeconds % 60).toInt()
+
+            Text("📏 Distance estimée : ${"%.0f".format(distanceMeters)} mètres")
+            Text("⏱️ Temps estimé à pied : ${minutes} min ${seconds} sec")
+        }
     }
 }
 
-// Fonction de calcul de la distance entre deux points
 fun distance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
     return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 }
 
-// Algorithme de Dijkstra pour trouver le plus court chemin
-fun dijkstra(
-    voisins: Map<String, List<String>>,
-    points: List<PointInteret>,
-    start: PointInteret,
-    end: PointInteret
-): List<PointInteret> {
-    val distances = mutableMapOf<String, Float>().withDefault { Float.MAX_VALUE }
-    val previous = mutableMapOf<String, String?>()
-    val unvisited = points.map { it.name }.toMutableSet()
 
-    distances[start.name] = 0f
+fun dijkstra(
+    voisins: Map<Int, List<Int>>,
+    points: List<PointInteret>,
+    startId: Int,
+    endId: Int
+): List<PointInteret> {
+    val distances = mutableMapOf<Int, Float>().withDefault { Float.MAX_VALUE }
+    val previous = mutableMapOf<Int, Int?>()
+    val unvisited = points.map { it.id }.toMutableSet()
+
+    distances[startId] = 0f
 
     while (unvisited.isNotEmpty()) {
         val current = unvisited.minByOrNull { distances.getValue(it) } ?: break
         unvisited.remove(current)
 
-        if (current == end.name) break
+        if (current == endId) break
 
-        val currentPoint = points.find { it.name == current } ?: continue
+        val currentPoint = points.find { it.id == current } ?: continue
         val neighbors = voisins[current] ?: emptyList()
 
         for (neighbor in neighbors) {
             if (neighbor !in unvisited) continue
-            val neighborPoint = points.find { it.name == neighbor } ?: continue
+            val neighborPoint = points.find { it.id == neighbor } ?: continue
 
-            val newDistance = distances.getValue(current) + distance(currentPoint.x, currentPoint.y, neighborPoint.x, neighborPoint.y)
-            if (newDistance < distances.getValue(neighbor)) {
-                distances[neighbor] = newDistance
+            val newDist = distances.getValue(current) +
+                    distance(currentPoint.x, currentPoint.y, neighborPoint.x, neighborPoint.y)
+            if (newDist < distances.getValue(neighbor)) {
+                distances[neighbor] = newDist
                 previous[neighbor] = current
             }
         }
     }
 
     val path = mutableListOf<PointInteret>()
-    var step: String? = end.name
+    var step: Int? = endId
 
     while (step != null) {
-        points.find { it.name == step }?.let { path.add(it) }
+        val point = points.find { it.id == step }
+        if (point != null) path.add(point)
         step = previous[step]
-    }
-
-    if (path.isEmpty()) {
-        Log.e("Dijkstra", "Aucun chemin trouvé entre ${start.name} et ${end.name}")
     }
 
     return path.reversed()
 }
-
-

@@ -8,7 +8,7 @@ import fr.isen.vincent.planetzoo.R
 class ZooMapManager(private val context: Context, private val photoView: PhotoView) {
 
     init {
-        photoView.setImageResource(R.drawable.mapzoo)
+        photoView.setImageResource(R.drawable.mapzoo2)
 
         photoView.setOnPhotoTapListener { _, x, y ->
             val imageX = x * photoView.drawable.intrinsicWidth
