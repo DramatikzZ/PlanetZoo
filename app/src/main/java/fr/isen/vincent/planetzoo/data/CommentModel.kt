@@ -4,7 +4,7 @@ class CommentModel(
 
     val id: String? = "",
     val comment: String? = "",
-
     val uid: String = "",
-    val rating: Int = 0
+    val rating: Int = 0,
+    val name: String? = "",
 )

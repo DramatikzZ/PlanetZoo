@@ -1,4 +1,9 @@
 import android.util.Log
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import com.google.ai.client.generativeai.GenerativeModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -34,21 +39,33 @@ object GeminiHelper {
         }
     }
 
-
-
-    fun parseAnimalInfo(info: String): String {
+    fun parseAnimalInfoAnnotated(info: String): AnnotatedString {
         val lines = info.split("\n").map { it.trim() }.filter { it.isNotEmpty() }
 
-        if (lines.size < 5) {
-            Log.e("GeminiHelper", "Réponse mal formatée : $info")
-            return "Informations non disponibles pour cet animal."
-        }
+        return buildAnnotatedString {
+            append("🌍 ")
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                append("Origine : ")
+            }
+            appendLine(lines.getOrNull(1)?.removePrefix("Origine :")?.trim() ?: "Inconnu")
 
-        return buildString {
-            appendLine("🌍 ${lines.getOrNull(1)?.replace("Origine :", "Origine") ?: "Origine : Inconnu"}")
-            appendLine("🏞 ${lines.getOrNull(2)?.replace("Habitat :", "Habitat") ?: "Habitat : Inconnu"}")
-            appendLine("🍽 ${lines.getOrNull(3)?.replace("Alimentation :", "Alimentation") ?: "Alimentation : Inconnu"}")
-            appendLine("🤩 ${lines.getOrNull(4)?.replace("Fun Fact :", "Fun Fact") ?: "Fun Fact : Aucun"}")
+            append("\n🏞 ")
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                append("Habitat : ")
+            }
+            appendLine(lines.getOrNull(2)?.removePrefix("Habitat :")?.trim() ?: "Inconnu")
+
+            append("\n🍽 ")
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                append("Alimentation : ")
+            }
+            appendLine(lines.getOrNull(3)?.removePrefix("Alimentation :")?.trim() ?: "Inconnu")
+
+            append("\n🤩 ")
+            withStyle(style = SpanStyle(fontWeight = FontWeight.Bold)) {
+                append("Fun Fact : ")
+            }
+            appendLine(lines.getOrNull(4)?.removePrefix("Fun Fact :")?.trim() ?: "Aucun")
         }
     }
 

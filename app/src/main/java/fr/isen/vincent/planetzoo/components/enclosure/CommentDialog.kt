@@ -13,6 +13,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,19 +72,20 @@ fun CommentDialog(
                     .padding(16.dp)
             ) {
                 Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState()) // Ajout du scroll
+                    modifier = Modifier.verticalScroll(rememberScrollState())
                 ) {
-                    Text(
-                        text = "Commentaires",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
 
                     CommentList(commentsList, Color.Black, enclosure)
 
                     Spacer(modifier = Modifier.height(20.dp))
 
-                    Button(onClick = onDismiss, modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    Button(
+                        onClick = onDismiss,
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF796D47),
+                            contentColor = Color.White
+                        )) {
                         Text("Fermer")
                     }
                 }
