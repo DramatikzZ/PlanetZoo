@@ -1,5 +1,6 @@
 package fr.isen.vincent.planetzoo.screens.content.main
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,35 +14,42 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import fr.isen.vincent.planetzoo.R
-import fr.isen.vincent.planetzoo.components.ServiceItem
-import fr.isen.vincent.planetzoo.utils.AppUtil
+import fr.isen.vincent.planetzoo.components.services.ServiceInfoDialog
+import fr.isen.vincent.planetzoo.components.services.ServiceItem
+import fr.isen.vincent.planetzoo.components.services.getIconForService
+import fr.isen.vincent.planetzoo.data.BiomeModel
 
 @Composable
 fun ServiceScreen(modifier: Modifier = Modifier) {
-
     val firebaseHelper = FirebaseHelper()
     val serviceListState = remember { mutableStateOf<Map<String, Pair<ServiceModel, Map<String, Int>>>>(emptyMap()) }
 
-    val expandedServiceName = remember { mutableStateOf<String?>(null) }
+    val selectedService = remember { mutableStateOf<Pair<ServiceModel, Map<String, Int>>?>(null) }
     val context = LocalContext.current
+
+    val biomeList = remember { mutableStateOf<List<BiomeModel>>(emptyList()) }
+
 
     firebaseHelper.fetchZooData { zooList ->
         val serviceMap = mutableMapOf<String, Pair<ServiceModel, MutableMap<String, Int>>>()
+
+        biomeList.value = zooList
 
         zooList.forEach { biome ->
             biome.services.forEach { service ->
@@ -62,19 +70,14 @@ fun ServiceScreen(modifier: Modifier = Modifier) {
         serviceListState.value = serviceMap
     }
 
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Top,
-    ) {
-        Row (
-            modifier = Modifier.padding(horizontal = 20.dp)
-        ){
+    Column(modifier = modifier.fillMaxSize()) {
+        Row(modifier = Modifier.padding(horizontal = 20.dp)) {
             Text(
                 text = ContextCompat.getString(context, R.string.can_be_find),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 25.sp,
-                color = Color.Black,
+                color =  Color(0xFFD7725D),
             )
         }
 
@@ -87,16 +90,24 @@ fun ServiceScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(35.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(serviceListState.value.entries.toList()) { (serviceName, data) ->
+            items(serviceListState.value.entries.toList()) { (_, data) ->
                 ServiceItem(
                     service = data.first,
-                    biomes = data.second,
-                    expanded = (expandedServiceName.value == serviceName),
-                    onExpand = { selectedService ->
-                        expandedServiceName.value = if (expandedServiceName.value == selectedService) null else selectedService
+                    onClick = { serviceClicked ->
+                        selectedService.value = data
                     }
                 )
             }
         }
+
+        selectedService.value?.let { (service, biomes) ->
+            ServiceInfoDialog(
+                service = service,
+                biomes = biomes,
+                allBiomes = biomeList.value,
+                onDismiss = { selectedService.value = null }
+            )
+        }
+
     }
 }
