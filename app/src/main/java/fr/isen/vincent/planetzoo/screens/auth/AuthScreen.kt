@@ -57,7 +57,7 @@ fun AuthScreen(modifier: Modifier = Modifier, navController: NavHostController) 
         Text(
             text = ContextCompat.getString(context, R.string.auth_title),
             style = TextStyle(
-                fontSize = 30.sp,
+                fontSize = 25.sp,
                 fontFamily = FontFamily.Monospace,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center
