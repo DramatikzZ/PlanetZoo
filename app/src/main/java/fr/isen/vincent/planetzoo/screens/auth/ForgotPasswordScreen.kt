@@ -52,7 +52,7 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavContro
 
 
     Column (
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,

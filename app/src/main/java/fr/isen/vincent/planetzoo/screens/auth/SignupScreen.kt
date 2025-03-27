@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
@@ -62,9 +64,12 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
 
     val context = LocalContext.current
 
+    val scrollState = rememberScrollState()
+
     Column (
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -118,9 +123,9 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
                 focusedBorderColor = Color(0xFFD6725D),
                 unfocusedLabelColor = Color(0xFF796D47),
                 focusedLabelColor = Color(0xFFD6725D),
-                unfocusedBorderColor =  Color(0xFF796D47),
-
-                )
+                unfocusedBorderColor =  Color(0xFF796D47)
+            ),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -139,9 +144,9 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
                 focusedBorderColor = Color(0xFFD6725D),
                 unfocusedLabelColor = Color(0xFF796D47),
                 focusedLabelColor = Color(0xFFD6725D),
-                unfocusedBorderColor =  Color(0xFF796D47),
-
-                )
+                unfocusedBorderColor =  Color(0xFF796D47)
+            ),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -161,9 +166,9 @@ fun SignupScreen(modifier: Modifier = Modifier, navController: NavController, au
                 focusedBorderColor = Color(0xFFD6725D),
                 unfocusedLabelColor = Color(0xFF796D47),
                 focusedLabelColor = Color(0xFFD6725D),
-                unfocusedBorderColor =  Color(0xFF796D47),
-
-                )
+                unfocusedBorderColor =  Color(0xFF796D47)
+            ),
+            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(20.dp))
