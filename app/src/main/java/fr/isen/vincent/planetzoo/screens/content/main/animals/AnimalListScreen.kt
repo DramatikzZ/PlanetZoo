@@ -1,7 +1,8 @@
 package fr.isen.vincent.planetzoo.screens.content.main.animals
 
-import GeminiHelper.parseAnimalInfo
+import GeminiHelper.parseAnimalInfoAnnotated
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -76,9 +78,9 @@ fun AnimalCard(animal: AnimalModel, info: String, imageUrl: String?) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp)
+            .padding(16.dp)
             .shadow(8.dp, RoundedCornerShape(16.dp))
-            .border(2.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(16.dp))
+            .border(2.dp, Color(0xFFD6725D), RoundedCornerShape(16.dp))
             .animateContentSize(),
         elevation = CardDefaults.cardElevation(8.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -89,8 +91,8 @@ fun AnimalCard(animal: AnimalModel, info: String, imageUrl: String?) {
                     if(isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(80.dp),
-                            color = MaterialTheme.colorScheme.secondary,
-                            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                            color = Color(0xFF796D47),
+                            trackColor = Color.White,
                         )
                     }
                     AsyncImage(
@@ -107,9 +109,10 @@ fun AnimalCard(animal: AnimalModel, info: String, imageUrl: String?) {
                         },
                         modifier = Modifier
                             .size(80.dp)
-                            .border(2.dp, Color.Gray, RoundedCornerShape(8.dp))
+                            .border(2.dp, Color(0xFF796D47), RoundedCornerShape(12.dp))
                             .padding(4.dp),
-                        contentScale = ContentScale.Crop
+                        contentScale = ContentScale.Crop,
+                        alignment = Alignment.TopCenter
                     )
                 }
             Spacer(modifier = Modifier.width(12.dp))
@@ -119,31 +122,29 @@ fun AnimalCard(animal: AnimalModel, info: String, imageUrl: String?) {
                     text = animal.name,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = Color(0xFFD6725D)
                 )
-                Text(
-                    text = "ID: ${animal.id}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.secondary
-                )
-
-                Spacer(modifier = Modifier.height(10.dp))
-
-                if (isExpanded) {
-                    val formattedInfo = parseAnimalInfo(info)
-                    Text(
-                        text = formattedInfo,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                } else {
+                if(!isExpanded) {
                     Text(
                         text = "Clique pour en savoir plus...",
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Gray
+                        color = Color(0xFF796D47)
                     )
                 }
             }
+
+        }
+
+        if (isExpanded) {
+            Row(modifier = Modifier.padding(16.dp)){
+                val formattedInfo = parseAnimalInfoAnnotated(info)
+                Text(
+                    text = formattedInfo,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+
         }
     }
 }

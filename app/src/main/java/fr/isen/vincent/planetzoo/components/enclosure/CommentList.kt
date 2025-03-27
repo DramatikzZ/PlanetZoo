@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import fr.isen.vincent.planetzoo.data.CommentModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
@@ -26,13 +27,12 @@ import fr.isen.vincent.planetzoo.utils.comments.deleteComment
 fun CommentList(commentsList: List<CommentModel>, textColor: Color, enclosure: EnclosureModel) {
     val database = FirebaseDatabase.getInstance().reference
 
-    Spacer(modifier = Modifier.height(16.dp))
-
     Text(
         text = "Commentaires :",
         style = MaterialTheme.typography.headlineSmall,
-        color = textColor
+        color = Color(0xFFD7725D)
     )
+    Spacer(modifier = Modifier.height(10.dp))
 
     if (commentsList.isEmpty()) {
         Text(
@@ -53,12 +53,25 @@ fun CommentList(commentsList: List<CommentModel>, textColor: Color, enclosure: E
                         .padding(vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "⭐ ${commentItem.rating}/5 - ${commentItem.comment}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = textColor,
-                        modifier = Modifier.weight(1f)
-                    )
+                    Column (modifier = Modifier.weight(1f)){
+                        Row{
+                            Text(
+                                text = "⭐ ${commentItem.rating}/5 - ${commentItem.name} " ,
+                                fontWeight = FontWeight.Bold,
+                                color = textColor
+                            )
+                        }
+                        Row{
+                            Text(
+                                text = "${commentItem.comment}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = textColor
+                            )
+                        }
+
+                    }
+
+
 
                     if (UserModel.isAdmin) {
                         IconButton(onClick = {

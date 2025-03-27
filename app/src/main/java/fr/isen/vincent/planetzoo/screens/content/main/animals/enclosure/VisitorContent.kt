@@ -1,7 +1,10 @@
 package fr.isen.vincent.planetzoo.screens.content.main.animals.enclosure
 
 import android.util.Log
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -12,6 +15,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -38,6 +42,7 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
     var averageRating by remember { mutableStateOf(0.0) }
     var hasCommented by remember { mutableStateOf(false) }
     var isOpen by remember { mutableStateOf(enclosure.is_open) }
+    var showRatingSection by remember { mutableStateOf(false) } // 🔸 Nouveau toggle
 
     LaunchedEffect(enclosure.firebaseId) {
         val enclosureRef = database.child("biomes").child(enclosure.id_biomes)
@@ -79,7 +84,17 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
         })
     }
 
-    Spacer(modifier = Modifier.height(8.dp))
+    Text(
+        text = "Note moyenne : ${"%.1f".format(averageRating)}/5 ⭐ ",
+        style = MaterialTheme.typography.titleMedium,
+        color = Color(0xFF796D47)
+    )
+
+    Spacer(modifier = Modifier.height(15.dp))
+
+    CommentList(commentsList, Color(0xFF796D47), enclosure)
+
+    Spacer(modifier = Modifier.height(15.dp))
 
     if (!isOpen) {
         Text(
@@ -88,8 +103,25 @@ fun VisitorContent(enclosure: EnclosureModel, biomeColor: String, navController:
             color = MaterialTheme.colorScheme.error
         )
     } else {
-        RatingAndCommentSection(hasCommented, averageRating, database, enclosure, userId)
-    }
+        if (!showRatingSection && !hasCommented) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Button(
+                    onClick = { showRatingSection = true },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFD7725D),
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Noter l'enclos")
+                }
+            }
+        }
 
-    CommentList(commentsList, Color.White, enclosure)
+        if (showRatingSection || hasCommented) {
+            RatingAndCommentSection(hasCommented, database, enclosure, userId,onCancel = { showRatingSection = false } )
+        }
+    }
 }
