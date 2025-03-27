@@ -71,6 +71,7 @@ fun ServiceScreen(modifier: Modifier = Modifier) {
     }
 
     Column(modifier = modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = Modifier.padding(horizontal = 20.dp)) {
             Text(
                 text = ContextCompat.getString(context, R.string.can_be_find),

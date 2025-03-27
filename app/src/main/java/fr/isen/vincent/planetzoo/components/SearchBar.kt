@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
@@ -26,6 +28,13 @@ fun SearchBar(
     var searchText by remember { mutableStateOf(TextFieldValue("")) }
 
     Column(modifier = modifier.fillMaxWidth().padding(16.dp)) {
+        Text(
+            text = "Recherchez un animal",
+            color = Color(0xFFD7725D),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
         OutlinedTextField(
             value = searchText,
             onValueChange = {
@@ -33,7 +42,14 @@ fun SearchBar(
                 val results = searchAnimals(searchText.text, biomes)
                 onSearchResults(results)
             },
-            label = { Text("Rechercher un animal") },
+            shape = RoundedCornerShape(25.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFFD6725D),
+                unfocusedLabelColor = Color(0xFF796D47),
+                focusedLabelColor = Color(0xFFD6725D),
+                unfocusedBorderColor =  Color(0xFF796D47)
+            ),
+            label = { Text("Chèvre naine") },
             modifier = Modifier.fillMaxWidth()
         )
     }
