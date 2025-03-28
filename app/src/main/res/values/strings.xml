@@ -1,11 +1,11 @@
 <resources>
     <!-- Page description -->
     <string name="app_name">PlanetZoo</string>
-    <string name="homepage">Home</string>
-    <string name="securitypage">Security</string>
+    <string name="homepage">Accueil</string>
+    <string name="securitypage">Securité</string>
     <string name="profilepage">Profile</string>
     <string name="servicespage">Services</string>
-    <string name="animalspage">Animals</string>
+    <string name="animalspage">Animaux</string>
     <string name="logo_zoo">Logo du zoo</string>
     <string name="menu">Menu</string>
     <string name="parameters">Paramètres</string>

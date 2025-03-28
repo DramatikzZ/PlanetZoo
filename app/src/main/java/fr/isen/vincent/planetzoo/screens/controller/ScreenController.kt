@@ -89,7 +89,9 @@ fun ScreenController(
                 }, modifier)
             },
             bottomBar = {
-                NavigationBar {
+                NavigationBar(
+                    containerColor = Color(0xFFF5EEE2),
+                ) {
                     navBarItems.forEachIndexed { index, navBarItem ->
                         NavigationBarItem(
                             selected = index == selectedIndex,
@@ -100,7 +102,16 @@ fun ScreenController(
                                     contentDescription = navBarItem.title
                                 )
                             },
-                            label = { Text(text = navBarItem.title) }
+                            label = { Text(text = navBarItem.title) },
+                            colors = NavigationBarItemColors(
+                                selectedIconColor = Color(0xFF796D47),
+                                selectedTextColor = Color(0xFF796D47),
+                                selectedIndicatorColor = Color(0xFFD2C6A1),
+                                unselectedIconColor =Color(0xFFD6725D),
+                                unselectedTextColor = Color(0xFFD6725D),
+                                disabledIconColor = Color(0xFFE3C6C0),
+                                disabledTextColor = Color(0xFFE3C6C0),
+                            )
                         )
                     }
                 }
