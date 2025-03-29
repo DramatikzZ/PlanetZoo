@@ -3,7 +3,9 @@ package fr.isen.vincent.planetzoo.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -16,10 +18,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -31,32 +35,39 @@ import com.google.firebase.auth.auth
 import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.data.UserModel
 
-
 @Composable
 fun TopBar(onOpenDrawer: () -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+            .padding(horizontal = 12.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
-        IconButton(onClick = onOpenDrawer) {
+        IconButton(
+            onClick = onOpenDrawer,
+            modifier = Modifier.size(48.dp)
+        ) {
             Icon(
                 Icons.Filled.Menu,
                 contentDescription = ContextCompat.getString(context, R.string.menu),
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(32.dp),
+                tint = Color(0xFF796D47),
             )
         }
+
+        Spacer(modifier = Modifier.weight(1f))
+
         Image(
             painter = painterResource(id = R.drawable.logo_zoo),
             contentDescription = ContextCompat.getString(context, R.string.logo_zoo),
-            modifier = Modifier.size(width = 160.dp, height = 55.dp)
+            modifier = Modifier
+                .height(40.dp) // hauteur plus douce pour caler avec le menu
+                .padding(end = 8.dp)
         )
     }
 }
+
 
 @Composable
 fun DrawerContent(
@@ -75,36 +86,37 @@ fun DrawerContent(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(ContextCompat.getString(context, R.string.menu), fontWeight = FontWeight.Bold)
+            Text(ContextCompat.getString(context, R.string.menu), fontWeight = FontWeight.Bold, color = Color(0xFFD6725D),)
             IconButton(onClick = onCloseClick) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = ContextCompat.getString(context, R.string.close_menu)
+                    contentDescription = ContextCompat.getString(context, R.string.close_menu),
+                    tint = Color(0xFFD6725D),
                 )
             }
         }
 
         NavigationDrawerItem(
-            icon = { Icon(Icons.Filled.Person, contentDescription = ContextCompat.getString(context, R.string.profilepage)) },
+            icon = { Icon(Icons.Filled.Person, contentDescription = ContextCompat.getString(context, R.string.profilepage), tint = Color(0xFF796D47)) },
             label = { if (UserModel.isAdmin) {
-                Text(text = "Admin Profile")
+                Text(text = "Admin Profile", color = Color(0xFF796D47))
             } else {
-                Text(ContextCompat.getString(context, R.string.profilepage))
+                Text(ContextCompat.getString(context, R.string.profilepage), color = Color(0xFF796D47))
             } },
             selected = false,
             onClick = onProfileClick
         )
 
         NavigationDrawerItem(
-            icon = { Icon(Icons.Filled.Settings, contentDescription = ContextCompat.getString(context, R.string.parameters)) },
-            label = { Text(ContextCompat.getString(context, R.string.parameters)) },
+            icon = { Icon(Icons.Filled.Settings, contentDescription = ContextCompat.getString(context, R.string.parameters), tint = Color(0xFF796D47)) },
+            label = { Text(ContextCompat.getString(context, R.string.parameters), color = Color(0xFF796D47)) },
             selected = false,
             onClick = onSettingsClick
         )
 
         NavigationDrawerItem(
-            icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "Logout") },
-            label = { Text("Logout") },
+            icon = { Icon(Icons.Filled.ExitToApp, contentDescription = "Logout", tint = Color(0xFF796D47)) },
+            label = { Text("Logout", color = Color(0xFF796D47)) },
             selected = false,
             onClick = {
                 Firebase.auth.signOut()
