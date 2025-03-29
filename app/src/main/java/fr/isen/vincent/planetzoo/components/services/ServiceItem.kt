@@ -74,12 +74,12 @@ fun ServiceItem(
             }
         }
 
-        Spacer(modifier = Modifier.size(5.dp))
+
 
         Text(
             text = service.name,
             textAlign = TextAlign.Center,
-            fontSize = 14.sp,
+            fontSize = 10.sp,
             color = Color.Black,
             modifier = Modifier.padding(10.dp)
         )
