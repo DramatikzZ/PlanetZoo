@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -66,7 +67,10 @@ fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) 
         ){
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.clickable{
+                    navController.navigate("zooMap/map")
+                }
             ){
                 Button(
                     onClick = { navController.navigate("zooMap/map") },
@@ -92,7 +96,10 @@ fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) 
 
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.clickable{
+                    navController.navigate("zooMap/map")
+                }
             ){
                 Button(
                     onClick = { navController.navigate("zooMap/map") },
@@ -117,7 +124,10 @@ fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) 
             Spacer(modifier = Modifier.size(5.dp))
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.clickable{
+                    navController.navigate("zooMap/map")
+                }
             ){
                 Button(
                     onClick = { navController.navigate("zooMap/map") },

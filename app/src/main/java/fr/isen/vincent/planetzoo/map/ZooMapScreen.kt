@@ -9,7 +9,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
@@ -258,6 +260,9 @@ fun ZooMapScreen(startInMode: String? = null, navController: NavController) {
     val originalWidth = imageBitmap.width.toFloat()
     val originalHeight = imageBitmap.height.toFloat()
 
+    val scrollState = rememberScrollState()
+
+
     LaunchedEffect(selectedStart, selectedEnd) {
         if (selectedStart != null && selectedEnd != null) {
             shortestPath = dijkstra(voisinsZoo, pointsZoo, selectedStart!!.id, selectedEnd!!.id)
@@ -423,26 +428,83 @@ fun ZooMapScreen(startInMode: String? = null, navController: NavController) {
 
             if (shortestPath.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("🧭 Itinéraire :", color = Color.Black)
+
 
                 var totalDistance = 0f
-                for (i in 0 until shortestPath.size - 1) {
-                    val a = shortestPath[i]
-                    val b = shortestPath[i + 1]
-                    totalDistance += distance(a.x, a.y, b.x, b.y)
-                    Text("➡️ ${i + 1}. De « ${a.name} » à « ${b.name} »")
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                        .padding(top = 8.dp)
+                ) {
+                    Text("🧭 Itinéraire :",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp,
+                        color = Color(0xFFD7725D)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    shortestPath.windowed(2).forEachIndexed { i, (a, b) ->
+                        totalDistance += distance(a.x, a.y, b.x, b.y)
+
+                        Column {
+
+                            Text(
+                                text = "➡️ Étape ${i + 1} :",
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFD6725D),
+                                fontSize = 16.sp
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Row{
+                                Text(
+                                    text = "De : ",
+                                    fontSize = 16.sp
+                                )
+                                Text(
+                                    text = "« ${a.name} »",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+                                )
+                            }
+                            Row{
+                                Text(
+                                    text = "À  : ",
+                                    fontSize = 16.sp
+                                )
+                                Text(
+                                    text = "« ${b.name} »",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+                                )
+                            }
+
+
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    val distanceMeters = totalDistance
+                    val walkingSpeed = 1.33f
+                    val estimatedTimeSeconds = distanceMeters / walkingSpeed
+                    val minutes = (estimatedTimeSeconds / 60).toInt()
+                    val seconds = (estimatedTimeSeconds % 60).toInt()
+
+                    Text("📏 Distance estimée : ${"%.0f".format(distanceMeters)} m",
+                        fontWeight = FontWeight.Bold,
+                        color =Color(0xFF796D47),
+                        fontSize = 16.sp)
+                    Text("⏱ Temps estimé : ${minutes} min ${seconds} sec",
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF796D47),
+                        fontSize = 16.sp)
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
 
-                val distanceMeters = totalDistance
-                val walkingSpeed = 1.33f
-                val estimatedTimeSeconds = distanceMeters / walkingSpeed
-                val minutes = (estimatedTimeSeconds / 60).toInt()
-                val seconds = (estimatedTimeSeconds % 60).toInt()
 
-                Text("📏 Distance estimée : ${"%.0f".format(distanceMeters)} m")
-                Text("⏱ Temps estimé : ${minutes} min ${seconds} sec")
+
             }
         }
     }
@@ -468,8 +530,16 @@ fun ModeCard(text: String, color: Color, onClick: () -> Unit) {
 fun DropdownSelector(label: String, selected: PointInteret?, onSelect: (PointInteret) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(label)
-        Button(onClick = { expanded = true }) {
+        Text(label,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFD6725D),
+            fontSize = 20.sp)
+        Spacer(modifier = Modifier.size(16.dp))
+        Button(onClick = { expanded = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF796D47),
+                contentColor = Color.White
+            )) {
             Text(selected?.name ?: "Sélectionner")
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
