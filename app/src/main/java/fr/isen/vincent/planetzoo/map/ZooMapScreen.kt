@@ -10,10 +10,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -30,6 +34,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.R
 import kotlin.math.sqrt
 
@@ -240,7 +245,7 @@ val voisinsZoo = mapOf(
 
 
 @Composable
-fun ZooMapScreen(startInMode: String? = null) {
+fun ZooMapScreen(startInMode: String? = null, navController: NavController) {
     val context = LocalContext.current
     var imageWidth by remember { mutableStateOf(1) }
     var imageHeight by remember { mutableStateOf(1) }
@@ -264,13 +269,26 @@ fun ZooMapScreen(startInMode: String? = null) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (currentMode == null) {
-            Text(
-                text = "Choisissez un mode d'itinéraire :",
-                fontWeight = FontWeight.Bold,
-                fontSize = 25.sp,
-                color = Color(0xFFD7725D),
-                modifier = Modifier.padding(16.dp)
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top,
+            ) {
+
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.Default.Clear, contentDescription = "Retour", tint =Color(0xFF796D47), )
+                }
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = "Choisissez un mode d'itinéraire :",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                    color = Color(0xFFD7725D),
+                )
+            }
+
 
             Column(
                 modifier = Modifier
@@ -298,18 +316,21 @@ fun ZooMapScreen(startInMode: String? = null) {
                     fontSize = 25.sp,
                     color = Color(0xFFD7725D),
                 )
-                Button(onClick = {
-                    currentMode = null
-                    selectedStart = null
-                    selectedEnd = null
-                    shortestPath = emptyList()
-                },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF796D47),
-                        contentColor = Color.White
-                    )) {
-                    Text("⬅️ Retour")
-                }
+                Text(
+                    text = "←",
+                    fontSize = 22.sp,
+                    modifier = Modifier
+                        .clickable {
+                            currentMode = null
+                            selectedStart = null
+                            selectedEnd = null
+                            shortestPath = emptyList()
+                        }
+                        .padding(8.dp),
+                    color = Color(0xFF796D47),
+                    fontWeight = FontWeight.Bold
+                )
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
