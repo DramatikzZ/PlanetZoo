@@ -8,7 +8,9 @@ data class UserModel(
     val color : String
 ) {
     companion object {
-        var isAdmin: Boolean = false
+        var uid: String = ""
         var name: String = ""
+        var isAdmin: Boolean = false
     }
+
 }

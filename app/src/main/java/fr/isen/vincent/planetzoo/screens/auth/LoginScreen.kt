@@ -41,7 +41,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import fr.isen.vincent.planetzoo.R
+import fr.isen.vincent.planetzoo.data.UserModel
 import fr.isen.vincent.planetzoo.utils.AppUtil
 import fr.isen.vincent.planetzoo.viewmodel.AuthViewModel
 
@@ -165,9 +167,16 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
             onClick = {
                 isLoading = true
                 authViewModel.login(context, email, password) { success, errorMessage ->
-                    if(success) {
+                    if (success) {
                         authViewModel.checkEmailVerification { verified, message ->
-                            if(verified) {
+                            if (verified) {
+                                val firebaseUser = FirebaseAuth.getInstance().currentUser
+                                firebaseUser?.let {
+                                    UserModel.uid = it.uid
+                                    UserModel.name = it.displayName ?: email.substringBefore("@")
+                                    UserModel.isAdmin = false
+                                }
+
                                 isLoading = false
                                 navController.navigate("home") {
                                     popUpTo(ContextCompat.getString(context, R.string.auth_route)) { inclusive = true }
@@ -183,7 +192,8 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
                     }
                 }
             },
-            modifier = Modifier
+
+                    modifier = Modifier
                 .fillMaxWidth()
                 .height(60.dp),
             colors = ButtonDefaults.buttonColors(
