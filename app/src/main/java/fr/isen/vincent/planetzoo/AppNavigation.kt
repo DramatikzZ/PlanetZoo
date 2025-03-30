@@ -125,6 +125,12 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 ZooMapScreen()
             }
 
+            composable("zooMap/{mode}") { backStackEntry ->
+                val mode = backStackEntry.arguments?.getString("mode")
+                ZooMapScreen(startInMode = mode)
+            }
+
+
             composable(
                 "animals/{enclosureId}",
                 arguments = listOf(navArgument("enclosureId") { type = NavType.StringType })

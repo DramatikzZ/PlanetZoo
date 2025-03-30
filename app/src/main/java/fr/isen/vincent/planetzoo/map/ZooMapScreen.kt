@@ -11,6 +11,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
@@ -82,7 +83,7 @@ val pointsZoo = listOf(
     PointInteret(41, "41 - XX - À compléter", 679.992f, 386.07663f),
     PointInteret(42, "42 - XX - À compléter", 718.31805f, 343.6733f),
     PointInteret(43, "43 - XX - À compléter", 789.26215f, 377.92215f),
-    PointInteret(44, "44 - XX - À compléter", 874.0688f, 373.02945f),
+    PointInteret(44, "44 - Point de rassemblement", 874.0688f, 373.02945f),
     PointInteret(45, "45 - XX - À compléter", 879.7769f, 315.94803f),
     PointInteret(46, "46 - XX - À compléter", 856.1289f, 598.0933f),
     PointInteret(47, "47 - XX - À compléter", 764.79865f, 574.4453f),
@@ -124,13 +125,13 @@ val pointsZoo = listOf(
     PointInteret(83, "83 - XX - À compléter", 373.38327f, 523.88745f),
     PointInteret(84, "84 - XX - À compléter", 276.34485f, 334.70337f),
     PointInteret(85, "85 - XX - À compléter", 459.00537f, 620.9259f),
-    PointInteret(86, "86 - XX - À compléter", 273.8985f, 594.01605f),
-    PointInteret(87, "87 - XX - À compléter", 336.68805f, 408.9092f),
-    PointInteret(88, "88 - XX - À compléter", 887.116f, 812.55634f),
-    PointInteret(89, "89 - XX - À compléter", 561.7519f, 763.6294f),
-    PointInteret(90, "90 - XX - À compléter", 1787.3715f, 457.02066f),
-    PointInteret(91, "91 - XX - À compléter", 1813.4658f, 293.9309f),
-    PointInteret(92, "92 - XX - À compléter", 1546.814f, 409.72464f),
+    PointInteret(86, "86 - Point de rassemblement", 273.8985f, 594.01605f),
+    PointInteret(87, "87 - Sortie de secours", 336.68805f, 408.9092f),
+    PointInteret(88, "88 - Sortie de secours", 887.116f, 812.55634f),
+    PointInteret(89, "89 - Point de rassemblement", 561.7519f, 763.6294f),
+    PointInteret(90, "90 - Sortie de secours", 1787.3715f, 457.02066f),
+    PointInteret(91, "91 - Sortie de secours", 1813.4658f, 293.9309f),
+    PointInteret(92, "92 - Point de rassemblement", 1546.814f, 409.72464f),
     PointInteret(93, "93 - XX - À compléter", 836.55817f, 365.69043f),
     PointInteret(94, "94 - Enclos Émeu / Nandou / Flamant Rose", 1455.4838f, 419.51004f),
     PointInteret(95, "95 - Point d’Eau / Aire de Pique-Nique", 1430.4597f, 480.50967f)
@@ -239,14 +240,14 @@ val voisinsZoo = mapOf(
 
 
 @Composable
-fun ZooMapScreen() {
+fun ZooMapScreen(startInMode: String? = null) {
     val context = LocalContext.current
     var imageWidth by remember { mutableStateOf(1) }
     var imageHeight by remember { mutableStateOf(1) }
     var selectedStart by remember { mutableStateOf<PointInteret?>(null) }
     var selectedEnd by remember { mutableStateOf<PointInteret?>(null) }
     var shortestPath by remember { mutableStateOf<List<PointInteret>>(emptyList()) }
-    var currentMode by remember { mutableStateOf<String?>(null) }
+    var currentMode by remember { mutableStateOf(startInMode) }
 
     val imageBitmap = ImageBitmap.imageResource(R.drawable.mapzoo2)
     val originalWidth = imageBitmap.width.toFloat()
@@ -302,7 +303,11 @@ fun ZooMapScreen() {
                     selectedStart = null
                     selectedEnd = null
                     shortestPath = emptyList()
-                }) {
+                },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF796D47),
+                        contentColor = Color.White
+                    )) {
                     Text("⬅️ Retour")
                 }
             }
@@ -338,7 +343,7 @@ fun ZooMapScreen() {
                                     y = (shortestPath[i + 1].y / originalHeight) * imageHeight
                                 )
                                 drawLine(
-                                    color = Color.Blue,
+                                    color = Color(0xFF70D5C2),
                                     start = start,
                                     end = end,
                                     strokeWidth = 6f
@@ -348,11 +353,8 @@ fun ZooMapScreen() {
 
                         for (point in pointsZoo) {
                             drawCircle(
-                                color = when {
-                                    point == selectedStart -> Color.Green
-                                    point == selectedEnd -> Color.Green
-                                    else -> Color.Red
-                                },
+                                color = getPointColor(point, selectedStart, selectedEnd)
+                                ,
                                 radius = 10f,
                                 center = Offset(
                                     x = (point.x / originalWidth) * imageWidth,
@@ -512,3 +514,16 @@ fun dijkstra(
 
     return path.reversed()
 }
+
+fun getPointColor(point: PointInteret, selectedStart: PointInteret?, selectedEnd: PointInteret?): Color {
+    return when {
+        point == selectedStart || point == selectedEnd -> Color(0xFFD6725D)
+        point.name.contains("Poste de Sécurité", ignoreCase = true) -> Color(0xFFFF4E41)
+        point.name.contains("Point de rassemblement", ignoreCase = true) -> Color(0xFF4F96FF)
+        point.name.contains("Sortie de secours", ignoreCase = true) -> Color(0xFF38FF78)
+        else -> Color(0xFFD6725D).copy(alpha = 0.4f)
+    }
+}
+
+
+

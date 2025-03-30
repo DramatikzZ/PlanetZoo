@@ -38,11 +38,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.utils.AppUtil
 
 @Composable
-fun SecurityScreen(modifier: Modifier = Modifier) {
+fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) {
     val context = LocalContext.current
     Column(
         modifier = modifier
@@ -68,7 +69,7 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = { navController.navigate("zooMap/map") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
                     Image(
@@ -94,7 +95,7 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = { navController.navigate("zooMap/map") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
                     Image(
@@ -119,7 +120,7 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.Center
             ){
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = { navController.navigate("zooMap/map") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
                     Image(
