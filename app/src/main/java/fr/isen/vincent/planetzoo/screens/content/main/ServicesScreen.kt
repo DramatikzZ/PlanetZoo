@@ -88,8 +88,8 @@ fun ServiceScreen(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(20.dp),
             contentPadding = PaddingValues(5.dp),
-            verticalArrangement = Arrangement.spacedBy(35.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(serviceListState.value.entries.toList()) { (_, data) ->
                 ServiceItem(
