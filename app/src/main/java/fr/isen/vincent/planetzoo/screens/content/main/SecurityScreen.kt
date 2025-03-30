@@ -1,5 +1,7 @@
 package fr.isen.vincent.planetzoo.screens.content.main
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +29,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
@@ -52,7 +55,7 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             fontSize = 25.sp,
-            color = Color.Black,
+            color = Color(0xFFD6725D),
         )
         Spacer(modifier = Modifier.size(15.dp))
         Column (
@@ -150,7 +153,14 @@ fun EmergencyAlertSection(phoneNumber: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
+        colors = CardColors(
+            containerColor =  Color(0xFFF5EEE2),
+            contentColor = Color.Black,
+            disabledContentColor =  Color(0xFFD2C6A1),
+            disabledContainerColor =  Color(0xFFD2C6A1),
+
+        )
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -171,7 +181,7 @@ fun EmergencyAlertSection(phoneNumber: String) {
                     text = ContextCompat.getString(context, R.string.cas_urgence),
                     fontWeight = FontWeight.Bold,
                     fontSize = 18.sp,
-                    color = Color(0xFF5E3B91)
+                    color = Color(0xFFD6725D),
                 )
             }
 
@@ -183,7 +193,12 @@ fun EmergencyAlertSection(phoneNumber: String) {
             )
 
             Button(
-                onClick = { /* TODO*/ },
+                onClick = {
+                    val intent = Intent(Intent.ACTION_DIAL).apply {
+                        data = Uri.parse("tel:$phoneNumber")
+                    }
+                    context.startActivity(intent)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -206,11 +221,4 @@ fun EmergencyAlertSection(phoneNumber: String) {
             }
         }
     }
-}
-
-
-@Preview
-@Composable
-fun PreviewSecurityScreen() {
-    SecurityScreen(modifier = Modifier)
 }
