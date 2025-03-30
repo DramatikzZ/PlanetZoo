@@ -5,10 +5,18 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -16,7 +24,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import fr.isen.vincent.planetzoo.R
 import kotlin.math.sqrt
 
@@ -235,6 +245,7 @@ fun ZooMapScreen() {
     var selectedStart by remember { mutableStateOf<PointInteret?>(null) }
     var selectedEnd by remember { mutableStateOf<PointInteret?>(null) }
     var shortestPath by remember { mutableStateOf<List<PointInteret>>(emptyList()) }
+    var currentMode by remember { mutableStateOf<String?>(null) } // null = écran accueil
 
     LaunchedEffect(selectedStart, selectedEnd) {
         if (selectedStart != null && selectedEnd != null) {
@@ -242,113 +253,197 @@ fun ZooMapScreen() {
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        Text("Clique sur un point pour voir son nom et tracer un chemin")
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(IMAGE_WIDTH_ORIG / IMAGE_HEIGHT_ORIG)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.mapzoo2),
-                contentDescription = "Carte du zoo",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .onGloballyPositioned { layoutCoordinates ->
-                        imageWidth = layoutCoordinates.size.width
-                        imageHeight = layoutCoordinates.size.height
-                    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (currentMode == null) {
+            Text(
+                text = "Bienvenue au Zoo !",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 24.dp)
             )
 
-            Canvas(modifier = Modifier.fillMaxSize()) {
-                if (shortestPath.isNotEmpty()) {
-                    for (i in 0 until shortestPath.size - 1) {
-                        val start = Offset(
-                            x = (shortestPath[i].x / IMAGE_WIDTH_ORIG) * imageWidth,
-                            y = (shortestPath[i].y / IMAGE_HEIGHT_ORIG) * imageHeight
-                        )
-                        val end = Offset(
-                            x = (shortestPath[i + 1].x / IMAGE_WIDTH_ORIG) * imageWidth,
-                            y = (shortestPath[i + 1].y / IMAGE_HEIGHT_ORIG) * imageHeight
-                        )
-                        drawLine(
-                            color = Color.Blue,
-                            start = start,
-                            end = end,
-                            strokeWidth = 6f
-                        )
-                    }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                ModeCard("🗺 Voir la carte", Color(0xFFB3E5FC)) {
+                    currentMode = "map"
                 }
-
-                for (point in pointsZoo) {
-                    drawCircle(
-                        color = when {
-                            point == selectedStart -> Color.Green
-                            point == selectedEnd -> Color.Green
-                            else -> Color.Red
-                        },
-                        radius = 10f,
-                        center = Offset(
-                            x = (point.x / IMAGE_WIDTH_ORIG) * imageWidth,
-                            y = (point.y / IMAGE_HEIGHT_ORIG) * imageHeight
-                        )
-                    )
+                ModeCard("📋 Vue liste", Color(0xFFC8E6C9)) {
+                    currentMode = "list"
+                }
+            }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text("🦓 Plan du zoo", style = MaterialTheme.typography.titleLarge)
+                Button(onClick = {
+                    currentMode = null
+                    selectedStart = null
+                    selectedEnd = null
+                    shortestPath = emptyList()
+                }) {
+                    Text("⬅️ Retour")
                 }
             }
 
-            Box(modifier = Modifier
-                .fillMaxSize()
-                .pointerInput(Unit) {
-                    detectTapGestures { tapOffset ->
-                        val clickedX = (tapOffset.x / imageWidth) * IMAGE_WIDTH_ORIG
-                        val clickedY = (tapOffset.y / imageHeight) * IMAGE_HEIGHT_ORIG
+            Spacer(modifier = Modifier.height(16.dp))
 
-                        val nearestPoint = pointsZoo.minByOrNull { point ->
-                            distance(point.x, point.y, clickedX, clickedY)
-                        }
+            if (currentMode == "map") {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(IMAGE_WIDTH_ORIG / IMAGE_HEIGHT_ORIG)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.mapzoo2),
+                        contentDescription = "Carte du zoo",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .onGloballyPositioned { layoutCoordinates ->
+                                imageWidth = layoutCoordinates.size.width
+                                imageHeight = layoutCoordinates.size.height
+                            }
+                    )
 
-                        nearestPoint?.let {
-                            if (selectedStart == null) {
-                                selectedStart = it
-                                Toast.makeText(context, "Départ : ${it.name}", Toast.LENGTH_SHORT).show()
-                            } else if (selectedEnd == null) {
-                                selectedEnd = it
-                                Toast.makeText(context, "Arrivée : ${it.name}", Toast.LENGTH_SHORT).show()
-                            } else {
-                                selectedStart = it
-                                selectedEnd = null
-                                shortestPath = emptyList()
-                                Toast.makeText(context, "Nouveau départ : ${it.name}", Toast.LENGTH_SHORT).show()
+                    Canvas(modifier = Modifier.fillMaxSize()) {
+                        if (shortestPath.isNotEmpty()) {
+                            for (i in 0 until shortestPath.size - 1) {
+                                val start = Offset(
+                                    x = (shortestPath[i].x / IMAGE_WIDTH_ORIG) * imageWidth,
+                                    y = (shortestPath[i].y / IMAGE_HEIGHT_ORIG) * imageHeight
+                                )
+                                val end = Offset(
+                                    x = (shortestPath[i + 1].x / IMAGE_WIDTH_ORIG) * imageWidth,
+                                    y = (shortestPath[i + 1].y / IMAGE_HEIGHT_ORIG) * imageHeight
+                                )
+                                drawLine(
+                                    color = Color.Blue,
+                                    start = start,
+                                    end = end,
+                                    strokeWidth = 6f
+                                )
                             }
                         }
+
+                        for (point in pointsZoo) {
+                            drawCircle(
+                                color = when {
+                                    point == selectedStart -> Color.Green
+                                    point == selectedEnd -> Color.Green
+                                    else -> Color.Red
+                                },
+                                radius = 10f,
+                                center = Offset(
+                                    x = (point.x / IMAGE_WIDTH_ORIG) * imageWidth,
+                                    y = (point.y / IMAGE_HEIGHT_ORIG) * imageHeight
+                                )
+                            )
+                        }
                     }
+
+                    Box(modifier = Modifier
+                        .fillMaxSize()
+                        .pointerInput(Unit) {
+                            detectTapGestures { tapOffset ->
+                                val clickedX = (tapOffset.x / imageWidth) * IMAGE_WIDTH_ORIG
+                                val clickedY = (tapOffset.y / imageHeight) * IMAGE_HEIGHT_ORIG
+
+                                val nearestPoint = pointsZoo.minByOrNull { point ->
+                                    distance(point.x, point.y, clickedX, clickedY)
+                                }
+
+                                nearestPoint?.let {
+                                    if (selectedStart == null) {
+                                        selectedStart = it
+                                        Toast.makeText(context, "Départ : ${it.name}", Toast.LENGTH_SHORT).show()
+                                    } else if (selectedEnd == null) {
+                                        selectedEnd = it
+                                        Toast.makeText(context, "Arrivée : ${it.name}", Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        selectedStart = it
+                                        selectedEnd = null
+                                        shortestPath = emptyList()
+                                        Toast.makeText(context, "Nouveau départ : ${it.name}", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+                        }
+                    )
                 }
-            )
-        }
-
-        if (shortestPath.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("🧭 Itinéraire :", color = Color.Black)
-
-            var totalDistance = 0f
-            for (i in 0 until shortestPath.size - 1) {
-                val a = shortestPath[i]
-                val b = shortestPath[i + 1]
-                totalDistance += distance(a.x, a.y, b.x, b.y)
-                Text("➡️ ${i + 1}. De « ${a.name} » à « ${b.name} »")
+            } else if (currentMode == "list") {
+                DropdownSelector("Départ", selectedStart, onSelect = { selectedStart = it })
+                Spacer(modifier = Modifier.height(8.dp))
+                DropdownSelector("Arrivée", selectedEnd, onSelect = { selectedEnd = it })
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            if (shortestPath.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("🧭 Itinéraire :", color = Color.Black)
 
-            val distanceMeters = totalDistance
-            val walkingSpeed = 1.33f // m/s (4.8 km/h)
-            val estimatedTimeSeconds = distanceMeters / walkingSpeed
-            val minutes = (estimatedTimeSeconds / 60).toInt()
-            val seconds = (estimatedTimeSeconds % 60).toInt()
+                var totalDistance = 0f
+                for (i in 0 until shortestPath.size - 1) {
+                    val a = shortestPath[i]
+                    val b = shortestPath[i + 1]
+                    totalDistance += distance(a.x, a.y, b.x, b.y)
+                    Text("➡️ ${i + 1}. De « ${a.name} » à « ${b.name} »")
+                }
 
-            Text("📏 Distance estimée : ${"%.0f".format(distanceMeters)} mètres")
-            Text("⏱️ Temps estimé à pied : ${minutes} min ${seconds} sec")
+                Spacer(modifier = Modifier.height(8.dp))
+
+                val distanceMeters = totalDistance
+                val walkingSpeed = 1.33f
+                val estimatedTimeSeconds = distanceMeters / walkingSpeed
+                val minutes = (estimatedTimeSeconds / 60).toInt()
+                val seconds = (estimatedTimeSeconds % 60).toInt()
+
+                Text("📏 Distance estimée : ${"%.0f".format(distanceMeters)} m")
+                Text("⏱ Temps estimé : ${minutes} min ${seconds} sec")
+            }
+        }
+    }
+}
+
+@Composable
+fun ModeCard(text: String, color: Color, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .width(150.dp)
+            .height(120.dp)
+            .background(color, RoundedCornerShape(16.dp))
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+    }
+}
+
+@Composable
+fun DropdownSelector(label: String, selected: PointInteret?, onSelect: (PointInteret) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(label)
+        Button(onClick = { expanded = true }) {
+            Text(selected?.name ?: "Sélectionner")
+        }
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            pointsZoo.forEach { point ->
+                DropdownMenuItem(
+                    text = { Text(point.name) },
+                    onClick = {
+                        onSelect(point)
+                        expanded = false
+                    }
+                )
+            }
         }
     }
 }
@@ -356,7 +451,6 @@ fun ZooMapScreen() {
 fun distance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
     return sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 }
-
 
 fun dijkstra(
     voisins: Map<Int, List<Int>>,
