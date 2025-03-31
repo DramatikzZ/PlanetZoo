@@ -138,6 +138,6 @@ fun ContentScreen(
         0 -> ServiceScreen(modifier)
         1 -> HomeScreen(modifier, navController)
         2 -> ZooListScreen(zooListState.value, navController,modifier)
-        3 -> SecurityScreen(modifier)
+        3 -> SecurityScreen(modifier,navController)
     }
 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
@@ -38,11 +39,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.utils.AppUtil
 
 @Composable
-fun SecurityScreen(modifier: Modifier = Modifier) {
+fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) {
     val context = LocalContext.current
     Column(
         modifier = modifier
@@ -65,10 +67,13 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
         ){
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.clickable{
+                    navController.navigate("zooMap/map")
+                }
             ){
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = { navController.navigate("zooMap/map") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
                     Image(
@@ -91,10 +96,13 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
 
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.clickable{
+                    navController.navigate("zooMap/map")
+                }
             ){
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = { navController.navigate("zooMap/map") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
                     Image(
@@ -116,10 +124,13 @@ fun SecurityScreen(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.size(5.dp))
             Row (
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                modifier = Modifier.clickable{
+                    navController.navigate("zooMap/map")
+                }
             ){
                 Button(
-                    onClick = { /* TODO */ },
+                    onClick = { navController.navigate("zooMap/map") },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
                 ) {
                     Image(

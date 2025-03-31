@@ -64,11 +64,6 @@ fun HomeScreen(modifier: Modifier = Modifier, navController: NavController) {
             )
             Spacer(modifier = Modifier.height(16.dp))
 
-            /*Text(
-                text = ContextCompat.getString(context, R.string.corps_zoo),
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center
-            )*/
         }
 
         Spacer(modifier = Modifier.height(16.dp))

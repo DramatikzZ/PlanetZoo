@@ -9,10 +9,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -20,13 +27,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.R
 import kotlin.math.sqrt
 
@@ -80,7 +90,7 @@ val pointsZoo = listOf(
     PointInteret(41, "41 - XX - À compléter", 679.992f, 386.07663f),
     PointInteret(42, "42 - XX - À compléter", 718.31805f, 343.6733f),
     PointInteret(43, "43 - XX - À compléter", 789.26215f, 377.92215f),
-    PointInteret(44, "44 - XX - À compléter", 874.0688f, 373.02945f),
+    PointInteret(44, "44 - Point de rassemblement", 874.0688f, 373.02945f),
     PointInteret(45, "45 - XX - À compléter", 879.7769f, 315.94803f),
     PointInteret(46, "46 - XX - À compléter", 856.1289f, 598.0933f),
     PointInteret(47, "47 - XX - À compléter", 764.79865f, 574.4453f),
@@ -122,13 +132,13 @@ val pointsZoo = listOf(
     PointInteret(83, "83 - XX - À compléter", 373.38327f, 523.88745f),
     PointInteret(84, "84 - XX - À compléter", 276.34485f, 334.70337f),
     PointInteret(85, "85 - XX - À compléter", 459.00537f, 620.9259f),
-    PointInteret(86, "86 - XX - À compléter", 273.8985f, 594.01605f),
-    PointInteret(87, "87 - XX - À compléter", 336.68805f, 408.9092f),
-    PointInteret(88, "88 - XX - À compléter", 887.116f, 812.55634f),
-    PointInteret(89, "89 - XX - À compléter", 561.7519f, 763.6294f),
-    PointInteret(90, "90 - XX - À compléter", 1787.3715f, 457.02066f),
-    PointInteret(91, "91 - XX - À compléter", 1813.4658f, 293.9309f),
-    PointInteret(92, "92 - XX - À compléter", 1546.814f, 409.72464f),
+    PointInteret(86, "86 - Point de rassemblement", 273.8985f, 594.01605f),
+    PointInteret(87, "87 - Sortie de secours", 336.68805f, 408.9092f),
+    PointInteret(88, "88 - Sortie de secours", 887.116f, 812.55634f),
+    PointInteret(89, "89 - Point de rassemblement", 561.7519f, 763.6294f),
+    PointInteret(90, "90 - Sortie de secours", 1787.3715f, 457.02066f),
+    PointInteret(91, "91 - Sortie de secours", 1813.4658f, 293.9309f),
+    PointInteret(92, "92 - Point de rassemblement", 1546.814f, 409.72464f),
     PointInteret(93, "93 - XX - À compléter", 836.55817f, 365.69043f),
     PointInteret(94, "94 - Enclos Émeu / Nandou / Flamant Rose", 1455.4838f, 419.51004f),
     PointInteret(95, "95 - Point d’Eau / Aire de Pique-Nique", 1430.4597f, 480.50967f)
@@ -236,16 +246,22 @@ val voisinsZoo = mapOf(
 )
 
 
-
 @Composable
-fun ZooMapScreen() {
+fun ZooMapScreen(startInMode: String? = null, navController: NavController) {
     val context = LocalContext.current
     var imageWidth by remember { mutableStateOf(1) }
     var imageHeight by remember { mutableStateOf(1) }
     var selectedStart by remember { mutableStateOf<PointInteret?>(null) }
     var selectedEnd by remember { mutableStateOf<PointInteret?>(null) }
     var shortestPath by remember { mutableStateOf<List<PointInteret>>(emptyList()) }
-    var currentMode by remember { mutableStateOf<String?>(null) } // null = écran accueil
+    var currentMode by remember { mutableStateOf(startInMode) }
+
+    val imageBitmap = ImageBitmap.imageResource(R.drawable.mapzoo2)
+    val originalWidth = imageBitmap.width.toFloat()
+    val originalHeight = imageBitmap.height.toFloat()
+
+    val scrollState = rememberScrollState()
+
 
     LaunchedEffect(selectedStart, selectedEnd) {
         if (selectedStart != null && selectedEnd != null) {
@@ -254,27 +270,42 @@ fun ZooMapScreen() {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (currentMode == null) {
-            Text(
-                text = "Bienvenue au Zoo !",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 24.dp)
-            )
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top,
             ) {
-                ModeCard("🗺 Voir la carte", Color(0xFFB3E5FC)) {
+
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(Icons.Default.Clear, contentDescription = "Retour", tint =Color(0xFF796D47), )
+                }
+                Spacer(modifier = Modifier.size(16.dp))
+                Text(
+                    modifier = Modifier.padding(16.dp),
+                    text = "Choisissez un mode d'itinéraire :",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                    color = Color(0xFFD7725D),
+                )
+            }
+
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                ModeCard("🗺 Voir la carte \uD83D\uDDFA", Color(0xFFE2A59D)) {
                     currentMode = "map"
                 }
-                ModeCard("📋 Vue liste", Color(0xFFC8E6C9)) {
+                Spacer(modifier = Modifier.size(16.dp))
+                ModeCard("📋 Choisir un lieu \uD83D\uDCCB", Color(0xFFE2CA9D)) {
                     currentMode = "list"
                 }
             }
@@ -284,15 +315,27 @@ fun ZooMapScreen() {
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("🦓 Plan du zoo", style = MaterialTheme.typography.titleLarge)
-                Button(onClick = {
-                    currentMode = null
-                    selectedStart = null
-                    selectedEnd = null
-                    shortestPath = emptyList()
-                }) {
-                    Text("⬅️ Retour")
-                }
+                Text(
+                    "🦓 Plan du zoo",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                    color = Color(0xFFD7725D),
+                )
+                Text(
+                    text = "←",
+                    fontSize = 22.sp,
+                    modifier = Modifier
+                        .clickable {
+                            currentMode = null
+                            selectedStart = null
+                            selectedEnd = null
+                            shortestPath = emptyList()
+                        }
+                        .padding(8.dp),
+                    color = Color(0xFF796D47),
+                    fontWeight = FontWeight.Bold
+                )
+
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -301,16 +344,16 @@ fun ZooMapScreen() {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .aspectRatio(IMAGE_WIDTH_ORIG / IMAGE_HEIGHT_ORIG)
+                        .aspectRatio(originalWidth / originalHeight)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.mapzoo2),
                         contentDescription = "Carte du zoo",
                         modifier = Modifier
                             .fillMaxSize()
-                            .onGloballyPositioned { layoutCoordinates ->
-                                imageWidth = layoutCoordinates.size.width
-                                imageHeight = layoutCoordinates.size.height
+                            .onGloballyPositioned {
+                                imageWidth = it.size.width
+                                imageHeight = it.size.height
                             }
                     )
 
@@ -318,15 +361,15 @@ fun ZooMapScreen() {
                         if (shortestPath.isNotEmpty()) {
                             for (i in 0 until shortestPath.size - 1) {
                                 val start = Offset(
-                                    x = (shortestPath[i].x / IMAGE_WIDTH_ORIG) * imageWidth,
-                                    y = (shortestPath[i].y / IMAGE_HEIGHT_ORIG) * imageHeight
+                                    x = (shortestPath[i].x / originalWidth) * imageWidth,
+                                    y = (shortestPath[i].y / originalHeight) * imageHeight
                                 )
                                 val end = Offset(
-                                    x = (shortestPath[i + 1].x / IMAGE_WIDTH_ORIG) * imageWidth,
-                                    y = (shortestPath[i + 1].y / IMAGE_HEIGHT_ORIG) * imageHeight
+                                    x = (shortestPath[i + 1].x / originalWidth) * imageWidth,
+                                    y = (shortestPath[i + 1].y / originalHeight) * imageHeight
                                 )
                                 drawLine(
-                                    color = Color.Blue,
+                                    color = Color(0xFF70D5C2),
                                     start = start,
                                     end = end,
                                     strokeWidth = 6f
@@ -336,93 +379,150 @@ fun ZooMapScreen() {
 
                         for (point in pointsZoo) {
                             drawCircle(
-                                color = when {
-                                    point == selectedStart -> Color.Green
-                                    point == selectedEnd -> Color.Green
-                                    else -> Color.Red
-                                },
+                                color = getPointColor(point, selectedStart, selectedEnd)
+                                ,
                                 radius = 10f,
                                 center = Offset(
-                                    x = (point.x / IMAGE_WIDTH_ORIG) * imageWidth,
-                                    y = (point.y / IMAGE_HEIGHT_ORIG) * imageHeight
+                                    x = (point.x / originalWidth) * imageWidth,
+                                    y = (point.y / originalHeight) * imageHeight
                                 )
                             )
                         }
                     }
 
-                    Box(modifier = Modifier
-                        .fillMaxSize()
-                        .pointerInput(Unit) {
-                            detectTapGestures { tapOffset ->
-                                val clickedX = (tapOffset.x / imageWidth) * IMAGE_WIDTH_ORIG
-                                val clickedY = (tapOffset.y / imageHeight) * IMAGE_HEIGHT_ORIG
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                detectTapGestures { tapOffset ->
+                                    val clickedX = (tapOffset.x / imageWidth) * originalWidth
+                                    val clickedY = (tapOffset.y / imageHeight) * originalHeight
 
-                                val nearestPoint = pointsZoo.minByOrNull { point ->
-                                    distance(point.x, point.y, clickedX, clickedY)
-                                }
+                                    val nearestPoint = pointsZoo.minByOrNull { point ->
+                                        distance(point.x, point.y, clickedX, clickedY)
+                                    }
 
-                                nearestPoint?.let {
-                                    if (selectedStart == null) {
-                                        selectedStart = it
-                                        Toast.makeText(context, "Départ : ${it.name}", Toast.LENGTH_SHORT).show()
-                                    } else if (selectedEnd == null) {
-                                        selectedEnd = it
-                                        Toast.makeText(context, "Arrivée : ${it.name}", Toast.LENGTH_SHORT).show()
-                                    } else {
-                                        selectedStart = it
-                                        selectedEnd = null
-                                        shortestPath = emptyList()
-                                        Toast.makeText(context, "Nouveau départ : ${it.name}", Toast.LENGTH_SHORT).show()
+                                    nearestPoint?.let {
+                                        if (selectedStart == null) {
+                                            selectedStart = it
+                                            Toast.makeText(context, "Départ : ${it.name}", Toast.LENGTH_SHORT).show()
+                                        } else if (selectedEnd == null) {
+                                            selectedEnd = it
+                                            Toast.makeText(context, "Arrivée : ${it.name}", Toast.LENGTH_SHORT).show()
+                                        } else {
+                                            selectedStart = it
+                                            selectedEnd = null
+                                            shortestPath = emptyList()
+                                            Toast.makeText(context, "Nouveau départ : ${it.name}", Toast.LENGTH_SHORT).show()
+                                        }
                                     }
                                 }
                             }
-                        }
                     )
                 }
             } else if (currentMode == "list") {
-                DropdownSelector("Départ", selectedStart, onSelect = { selectedStart = it })
+                DropdownSelector("Départ", selectedStart) { selectedStart = it }
                 Spacer(modifier = Modifier.height(8.dp))
-                DropdownSelector("Arrivée", selectedEnd, onSelect = { selectedEnd = it })
+                DropdownSelector("Arrivée", selectedEnd) { selectedEnd = it }
             }
 
             if (shortestPath.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("🧭 Itinéraire :", color = Color.Black)
+
 
                 var totalDistance = 0f
-                for (i in 0 until shortestPath.size - 1) {
-                    val a = shortestPath[i]
-                    val b = shortestPath[i + 1]
-                    totalDistance += distance(a.x, a.y, b.x, b.y)
-                    Text("➡️ ${i + 1}. De « ${a.name} » à « ${b.name} »")
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .verticalScroll(scrollState)
+                        .padding(top = 8.dp)
+                ) {
+                    Text("🧭 Itinéraire :",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp,
+                        color = Color(0xFFD7725D)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    shortestPath.windowed(2).forEachIndexed { i, (a, b) ->
+                        totalDistance += distance(a.x, a.y, b.x, b.y)
+
+                        Column {
+
+                            Text(
+                                text = "➡️ Étape ${i + 1} :",
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFFD6725D),
+                                fontSize = 16.sp
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Row{
+                                Text(
+                                    text = "De : ",
+                                    fontSize = 16.sp
+                                )
+                                Text(
+                                    text = "« ${a.name} »",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+                                )
+                            }
+                            Row{
+                                Text(
+                                    text = "À  : ",
+                                    fontSize = 16.sp
+                                )
+                                Text(
+                                    text = "« ${b.name} »",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+                                )
+                            }
+
+
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    val distanceMeters = totalDistance
+                    val walkingSpeed = 1.33f
+                    val estimatedTimeSeconds = distanceMeters / walkingSpeed
+                    val minutes = (estimatedTimeSeconds / 60).toInt()
+                    val seconds = (estimatedTimeSeconds % 60).toInt()
+
+                    Text("📏 Distance estimée : ${"%.0f".format(distanceMeters)} m",
+                        fontWeight = FontWeight.Bold,
+                        color =Color(0xFF796D47),
+                        fontSize = 16.sp)
+                    Text("⏱ Temps estimé : ${minutes} min ${seconds} sec",
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFF796D47),
+                        fontSize = 16.sp)
+                    Spacer(modifier = Modifier.height(20.dp))
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
 
-                val distanceMeters = totalDistance
-                val walkingSpeed = 1.33f
-                val estimatedTimeSeconds = distanceMeters / walkingSpeed
-                val minutes = (estimatedTimeSeconds / 60).toInt()
-                val seconds = (estimatedTimeSeconds % 60).toInt()
 
-                Text("📏 Distance estimée : ${"%.0f".format(distanceMeters)} m")
-                Text("⏱ Temps estimé : ${minutes} min ${seconds} sec")
+
             }
         }
     }
 }
 
+
+
 @Composable
 fun ModeCard(text: String, color: Color, onClick: () -> Unit) {
     Box(
         modifier = Modifier
-            .width(150.dp)
-            .height(120.dp)
+            .fillMaxWidth()
+            .height(100.dp)
             .background(color, RoundedCornerShape(16.dp))
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
-        Text(text, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+        Text(text, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = Color.White)
     }
 }
 
@@ -430,8 +530,16 @@ fun ModeCard(text: String, color: Color, onClick: () -> Unit) {
 fun DropdownSelector(label: String, selected: PointInteret?, onSelect: (PointInteret) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     Column(modifier = Modifier.fillMaxWidth()) {
-        Text(label)
-        Button(onClick = { expanded = true }) {
+        Text(label,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFFD6725D),
+            fontSize = 20.sp)
+        Spacer(modifier = Modifier.size(16.dp))
+        Button(onClick = { expanded = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF796D47),
+                contentColor = Color.White
+            )) {
             Text(selected?.name ?: "Sélectionner")
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
@@ -497,3 +605,16 @@ fun dijkstra(
 
     return path.reversed()
 }
+
+fun getPointColor(point: PointInteret, selectedStart: PointInteret?, selectedEnd: PointInteret?): Color {
+    return when {
+        point == selectedStart || point == selectedEnd -> Color(0xFFD6725D)
+        point.name.contains("Poste de Sécurité", ignoreCase = true) -> Color(0xFFFF4E41)
+        point.name.contains("Point de rassemblement", ignoreCase = true) -> Color(0xFF4F96FF)
+        point.name.contains("Sortie de secours", ignoreCase = true) -> Color(0xFF38FF78)
+        else -> Color(0xFFD6725D).copy(alpha = 0.4f)
+    }
+}
+
+
+
