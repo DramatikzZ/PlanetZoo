@@ -73,7 +73,6 @@ fun TopBar(onOpenDrawer: () -> Unit, modifier: Modifier = Modifier) {
 fun DrawerContent(
     onCloseClick: () -> Unit,
     onProfileClick: () -> Unit,
-    onSettingsClick: () -> Unit,
     navController: NavController
 ) {
 
@@ -105,13 +104,6 @@ fun DrawerContent(
             } },
             selected = false,
             onClick = onProfileClick
-        )
-
-        NavigationDrawerItem(
-            icon = { Icon(Icons.Filled.Settings, contentDescription = ContextCompat.getString(context, R.string.parameters), tint = Color(0xFF796D47)) },
-            label = { Text(ContextCompat.getString(context, R.string.parameters), color = Color(0xFF796D47)) },
-            selected = false,
-            onClick = onSettingsClick
         )
 
         NavigationDrawerItem(

@@ -68,10 +68,6 @@ fun ScreenController(
                     scope.launch { drawerState.close() }
                     navController.navigate("profile")
                 },
-                onSettingsClick = {
-                    scope.launch { drawerState.close() }
-                    navController.navigate("parameters")
-                },
                 navController
             )
         },

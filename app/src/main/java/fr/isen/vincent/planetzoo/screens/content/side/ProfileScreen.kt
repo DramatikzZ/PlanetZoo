@@ -34,23 +34,20 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostControlle
     LaunchedEffect(Unit) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser
 
-        /*firebaseUser?.let {
+        firebaseUser?.let {
             UserModel.uid = it.uid
-            UserModel.name = it.displayName ?: it.email?.substringBefore("@") ?: "Visiteur"
+            //UserModel.name = it.displayName ?: it.email?.substringBefore("@") ?: "Visiteur"
             UserModel.isAdmin = false
         }
 
         println("veruf UID ACTUEL = '${UserModel.uid}'")
-        println("verif de l'appel de fethUserComments pour UID: ${UserModel.uid}")*/
+        println("verif de l'appel de fethUserComments pour UID: ${UserModel.uid}")
 
         FirebaseHelper().fetchUserComments(UserModel.uid) { comments ->
             println(" Commentaires trouvé : ${comments.size}")
             userComments.clear()
             userComments.addAll(comments)
         }
-        val zooListState = mutableStateOf<List<BiomeModel>>(emptyList())
-
-
 
     }
 

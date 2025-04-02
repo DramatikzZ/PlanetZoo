@@ -87,9 +87,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 ForgotPasswordScreen(modifier, navController)
             }
 
-            composable( ContextCompat.getString(context, R.string.test_route)) {
-                TestScreen(modifier, navController)
-            }
 
             composable( "home") {
                 ScreenController(modifier, navController, zooListState)
@@ -103,9 +100,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 ProfileScreen(modifier, navController)
             }
 
-            composable("parameters") {
-                ParametersScreen()
-            }
 
             composable("biomes") {
                 ZooListScreen(zooListState.value, navController,modifier)
