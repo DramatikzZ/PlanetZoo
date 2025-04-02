@@ -3,6 +3,7 @@ package fr.isen.vincent.planetzoo.utils
 import com.google.firebase.database.*
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.CommentModel
+import fr.isen.vincent.planetzoo.data.EnclosureModel
 
 class FirebaseHelper {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
@@ -59,18 +60,8 @@ class FirebaseHelper {
             }
         })
     }
+
+
 }
 
-/*
-fun addZoo(zoo: BiomeModel) {
-    val database = FirebaseDatabase.getInstance().reference
-    val newZooRef = database.child("biomes")
 
-    newZooRef.setValue(zoo.copy(id = newZooRef.key ?: ""))
-        .addOnSuccessListener {
-            println("Données ajoutées avec succès")
-        }
-        .addOnFailureListener { e ->
-            println("Erreur lors de l'ajout: ${e.message}")
-        }
-}*/
