@@ -1,7 +1,6 @@
 package fr.isen.vincent.planetzoo.screens.auth
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +20,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -174,7 +172,6 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController, aut
                                 firebaseUser?.let {
                                     UserModel.uid = it.uid
                                     UserModel.name = it.displayName ?: email.substringBefore("@")
-                                    UserModel.isAdmin = false
                                 }
 
                                 isLoading = false

@@ -1,14 +1,8 @@
 package fr.isen.vincent.planetzoo.screens.content.main
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,7 +22,6 @@ import fr.isen.vincent.planetzoo.components.SearchResultsList
 import fr.isen.vincent.planetzoo.data.AnimalModel
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
-import fr.isen.vincent.planetzoo.screens.content.main.animals.AnimalCard
 import fr.isen.vincent.planetzoo.utils.FirebaseHelper
 
 @Composable

@@ -3,7 +3,6 @@ package fr.isen.vincent.planetzoo.utils
 import com.google.firebase.database.*
 import fr.isen.vincent.planetzoo.data.BiomeModel
 import fr.isen.vincent.planetzoo.data.CommentModel
-import fr.isen.vincent.planetzoo.data.EnclosureModel
 
 class FirebaseHelper {
     private val database: DatabaseReference = FirebaseDatabase.getInstance().reference
