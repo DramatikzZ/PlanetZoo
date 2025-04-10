@@ -89,7 +89,7 @@ fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) 
                     text = ContextCompat.getString(context, R.string.first_aid_station),
                     textAlign = TextAlign.Center,
                     fontSize = 14.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             Spacer(modifier = Modifier.size(5.dp))
@@ -118,7 +118,7 @@ fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) 
                     text = ContextCompat.getString(context, R.string.emergency_exit),
                     textAlign = TextAlign.Center,
                     fontSize = 14.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             Spacer(modifier = Modifier.size(5.dp))
@@ -146,7 +146,7 @@ fun SecurityScreen(modifier: Modifier = Modifier, navController: NavController) 
                     text = ContextCompat.getString(context, R.string.assembly_point),
                     textAlign = TextAlign.Center,
                     fontSize = 14.sp,
-                    color = Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
