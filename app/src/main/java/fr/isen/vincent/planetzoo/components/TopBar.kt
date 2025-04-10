@@ -13,12 +13,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -62,7 +60,7 @@ fun TopBar(onOpenDrawer: () -> Unit, modifier: Modifier = Modifier) {
             painter = painterResource(id = R.drawable.logo_zoo),
             contentDescription = ContextCompat.getString(context, R.string.logo_zoo),
             modifier = Modifier
-                .height(40.dp) // hauteur plus douce pour caler avec le menu
+                .height(40.dp)
                 .padding(end = 8.dp)
         )
     }

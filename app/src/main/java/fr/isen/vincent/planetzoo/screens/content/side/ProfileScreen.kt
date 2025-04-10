@@ -123,7 +123,7 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostControlle
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
-                                    text = "🔧 Enclos ${enclosure.firebaseId}",
+                                    text = "🔧 Enclos ${enclosure.firebaseId} - Biome ${enclosure.id_biomes}",
                                     style = MaterialTheme.typography.titleMedium,
                                     color = Color(0xFFD7725D)
                                 )

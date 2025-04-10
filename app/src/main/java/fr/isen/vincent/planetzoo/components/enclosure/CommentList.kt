@@ -18,7 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import fr.isen.vincent.planetzoo.data.CommentModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import fr.isen.vincent.planetzoo.data.UserModel
 import fr.isen.vincent.planetzoo.utils.comments.deleteComment

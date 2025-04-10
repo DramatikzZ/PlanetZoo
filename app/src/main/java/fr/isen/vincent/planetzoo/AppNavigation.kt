@@ -92,10 +92,6 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 ScreenController(modifier, navController, zooListState)
             }
 
-            composable("comments") {
-                CommentsScreen(navController)
-            }
-
             composable("profile") {
                 ProfileScreen(modifier, navController)
             }

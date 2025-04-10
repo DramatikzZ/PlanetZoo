@@ -1,7 +1,5 @@
 package fr.isen.vincent.planetzoo.screens
 
-import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -20,7 +18,6 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -40,9 +37,6 @@ import androidx.navigation.NavController
 import fr.isen.vincent.planetzoo.R
 import kotlin.math.sqrt
 
-
-const val IMAGE_WIDTH_ORIG = 1800f
-const val IMAGE_HEIGHT_ORIG = 850f
 
 data class PointInteret(val id: Int, val name: String, val x: Float, val y: Float)
 

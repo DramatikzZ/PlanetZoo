@@ -2,7 +2,6 @@ package fr.isen.vincent.planetzoo.screens.content.main.animals
 
 import GeminiHelper.parseAnimalInfoAnnotated
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,10 +19,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
-import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
 import fr.isen.vincent.planetzoo.data.AnimalModel
 import fr.isen.vincent.planetzoo.data.EnclosureModel
 import kotlinx.coroutines.launch
