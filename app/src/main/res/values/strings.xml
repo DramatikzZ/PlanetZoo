@@ -1,8 +1,71 @@
 <resources>
+    <!-- Page description -->
     <string name="app_name">PlanetZoo</string>
-    <string name="homepage">Home</string>
-    <string name="securitypage">Security</string>
+    <string name="homepage">Accueil</string>
+    <string name="securitypage">Securité</string>
     <string name="profilepage">Profile</string>
     <string name="servicespage">Services</string>
-    <string name="animalspage">Animals</string>
+    <string name="animalspage">Animaux</string>
+    <string name="logo_zoo">Logo du zoo</string>
+    <string name="menu">Menu</string>
+    <string name="parameters">Paramètres</string>
+
+    <!-- Icon description -->
+    <string name="close_menu">Ferme le menu</string>
+    <string name="warning">Alerte</string>
+    <string name="first_aid_station">Poste de secours</string>
+    <string name="emergency_exit">Sortie de secours</string>
+    <string name="assembly_point">Point de rassemblement</string>
+
+    <!-- Image description -->
+    <string name="auth_image">Authentification Image</string>
+
+    <!-- Button description -->
+    <string name="appeler">Appeler</string>
+
+
+    <!-- Title -->
+    <string name="auth_title">Authentifiez-vous</string>
+    <string name="login_title">Se connecter</string>
+    <string name="signup_title">S\'inscrire</string>
+    <string name="headline_zoo">BIENVENUE AU PARC ANIMALIER DE LA BARBEN !</string>
+    <string name="need_help">Besoin d\'aide ?</string>*
+    <string name="can_be_find">Vous retrouverez dans le parc :</string>
+
+
+
+    <!-- Text-->
+    <string name="welcome_text">Bon retour !</string>
+    <string name="forgot_text">Vous avez oublié votre mot de passe ?</string>
+    <string name="soucis_text">Aucun soucis !</string>
+    <string name="signup_text">Connectez vous</string>
+    <string name="email_text">"exemple@gmail.com"</string>
+    <string name="password_text">"Mot de passe"</string>
+    <string name="logging_text">"Connexion..."</string>
+    <string name="login_text">"Se connecter"</string>
+    <string name="creating_account_text">"Creating account"</string>
+    <string name="name_text">"Name"</string>
+    <string name="hello_text">"Bienvenue !"</string>
+    <string name="create_account_text">"Créez votre compte"</string>
+    <string name="corps_zoo">Le parc est ouvert tous les jours, y compris les jours fériés.
+    Au cœur de la Provence et d’un site Natura 2000, le Parc animalier de La Barben est une
+    invitation à l’évasion.9 km de sentiers vous guident à la rencontre de 130 espèces différentes,
+        à l’ombre des chênes.</string>
+    <string name="merci">Merci de bien vouloir appeler ce numéro, nous nous chargerons de joindre les pompiers.</string>
+    <string name="cas_urgence">En cas d\'urgence au parc :</string>
+    <string name="phone_number">06 31 29 35 98</string>
+
+    <!-- Routes -->
+    <string name="login_route">login</string>
+    <string name="auth_route">auth</string>
+    <string name="signup_route">signup</string>
+    <string name="test_route">test</string>
+
+
+    <!-- Messages -->
+    <string name="error_message">"Something went wrong</string>
+
+
+    <!-- Routes -->
+    <string name="users_collection">users</string>
 </resources>

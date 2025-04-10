@@ -1,14 +1,5 @@
 package fr.isen.vincent.planetzoo.components
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Lock
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Menu
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -19,17 +10,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import fr.isen.vincent.planetzoo.R
 import fr.isen.vincent.planetzoo.data.NavBarItem
 
 
 @Composable
 fun BottomNavBar(tabBarItems: List<NavBarItem>, navController: NavController) {
     var selectedTabIndex by rememberSaveable {
-        mutableStateOf(0)
+        mutableStateOf(1)
     }
 
     NavigationBar {
