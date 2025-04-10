@@ -37,7 +37,6 @@ fun ProfileScreen(modifier: Modifier = Modifier, navController: NavHostControlle
         firebaseUser?.let {
             UserModel.uid = it.uid
             //UserModel.name = it.displayName ?: it.email?.substringBefore("@") ?: "Visiteur"
-            UserModel.isAdmin = false
         }
 
         println("veruf UID ACTUEL = '${UserModel.uid}'")
