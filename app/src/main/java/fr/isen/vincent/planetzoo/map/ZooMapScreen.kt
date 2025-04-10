@@ -68,8 +68,8 @@ val pointsZoo = listOf(
     PointInteret(19, "19 - Crocodile Nain", 900.16315f, 155.30463f),
     PointInteret(20, "20 - Guépard", 820.2492f, 116.97854f),
     PointInteret(21, "21 - Autruche / Gazelle", 737.88885f, 147.15015f),
-    PointInteret(22, "22 -  Point de Vue 1", 856.1289f, 55.819885f),
-    PointInteret(23, "23 -  Lion", 947.45917f, 235.21861f),
+    PointInteret(22, "22 - Point de Vue 1", 856.1289f, 55.819885f),
+    PointInteret(23, "23 - Lion", 947.45917f, 235.21861f),
     PointInteret(24, "24 - Hippopotame", 1019.2187f, 275.1756f),
     PointInteret(25, "25 - Zèbre", 1020.84955f, 350.1969f),
     PointInteret(26, "26 - Tente pédagogique", 988.2316f, 394.23112f),
@@ -87,11 +87,11 @@ val pointsZoo = listOf(
     PointInteret(38, "38 - Toilette", 702.0091f, 425.21817f),
     PointInteret(39, "39 - Point d'eau", 595.1853f, 402.3856f),
     PointInteret(40, "40 - Lodge", 599.2626f, 368.9522f),
-    PointInteret(41, "41 - espace pique-nique", 679.992f, 386.07663f),
-    PointInteret(42, "42 - plateau des jeux ", 718.31805f, 343.6733f),
-    PointInteret(43, "43 - gare", 789.26215f, 377.92215f),
+    PointInteret(41, "41 - Espace pique-nique", 679.992f, 386.07663f),
+    PointInteret(42, "42 - Plateau des jeux ", 718.31805f, 343.6733f),
+    PointInteret(43, "43 - Gare", 789.26215f, 377.92215f),
     PointInteret(44, "44 - Point de rassemblement", 874.0688f, 373.02945f),
-    PointInteret(45, "45 - plateau des jeux", 879.7769f, 315.94803f),
+    PointInteret(45, "45 - Plateau des jeux", 879.7769f, 315.94803f),
     PointInteret(46, "46 - Point d'eau ", 856.1289f, 598.0933f),
     PointInteret(47, "47 - Point de vue", 764.79865f, 574.4453f),
     PointInteret(48, "48 - Panda roux", 769.69135f, 629.0804f),
@@ -101,9 +101,9 @@ val pointsZoo = listOf(
     PointInteret(52, "52 - Café Nomade", 898.5323f, 742.42773f),
     PointInteret(53, "53 - Mouflon", 990.678f, 670.6682f),
     PointInteret(54, "54 - Point d'eau", 974.369f, 739.9814f),
-    PointInteret(55, "55 - espace pique-nique", 969.4763f, 804.40186f),
-    PointInteret(56, "56 - espace pique-nique", 1043.6821f, 764.4449f),
-    PointInteret(57, "57 - espace pique-nique", 1113.8108f, 726.9342f),
+    PointInteret(55, "55 - Espace pique-nique", 969.4763f, 804.40186f),
+    PointInteret(56, "56 - Espace pique-nique", 1043.6821f, 764.4449f),
+    PointInteret(57, "57 - Espace pique-nique", 1113.8108f, 726.9342f),
     PointInteret(58, "58 - Loutre/Binturong", 1037.974f, 569.5526f),
     PointInteret(59, "59 - Macaque crabier", 1177.4158f, 629.0804f),
     PointInteret(60, "60 - Cerf", 1267.9305f, 712.2561f),
@@ -112,7 +112,7 @@ val pointsZoo = listOf(
     PointInteret(63, "63 - Loup d'Europe", 1705.8265f, 586.67706f),
     PointInteret(64, "64 - Dromadaire/Âne de Provence", 1688.7021f, 421.9564f),
     PointInteret(65, "65 - Bison", 1695.2257f, 334.70337f),
-    PointInteret(66, "66 - espace pique-nique", 1586.771f, 445.6044f),
+    PointInteret(66, "66 - Espace pique-nique", 1586.771f, 445.6044f),
     PointInteret(67, "67 - Porc-épic", 1530.505f, 368.13675f),
     PointInteret(68, "68 - Futur plaine africaine", 1517.4579f, 301.26996f),
     PointInteret(69, "69 - Mouton noir/Yack", 1373.9388f, 334.70337f),
@@ -136,8 +136,8 @@ val pointsZoo = listOf(
     PointInteret(87, "87 - Sortie de secours 1", 336.68805f, 408.9092f),
     PointInteret(88, "88 - Sortie de secours 2", 887.116f, 812.55634f),
     PointInteret(89, "89 - Point de rassemblement", 561.7519f, 763.6294f),
-    PointInteret(90, "90 - sortie de secours 3", 1787.3715f, 457.02066f),
-    PointInteret(91, "91 - sortie de secours 4", 1813.4658f, 293.9309f),
+    PointInteret(90, "90 - Sortie de secours 3", 1787.3715f, 457.02066f),
+    PointInteret(91, "91 - Sortie de secours 4", 1813.4658f, 293.9309f),
     PointInteret(92, "92 - Point de rassemblement", 1546.814f, 409.72464f),
     PointInteret(94, "94 - Enclos Émeu / Wallaby", 1455.4838f, 419.51004f),
     PointInteret(95, "95 - Point d’Eau / Aire de Pique-Nique", 1430.4597f, 480.50967f)
@@ -269,7 +269,7 @@ fun ZooMapScreen(startInMode: String? = null, navController: NavController) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(16.dp).padding(top=20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (currentMode == null) {
@@ -368,7 +368,7 @@ fun ZooMapScreen(startInMode: String? = null, navController: NavController) {
                                     y = (shortestPath[i + 1].y / originalHeight) * imageHeight
                                 )
                                 drawLine(
-                                    color = Color(0xFF70D5C2),
+                                    color = Color(0xFF7AFFE7),
                                     start = start,
                                     end = end,
                                     strokeWidth = 6f
@@ -418,7 +418,44 @@ fun ZooMapScreen(startInMode: String? = null, navController: NavController) {
                                 }
                             }
                     )
+
                 }
+                Spacer(modifier = Modifier.height(12.dp))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Canvas(modifier = Modifier.size(8.dp)) {
+                            drawCircle(Color(0xFF4F96FF))
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text("Point de rassemblement", fontSize = 8.sp)
+                    }
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Canvas(modifier = Modifier.size(8.dp)) {
+                            drawCircle(Color(0xFFFF4E41))
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+
+                        Text("Poste de Sécurité", fontSize = 8.sp)
+                    }
+
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Canvas(modifier = Modifier.size(8.dp)) {
+                            drawCircle(Color(0xFF38FF78))
+                        }
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text("Sortie de secours", fontSize = 8.sp)
+                    }
+                }
+
             } else if (currentMode == "list") {
                 DropdownSelector("Départ", selectedStart) { selectedStart = it }
                 Spacer(modifier = Modifier.height(8.dp))
